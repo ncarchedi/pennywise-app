@@ -107,7 +107,7 @@ SettingsStack.path = "";
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
   LinksStack,
-  AnalyticsScreen,
+  AnalyticsStack,
   SettingsStack
 });
 
