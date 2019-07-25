@@ -1,27 +1,43 @@
 import React from "react";
-import { ScrollView, StyleSheet } from "react-native";
-import { ExpoLinksView } from "@expo/samples";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function LinksScreen() {
   return (
-    <ScrollView style={styles.container}>
-      {/**
-       * Go ahead and delete ExpoLinksView and replace it with your content;
-       * we just wanted to provide you with some helpful links.
-       */}
-      <ExpoLinksView />
-    </ScrollView>
+    <View style={styles.container}>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.contentContainer}
+      >
+        <View style={styles.spendingContainer}>
+          <Text style={styles.spendingText}>
+            This will show recent spending by category.
+          </Text>
+        </View>
+      </ScrollView>
+    </View>
   );
 }
 
 LinksScreen.navigationOptions = {
-  title: "Links"
+  title: "Spending"
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 15,
     backgroundColor: "#fff"
+  },
+  contentContainer: {
+    paddingTop: 30,
+    paddingHorizontal: 10
+  },
+  spendingContainer: {
+    alignItems: "center"
+  },
+  spendingText: {
+    fontSize: 17,
+    color: "rgba(96,100,109, 1)",
+    lineHeight: 24,
+    textAlign: "center"
   }
 });

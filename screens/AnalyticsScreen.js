@@ -10,7 +10,7 @@ export default function AnalyticsScreen() {
       >
         <View style={styles.analyticsContainer}>
           <Text style={styles.analyticsText}>
-            This will be some killer analytics.
+            This will show some spending analytics.
           </Text>
         </View>
       </ScrollView>
@@ -19,7 +19,7 @@ export default function AnalyticsScreen() {
 }
 
 AnalyticsScreen.navigationOptions = {
-  header: null
+  title: "Analytics"
 };
 
 const styles = StyleSheet.create({
@@ -32,8 +32,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10
   },
   analyticsContainer: {
-    alignItems: "center",
-    marginTop: 40
+    alignItems: "center"
   },
   analyticsText: {
     fontSize: 17,

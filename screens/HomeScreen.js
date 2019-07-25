@@ -1,7 +1,7 @@
 import React from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 
-export default function HomeScreen() {
+export default function TransactionsScreen() {
   return (
     <View style={styles.container}>
       <ScrollView
@@ -10,7 +10,7 @@ export default function HomeScreen() {
       >
         <View style={styles.transactionsContainer}>
           <Text style={styles.transactionsText}>
-            This will be a list of your transactions.
+            This will be a list of all transactions.
           </Text>
         </View>
       </ScrollView>
@@ -18,8 +18,8 @@ export default function HomeScreen() {
   );
 }
 
-HomeScreen.navigationOptions = {
-  header: null
+TransactionsScreen.navigationOptions = {
+  title: "Transactions"
 };
 
 const styles = StyleSheet.create({
@@ -32,8 +32,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10
   },
   transactionsContainer: {
-    alignItems: "center",
-    marginTop: 40
+    alignItems: "center"
   },
   transactionsText: {
     fontSize: 17,
