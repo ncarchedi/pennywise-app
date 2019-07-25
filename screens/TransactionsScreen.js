@@ -2,25 +2,16 @@ import React from "react";
 import { ScrollView, StyleSheet, Text, View, SectionList } from "react-native";
 
 export default function TransactionsScreen() {
-  SectionListItemSeparator = () => {
-    return (
-      <View
-        style={{ height: 0.25, width: "100%", backgroundColor: "#C8C8C8" }}
-      />
-    );
-  };
-
-  TransactionList = () => {
+  NewTransactionsList = () => {
     return (
       <SectionList
-        ItemSeparatorComponent={this.SectionListItemSeparator}
         renderItem={({ item, index }) => (
-          <Text style={styles.transactionListItem} key={index}>
+          <Text style={styles.transactionsListItem} key={index}>
             {item}
           </Text>
         )}
         renderSectionHeader={({ section: { title } }) => (
-          <Text style={styles.transactionDateHeader}>{title}</Text>
+          <Text style={styles.transactionsDateHeader}>{title}</Text>
         )}
         sections={[
           { title: "Thursday, July 25", data: ["Amazon.com"] },
@@ -35,18 +26,41 @@ export default function TransactionsScreen() {
     );
   };
 
+  CategorizedTransactionsList = () => {
+    return (
+      <SectionList
+        renderItem={({ item, index }) => (
+          <Text style={styles.transactionsListItem} key={index}>
+            {item}
+          </Text>
+        )}
+        renderSectionHeader={({ section: { title } }) => (
+          <Text style={styles.transactionsDateHeader}>{title}</Text>
+        )}
+        sections={[
+          { title: "Monday, July 22", data: ["Whole Foods"] },
+          {
+            title: "Saturday, July 20",
+            data: ["Netflix", "Tequila Sunrise"]
+          }
+        ]}
+        keyExtractor={(item, index) => item + index}
+      />
+    );
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView
         style={styles.container}
         contentContainerStyle={styles.contentContainer}
       >
-        <Text style={styles.transactionListHeader}>New</Text>
-        <TransactionList />
-        <Text style={[styles.transactionListHeader, { marginTop: 20 }]}>
+        <Text style={styles.transactionsListHeader}>New</Text>
+        <NewTransactionsList />
+        <Text style={[styles.transactionsListHeader, { marginTop: 20 }]}>
           Categorized
         </Text>
-        <TransactionList />
+        <CategorizedTransactionsList />
       </ScrollView>
     </View>
   );
@@ -65,16 +79,16 @@ const styles = StyleSheet.create({
     paddingTop: 30,
     paddingHorizontal: 20
   },
-  transactionListHeader: {
+  transactionsListHeader: {
     fontSize: 34,
     marginBottom: 10,
     backgroundColor: "lightgrey"
   },
-  transactionDateHeader: {
+  transactionsDateHeader: {
     fontSize: 22,
     marginTop: 10
   },
-  transactionListItem: {
+  transactionsListItem: {
     fontSize: 17,
     color: "rgba(96, 100, 109, 1)",
     marginVertical: 15
