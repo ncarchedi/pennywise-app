@@ -10,7 +10,7 @@ export default function TransactionsScreen() {
       >
         <View style={styles.transactionsContainer}>
           <Text style={styles.transactionsText}>
-            This will be a list of all transactions.
+            This will show a list of all transactions.
           </Text>
         </View>
       </ScrollView>

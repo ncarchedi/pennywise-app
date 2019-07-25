@@ -6,8 +6,8 @@ import {
 } from "react-navigation";
 
 import TabBarIcon from "../components/TabBarIcon";
-import HomeScreen from "../screens/HomeScreen";
-import LinksScreen from "../screens/LinksScreen";
+import TransactionsScreen from "../screens/TransactionsScreen";
+import SpendingScreen from "../screens/SpendingScreen";
 import AnalyticsScreen from "../screens/AnalyticsScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 
@@ -18,49 +18,45 @@ const config = Platform.select({
 
 // Transactions screen
 
-const HomeStack = createStackNavigator(
+const TransactionsStack = createStackNavigator(
   {
-    Home: HomeScreen
+    Transactions: TransactionsScreen
   },
   config
 );
 
-HomeStack.navigationOptions = {
+TransactionsStack.navigationOptions = {
   tabBarLabel: "Transactions",
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={
-        Platform.OS === "ios"
-          ? `ios-information-circle${focused ? "" : "-outline"}`
-          : "md-information-circle"
-      }
+      name={Platform.OS === "ios" ? "ios-list" : "md-list"}
     />
   )
 };
 
-HomeStack.path = "";
+TransactionsStack.path = "";
 
 // Spending screen
 
-const LinksStack = createStackNavigator(
+const SpendingStack = createStackNavigator(
   {
-    Links: LinksScreen
+    Spending: SpendingScreen
   },
   config
 );
 
-LinksStack.navigationOptions = {
+SpendingStack.navigationOptions = {
   tabBarLabel: "Spending",
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === "ios" ? "ios-link" : "md-link"}
+      name={Platform.OS === "ios" ? "ios-wallet" : "md-wallet"}
     />
   )
 };
 
-LinksStack.path = "";
+SpendingStack.path = "";
 
 // Analytics screen
 
@@ -105,8 +101,8 @@ SettingsStack.navigationOptions = {
 SettingsStack.path = "";
 
 const tabNavigator = createBottomTabNavigator({
-  HomeStack,
-  LinksStack,
+  TransactionsStack,
+  SpendingStack,
   AnalyticsStack,
   SettingsStack
 });
