@@ -40,14 +40,14 @@ const styles = StyleSheet.create({
   },
   transactionsListHeader: {
     color: "#fff",
-    fontSize: 34,
+    fontSize: 22,
     marginBottom: 10,
     backgroundColor: "#92BFB1",
     paddingVertical: 5,
     paddingHorizontal: 10
   },
   transactionsDateHeader: {
-    fontSize: 22,
+    fontWeight: "bold",
     marginTop: 10,
     marginHorizontal: 10
   },
@@ -57,7 +57,6 @@ const styles = StyleSheet.create({
     flexDirection: "row"
   },
   transactionsListItemText: {
-    fontSize: 17,
     color: "rgba(96, 100, 109, 1)"
   }
 });
