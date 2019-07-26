@@ -7,18 +7,34 @@ export default class TransactionsScreen extends React.Component {
   state = {
     transactions: {
       new: [
-        { date: "Thursday, July 25", data: ["Amazon.com"] },
+        {
+          date: "Thursday, July 25",
+          data: [{ name: "Amazon.com", amount: "84.33" }]
+        },
         {
           date: "Wednesday, July 24",
-          data: ["Union Square Cafe", "ACME, Inc.", "The Corner Store"]
+          data: [
+            { name: "Union Square Cafe", amount: "104.00" },
+            { name: "ACME, Inc.", amount: "21.99" },
+            { name: "The Corner Store", amount: "9.95" }
+          ]
         },
-        { date: "Tuesday, July 23", data: ["Ace Hardware"] }
+        {
+          date: "Tuesday, July 23",
+          data: [{ name: "Ace Hardware", amount: "25.99" }]
+        }
       ],
       categorized: [
-        { date: "Monday, July 22", data: ["Whole Foods"] },
+        {
+          date: "Monday, July 22",
+          data: [{ name: "Whole Foods", amount: "49.45" }]
+        },
         {
           date: "Saturday, July 20",
-          data: ["Netflix", "Tequila Sunrise"]
+          data: [
+            { name: "Netflix", amount: "14.99" },
+            { name: "Tequila Sunrise", amount: "75.25" }
+          ]
         }
       ]
     }

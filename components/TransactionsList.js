@@ -14,8 +14,13 @@ export default function TransactionsList({ header, transactions }) {
       <SectionList
         ItemSeparatorComponent={this.ListItemSeparator}
         renderItem={({ item, index }) => (
-          <View style={styles.transactionsListItem} key={index}>
-            <Text style={styles.transactionsListItemText}>{item}</Text>
+          <View style={[styles.transactionsListItem]} key={index}>
+            <Text style={[styles.transactionsListItemText]}>{item.name}</Text>
+            <Text
+              style={[styles.transactionsListItemText, { marginLeft: "auto" }]}
+            >
+              {`$` + item.amount}
+            </Text>
           </View>
         )}
         renderSectionHeader={({ section: { date } }) => (
@@ -48,7 +53,8 @@ const styles = StyleSheet.create({
   },
   transactionsListItem: {
     paddingVertical: 15,
-    marginHorizontal: 10
+    marginHorizontal: 10,
+    flexDirection: "row"
   },
   transactionsListItemText: {
     fontSize: 17,
