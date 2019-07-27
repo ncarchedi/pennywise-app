@@ -6,6 +6,12 @@ Clone the repo:
 git clone https://github.com/ncarchedi/conscious-spending-app.git
 ```
 
+Install packages:
+
+```
+yarn install
+```
+
 Run the production version:
 
 ```
