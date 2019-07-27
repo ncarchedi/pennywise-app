@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, SectionList, View } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
 
 export default function TransactionsList({ header, transactions }) {
   ListItemSeparator = () => {
@@ -10,23 +11,42 @@ export default function TransactionsList({ header, transactions }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.transactionsListHeader}>{header}</Text>
-      <SectionList
-        ItemSeparatorComponent={this.ListItemSeparator}
+      <FlatList
+        data={transactions}
         renderItem={({ item, index }) => (
-          <View style={[styles.transactionsListItem]} key={index}>
-            <Text style={[styles.transactionsListItemText]}>{item.name}</Text>
+          <View style={styles.transactionsListItem} key={index}>
+            <View style={{ flexDirection: "row" }}>
+              <Text
+                style={[
+                  styles.transactionsListItemText,
+                  { fontWeight: "bold" }
+                ]}
+              >
+                {item.name}
+              </Text>
+              <Text
+                style={[
+                  styles.transactionsListItemText,
+                  { marginLeft: "auto" }
+                ]}
+              >
+                {Number(item.amount).toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "USD"
+                })}
+              </Text>
+            </View>
             <Text
-              style={[styles.transactionsListItemText, { marginLeft: "auto" }]}
+              style={[
+                styles.transactionsListItemText,
+                { fontStyle: "italic", marginTop: 5 }
+              ]}
             >
-              {`$` + item.amount}
+              {item.category}
             </Text>
           </View>
         )}
-        renderSectionHeader={({ section: { date } }) => (
-          <Text style={styles.transactionsDateHeader}>{date}</Text>
-        )}
-        sections={transactions}
+        ItemSeparatorComponent={this.ListItemSeparator}
         keyExtractor={(item, index) => item + index}
       />
     </View>
@@ -53,8 +73,7 @@ const styles = StyleSheet.create({
   },
   transactionsListItem: {
     paddingVertical: 15,
-    marginHorizontal: 10,
-    flexDirection: "row"
+    marginHorizontal: 10
   },
   transactionsListItemText: {
     color: "rgba(96, 100, 109, 1)"
