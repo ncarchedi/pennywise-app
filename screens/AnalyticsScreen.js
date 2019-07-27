@@ -29,15 +29,14 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingTop: 30,
-    paddingHorizontal: 10
+    paddingHorizontal: 20
   },
   analyticsContainer: {
     alignItems: "center"
   },
   analyticsText: {
     fontSize: 17,
-    color: "rgba(96,100,109, 1)",
-    lineHeight: 24,
-    textAlign: "center"
+    color: "rgba(96, 100, 109, 1)",
+    lineHeight: 24
   }
 });
