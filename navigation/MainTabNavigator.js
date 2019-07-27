@@ -6,6 +6,8 @@ import {
 } from "react-navigation";
 
 import TabBarIcon from "../components/TabBarIcon";
+
+import TodoScreen from "../screens/TodoScreen";
 import TransactionsScreen from "../screens/TransactionsScreen";
 import SpendingScreen from "../screens/SpendingScreen";
 import AnalyticsScreen from "../screens/AnalyticsScreen";
@@ -15,6 +17,29 @@ const config = Platform.select({
   web: { headerMode: "screen" },
   default: {}
 });
+
+// Todo screen
+
+const TodoStack = createStackNavigator(
+  {
+    Todo: TodoScreen
+  },
+  config
+);
+
+TodoStack.navigationOptions = {
+  tabBarLabel: "To Do",
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={
+        Platform.OS === "ios" ? "ios-checkbox-outline" : "md-checkbox-outline"
+      }
+    />
+  )
+};
+
+TodoStack.path = "";
 
 // Transactions screen
 
@@ -101,6 +126,7 @@ SettingsStack.navigationOptions = {
 SettingsStack.path = "";
 
 const tabNavigator = createBottomTabNavigator({
+  TodoStack,
   TransactionsStack,
   SpendingStack,
   AnalyticsStack,
