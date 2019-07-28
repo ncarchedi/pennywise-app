@@ -1,8 +1,7 @@
 import React from "react";
-import { StyleSheet, Text, SectionList, View } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
+import { StyleSheet, Text, FlatList, View } from "react-native";
 
-export default function TransactionsList({ header, transactions }) {
+export default function TransactionsList({ transactions }) {
   ListItemSeparator = () => {
     return (
       <View style={{ height: 1, width: "100%", backgroundColor: "#f1f1f1" }} />
