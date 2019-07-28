@@ -1,47 +1,36 @@
 import React from "react";
-import { ScrollView, StyleSheet, Text, View, SectionList } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 
 import TransactionsList from "../components/TransactionsList";
+import EditTransactionModal from "../components/EditTransactionModal";
+import transactionsData from "../transactions.json";
 
 export default class TransactionsScreen extends React.Component {
   state = {
-    transactions: {
-      new: [
-        {
-          date: "Thursday, July 25",
-          data: [{ name: "Amazon.com", amount: "84.33" }]
-        },
-        {
-          date: "Wednesday, July 24",
-          data: [
-            { name: "Union Square Cafe", amount: "104.00" },
-            { name: "ACME, Inc.", amount: "21.99" },
-            { name: "The Corner Store", amount: "9.95" }
-          ]
-        },
-        {
-          date: "Tuesday, July 23",
-          data: [{ name: "Ace Hardware", amount: "25.99" }]
-        }
-      ],
-      categorized: [
-        {
-          date: "Monday, July 22",
-          data: [{ name: "Whole Foods", amount: "49.45" }]
-        },
-        {
-          date: "Saturday, July 20",
-          data: [
-            { name: "Netflix", amount: "14.99" },
-            { name: "Tequila Sunrise", amount: "75.25" }
-          ]
-        }
-      ]
-    }
+    transactions: [],
+    selectedTransaction: {},
+    isModalVisible: false
+  };
+
+  componentDidMount() {
+    this.setState({
+      transactions: transactionsData
+    });
+  }
+
+  toggleModal = () => {
+    this.setState({ isModalVisible: !this.state.isModalVisible });
+  };
+
+  handleTransactionPress = item => {
+    this.setState({
+      selectedTransaction: item
+    });
+    this.toggleModal();
   };
 
   render() {
-    const { transactions } = this.state;
+    const { transactions, selectedTransaction, isModalVisible } = this.state;
 
     return (
       <View style={styles.container}>
@@ -49,10 +38,14 @@ export default class TransactionsScreen extends React.Component {
           style={styles.container}
           contentContainerStyle={styles.contentContainer}
         >
-          <TransactionsList header="New" transactions={transactions.new} />
           <TransactionsList
-            header="Categorized"
-            transactions={transactions.categorized}
+            transactions={transactions}
+            onTransactionPress={this.handleTransactionPress}
+          />
+          <EditTransactionModal
+            transaction={selectedTransaction}
+            isVisible={isModalVisible}
+            onExitModal={this.toggleModal}
           />
         </ScrollView>
       </View>
