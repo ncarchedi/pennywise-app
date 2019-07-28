@@ -63,19 +63,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff"
   },
-  transactionsListHeader: {
-    color: "#fff",
-    fontSize: 22,
-    marginBottom: 10,
-    backgroundColor: "#92BFB1",
-    paddingVertical: 5,
-    paddingHorizontal: 10
-  },
-  transactionsDateHeader: {
-    fontWeight: "bold",
-    marginTop: 10,
-    marginHorizontal: 10
-  },
   transactionsListItem: {
     paddingVertical: 15,
     marginHorizontal: 10

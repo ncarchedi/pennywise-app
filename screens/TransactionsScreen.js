@@ -1,8 +1,8 @@
 import React from "react";
-import { ScrollView, StyleSheet, View, Button, Text } from "react-native";
-import Modal from "react-native-modal";
+import { ScrollView, StyleSheet, View } from "react-native";
 
 import TransactionsList from "../components/TransactionsList";
+import EditTransactionModal from "../components/EditTransactionModal";
 import transactionsData from "../transactions.json";
 
 export default class TransactionsScreen extends React.Component {
@@ -30,7 +30,7 @@ export default class TransactionsScreen extends React.Component {
   };
 
   render() {
-    const { transactions } = this.state;
+    const { transactions, selectedTransaction, isModalVisible } = this.state;
 
     return (
       <View style={styles.container}>
@@ -42,20 +42,11 @@ export default class TransactionsScreen extends React.Component {
             transactions={transactions}
             onTransactionPress={this.handleTransactionPress}
           />
-          <Modal
-            isVisible={this.state.isModalVisible}
-            backdropOpacity={0.95}
-            backdropColor="#fff"
-            animationInTiming={50}
-            backdropTransitionInTiming={50}
-            style={styles.transactionModal}
-          >
-            <Text>{this.state.selectedTransaction.name}</Text>
-            <Text>{this.state.selectedTransaction.amount}</Text>
-            <Text>{this.state.selectedTransaction.category}</Text>
-            <Text>{this.state.selectedTransaction.date}</Text>
-            <Button title="Go Back" onPress={this.toggleModal} />
-          </Modal>
+          <EditTransactionModal
+            transaction={selectedTransaction}
+            isVisible={isModalVisible}
+            onExitModal={this.toggleModal}
+          />
         </ScrollView>
       </View>
     );
@@ -73,8 +64,5 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingBottom: 30
-  },
-  transactionModal: {
-    alignItems: "center"
   }
 });
