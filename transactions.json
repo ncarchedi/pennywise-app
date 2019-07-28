@@ -1,47 +1,55 @@
 [
   {
+    "id": "1",
     "date": "2019-07-25",
     "name": "Amazon.com",
     "amount": "-84.33",
     "category": "Household Goods"
   },
   {
+    "id": "2",
     "date": "2019-07-24",
     "name": "Union Square Cafe",
     "amount": "-104.00",
     "category": "Bars & Restaurants"
   },
   {
+    "id": "3",
     "date": "2019-07-24",
     "name": "ACME, Inc.",
     "amount": "2000.00",
     "category": "Income"
   },
   {
+    "id": "4",
     "date": "2019-07-24",
     "name": "The Corner Store",
     "amount": "-9.95",
     "category": "Personal Care"
   },
   {
+    "id": "5",
     "date": "2019-07-23",
     "name": "Ace Hardware",
     "amount": "-25.99",
     "category": "Household Goods"
   },
   {
+    "id": "6",
     "date": "2019-07-22",
     "name": "Whole Foods",
     "amount": "-49.45",
     "category": "Groceries"
   },
   {
+    "id": "7",
     "date": "2019-07-20",
     "name": "Netflix",
     "amount": "-14.99",
     "category": "Entertainment"
   },
   {
+    "id": "8",
     "date": "2019-07-20",
     "name": "Tequila Sunrise",
     "amount": "-75.25",
