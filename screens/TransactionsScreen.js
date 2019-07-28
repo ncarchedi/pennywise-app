@@ -8,6 +8,7 @@ import transactionsData from "../transactions.json";
 export default class TransactionsScreen extends React.Component {
   state = {
     transactions: [],
+    selectedTransaction: {},
     isModalVisible: false
   };
 
@@ -21,6 +22,13 @@ export default class TransactionsScreen extends React.Component {
     this.setState({ isModalVisible: !this.state.isModalVisible });
   };
 
+  handleTransactionPress = item => {
+    this.setState({
+      selectedTransaction: item
+    });
+    this.toggleModal();
+  };
+
   render() {
     const { transactions } = this.state;
 
@@ -30,18 +38,23 @@ export default class TransactionsScreen extends React.Component {
           style={styles.container}
           contentContainerStyle={styles.contentContainer}
         >
-          <TransactionsList transactions={transactions} />
-          <Button title="Edit Transaction" onPress={this.toggleModal} />
+          <TransactionsList
+            transactions={transactions}
+            onTransactionPress={this.handleTransactionPress}
+          />
           <Modal
             isVisible={this.state.isModalVisible}
-            backdropOpacity={1}
+            backdropOpacity={0.95}
             backdropColor="#fff"
+            animationInTiming={50}
+            backdropTransitionInTiming={50}
             style={styles.transactionModal}
           >
-            <View style={styles.transactionModalText}>
-              <Text>This is where you will edit a transaction.</Text>
-              <Button title="Go Back" onPress={this.toggleModal} />
-            </View>
+            <Text>{this.state.selectedTransaction.name}</Text>
+            <Text>{this.state.selectedTransaction.amount}</Text>
+            <Text>{this.state.selectedTransaction.category}</Text>
+            <Text>{this.state.selectedTransaction.date}</Text>
+            <Button title="Go Back" onPress={this.toggleModal} />
           </Modal>
         </ScrollView>
       </View>
@@ -62,13 +75,6 @@ const styles = StyleSheet.create({
     paddingBottom: 30
   },
   transactionModal: {
-    paddingTop: 30,
-    paddingHorizontal: 20,
     alignItems: "center"
-  },
-  transactionModalText: {
-    fontSize: 17,
-    color: "rgba(96, 100, 109, 1)",
-    lineHeight: 24
   }
 });
