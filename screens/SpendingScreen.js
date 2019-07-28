@@ -44,10 +44,20 @@ export default class SpendingScreen extends React.Component {
         </View>
         <View style={styles.categorySpendingContainer}>
           <View style={styles.categorySpendingItemContainer}>
-            <Text>$ {item.thisMonth}</Text>
+            <Text> 
+              {Number(item.thisMonth).toLocaleString("en-US", { 
+                style: "currency", 
+                currency: "USD" 
+              })} 
+            </Text>
           </View>
           <View style={styles.categorySpendingItemContainer}>
-            <Text>$ {item.lastMonth}</Text>
+            <Text> 
+              {Number(item.lastMonth).toLocaleString("en-US", { 
+                style: "currency", 
+                currency: "USD" 
+              })} 
+            </Text>
           </View>
         </View>
       </View>
@@ -62,10 +72,10 @@ export default class SpendingScreen extends React.Component {
         </View>
         <View style={styles.categorySpendingContainer}>
           <View style={styles.categorySpendingItemContainer}>
-            <Text style={styles.headerText}>This month</Text>
+            <Text style={styles.headerText}>Last month</Text>
           </View>
           <View style={styles.categorySpendingItemContainer}>
-            <Text style={styles.headerText}>Last month</Text>
+            <Text style={styles.headerText}>This month</Text>
           </View>
         </View>
       </View>
@@ -132,6 +142,7 @@ const styles = StyleSheet.create({
   categorySpendingItemContainer: {
     minWidth: 85,
     marginVertical: 10,
+    flexDirection: 'row-reverse'
   },
   categorySpendingText: {
     color: 'pink',
