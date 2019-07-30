@@ -1,34 +1,34 @@
 import React from "react";
-import { ScrollView, StyleSheet, Text, View, SectionList, FlatList } from "react-native"; 
+import { ScrollView, StyleSheet, Text, View, FlatList } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 export default class SpendingScreen extends React.Component {
   state = {
     categories: [
       {
-        name: 'Food',
-        icon: 'md-pizza',
+        name: "Food",
+        icon: "md-pizza",
         thisMonth: 237.98,
-        lastMonth: 576.88,
+        lastMonth: 576.88
       },
       {
-        name: 'Transportation',
-        icon: 'md-car',
+        name: "Transportation",
+        icon: "md-car",
         thisMonth: 237.98,
-        lastMonth: 576.88,
+        lastMonth: 576.88
       },
       {
-        name: 'Groceries',
-        icon: 'md-cart',
+        name: "Groceries",
+        icon: "md-cart",
         thisMonth: 237.98,
-        lastMonth: 576.88,
+        lastMonth: 576.88
       },
       {
-        name: 'Salary',
-        icon: 'md-cash',
-        thisMonth: 2250.90,
-        lastMonth: 4500.10,
-      },
+        name: "Salary",
+        icon: "md-cash",
+        thisMonth: 2250.9,
+        lastMonth: 4500.1
+      }
     ]
   };
 
@@ -36,33 +36,30 @@ export default class SpendingScreen extends React.Component {
     return (
       <View style={styles.categoryContainer}>
         <View style={styles.categoryNameContainer}>
-          <Ionicons
-            name={item.icon}
-            size={20}
-          />
+          <Ionicons name={item.icon} size={20} />
           <Text style={styles.nameText}>{item.name}</Text>
         </View>
         <View style={styles.categorySpendingContainer}>
           <View style={styles.categorySpendingItemContainer}>
-            <Text> 
-              {Number(item.thisMonth).toLocaleString("en-US", { 
-                style: "currency", 
-                currency: "USD" 
-              })} 
+            <Text>
+              {Number(item.thisMonth).toLocaleString("en-US", {
+                style: "currency",
+                currency: "USD"
+              })}
             </Text>
           </View>
           <View style={styles.categorySpendingItemContainer}>
-            <Text> 
-              {Number(item.lastMonth).toLocaleString("en-US", { 
-                style: "currency", 
-                currency: "USD" 
-              })} 
+            <Text>
+              {Number(item.lastMonth).toLocaleString("en-US", {
+                style: "currency",
+                currency: "USD"
+              })}
             </Text>
           </View>
         </View>
       </View>
-    )
-  }
+    );
+  };
 
   listHeader = () => {
     return (
@@ -79,8 +76,8 @@ export default class SpendingScreen extends React.Component {
           </View>
         </View>
       </View>
-    )
-  }
+    );
+  };
 
   render() {
     return (
@@ -99,7 +96,7 @@ export default class SpendingScreen extends React.Component {
           </View>
         </ScrollView>
       </View>
-    )
+    );
   }
 }
 
@@ -119,35 +116,27 @@ const styles = StyleSheet.create({
   spendingContainer: {
     // alignItems: "center"
   },
-  spendingText: {
-    fontSize: 17,
-    color: "rgba(96, 100, 109, 1)",
-    lineHeight: 24
-  },
   categoryContainer: {
     flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between"
   },
   nameText: {
-    marginHorizontal: 10,
+    marginHorizontal: 10
   },
   categoryNameContainer: {
-    flexDirection: 'row',
-    marginVertical: 10,
+    flexDirection: "row",
+    marginVertical: 10
   },
   categorySpendingContainer: {
-    flexDirection: 'row-reverse',
+    flexDirection: "row-reverse"
   },
   categorySpendingItemContainer: {
     minWidth: 85,
     marginVertical: 10,
-    flexDirection: 'row-reverse'
-  },
-  categorySpendingText: {
-    color: 'pink',
+    flexDirection: "row-reverse"
   },
   headerText: {
-    fontWeight: 'bold',
-  },
+    fontWeight: "bold"
+  }
 });
