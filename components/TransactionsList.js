@@ -19,26 +19,15 @@ export default function TransactionsList({ transactions, onTransactionPress }) {
       <TouchableOpacity onPress={() => onTransactionPress(item)}>
         <View style={styles.transactionsListItem} key={index}>
           <View style={{ flexDirection: "row" }}>
-            <Text
-              style={[styles.transactionsListItemText, { fontWeight: "bold" }]}
-            >
-              {item.name}
-            </Text>
-            <Text
-              style={[styles.transactionsListItemText, { marginLeft: "auto" }]}
-            >
+            <Text style={{ fontWeight: "bold" }}>{item.name}</Text>
+            <Text style={{ marginLeft: "auto" }}>
               {Number(item.amount).toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD"
               })}
             </Text>
           </View>
-          <Text
-            style={[
-              styles.transactionsListItemText,
-              { fontStyle: "italic", marginTop: 5 }
-            ]}
-          >
+          <Text style={{ fontStyle: "italic", marginTop: 5 }}>
             {item.category}
           </Text>
         </View>
@@ -66,8 +55,5 @@ const styles = StyleSheet.create({
   transactionsListItem: {
     paddingVertical: 15,
     marginHorizontal: 10
-  },
-  transactionsListItemText: {
-    color: "rgba(96, 100, 109, 1)"
   }
 });
