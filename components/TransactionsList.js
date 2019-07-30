@@ -38,7 +38,7 @@ export default function TransactionsList({ transactions, onTransactionPress }) {
   return (
     <View style={styles.container}>
       <FlatList
-        data={transactions}
+        data={transactions.filter(t => t.category)}
         renderItem={({ item, index }) => this.ListItem(item, index)}
         ItemSeparatorComponent={this.ListItemSeparator}
         keyExtractor={(item, index) => item + index}
