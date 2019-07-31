@@ -7,7 +7,11 @@ import {
   TouchableOpacity
 } from "react-native";
 
-export default function TransactionsList({ transactions, onTransactionPress }) {
+export default function TransactionsList({
+  transactions,
+  onTransactionPress,
+  categorized
+}) {
   ListItemSeparator = () => {
     return (
       <View style={{ height: 1, width: "100%", backgroundColor: "#f1f1f1" }} />
@@ -34,6 +38,11 @@ export default function TransactionsList({ transactions, onTransactionPress }) {
       </TouchableOpacity>
     );
   };
+
+  // get only the relevant transactions
+  transactions = categorized
+    ? transactions.filter(t => t.category !== "No Category")
+    : transactions.filter(t => t.category === "No Category");
 
   return (
     <View style={styles.container}>

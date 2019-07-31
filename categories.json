@@ -1,0 +1,42 @@
+[
+  {
+    "id": "0",
+    "name": "No Category",
+    "icon": "ios-help"
+  },
+  {
+    "id": "1",
+    "name": "Bars & Restaurants",
+    "icon": "ios-restaurant"
+  },
+  {
+    "id": "2",
+    "name": "Entertainment",
+    "icon": "ios-tv"
+  },
+  {
+    "id": "3",
+    "name": "Groceries",
+    "icon": "ios-cart"
+  },
+  {
+    "id": "4",
+    "name": "Household Goods",
+    "icon": "ios-home"
+  },
+  {
+    "id": "5",
+    "name": "Income",
+    "icon": "ios-cash"
+  },
+  {
+    "id": "6",
+    "name": "Personal Care",
+    "icon": "ios-body"
+  },
+  {
+    "id": "7",
+    "name": "Transportation",
+    "icon": "ios-train"
+  }
+]
