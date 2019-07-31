@@ -26,3 +26,5 @@ cd conscious-spending-app
 git checkout dev
 yarn start
 ```
+
+Link to the backend: https://github.com/BGordts/conscious-spending-backend.git
