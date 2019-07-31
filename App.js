@@ -7,6 +7,8 @@ import { Ionicons } from "@expo/vector-icons";
 
 import AppNavigator from "./navigation/AppNavigator";
 
+import { GlobalContextProvider } from "./GlobalContext";
+
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
 
@@ -22,7 +24,9 @@ export default function App(props) {
     return (
       <View style={styles.container}>
         {Platform.OS === "ios" && <StatusBar barStyle="default" />}
-        <AppNavigator />
+        <GlobalContextProvider>
+          <AppNavigator />
+        </GlobalContextProvider>
       </View>
     );
   }

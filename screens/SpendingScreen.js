@@ -1,37 +1,9 @@
 import React from "react";
 import { ScrollView, StyleSheet, Text, View, FlatList } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { withGlobalContext } from "../GlobalContext";
 
-export default class SpendingScreen extends React.Component {
-  state = {
-    categories: [
-      {
-        name: "Food",
-        icon: "md-pizza",
-        thisMonth: 237.98,
-        lastMonth: 576.88
-      },
-      {
-        name: "Transportation",
-        icon: "md-car",
-        thisMonth: 237.98,
-        lastMonth: 576.88
-      },
-      {
-        name: "Groceries",
-        icon: "md-cart",
-        thisMonth: 237.98,
-        lastMonth: 576.88
-      },
-      {
-        name: "Salary",
-        icon: "md-cash",
-        thisMonth: 2250.9,
-        lastMonth: 4500.1
-      }
-    ]
-  };
-
+class SpendingScreen extends React.Component {
   listItem = (item, index) => {
     return (
       <View style={styles.categoryContainer}>
@@ -42,7 +14,8 @@ export default class SpendingScreen extends React.Component {
         <View style={styles.categorySpendingContainer}>
           <View style={styles.categorySpendingItemContainer}>
             <Text>
-              {Number(item.thisMonth).toLocaleString("en-US", {
+              {/* Todo: replace with actual values */}
+              {Number("400").toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD"
               })}
@@ -50,7 +23,8 @@ export default class SpendingScreen extends React.Component {
           </View>
           <View style={styles.categorySpendingItemContainer}>
             <Text>
-              {Number(item.lastMonth).toLocaleString("en-US", {
+              {/* Todo: replace with actual values */}
+              {Number("400").toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD"
               })}
@@ -80,6 +54,8 @@ export default class SpendingScreen extends React.Component {
   };
 
   render() {
+    const categories = this.props.global.categories;
+
     return (
       <View style={styles.container}>
         <ScrollView
@@ -88,7 +64,7 @@ export default class SpendingScreen extends React.Component {
         >
           <View style={styles.spendingContainer}>
             <FlatList
-              data={this.state.categories}
+              data={categories}
               renderItem={({ item, index }) => this.listItem(item, index)}
               ListHeaderComponent={() => this.listHeader()}
               keyExtractor={(item, index) => item + index}
@@ -99,6 +75,8 @@ export default class SpendingScreen extends React.Component {
     );
   }
 }
+
+export default withGlobalContext(SpendingScreen);
 
 SpendingScreen.navigationOptions = {
   title: "Spending"
