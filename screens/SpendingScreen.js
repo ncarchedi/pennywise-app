@@ -1,36 +1,9 @@
 import React from "react";
 import { ScrollView, StyleSheet, Text, View, SectionList, FlatList } from "react-native"; 
 import { Ionicons } from "@expo/vector-icons";
+import { withGlobalContext } from '../GlobalContext';
 
-export default class SpendingScreen extends React.Component {
-  state = {
-    categories: [
-      {
-        name: 'Food',
-        icon: 'md-pizza',
-        thisMonth: 237.98,
-        lastMonth: 576.88,
-      },
-      {
-        name: 'Transportation',
-        icon: 'md-car',
-        thisMonth: 237.98,
-        lastMonth: 576.88,
-      },
-      {
-        name: 'Groceries',
-        icon: 'md-cart',
-        thisMonth: 237.98,
-        lastMonth: 576.88,
-      },
-      {
-        name: 'Salary',
-        icon: 'md-cash',
-        thisMonth: 2250.90,
-        lastMonth: 4500.10,
-      },
-    ]
-  };
+class SpendingScreen extends React.Component {
 
   listItem = (item, index) => {
     return (
@@ -91,7 +64,7 @@ export default class SpendingScreen extends React.Component {
         >
           <View style={styles.spendingContainer}>
             <FlatList
-              data={this.state.categories}
+              data={this.props.global.categories}
               renderItem={({ item, index }) => this.listItem(item, index)}
               ListHeaderComponent={() => this.listHeader()}
               keyExtractor={(item, index) => item + index}
@@ -102,6 +75,8 @@ export default class SpendingScreen extends React.Component {
     )
   }
 }
+
+export default withGlobalContext(SpendingScreen);
 
 SpendingScreen.navigationOptions = {
   title: "Spending"
