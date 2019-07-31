@@ -1,0 +1,30 @@
+[
+  {
+    "id": "1",
+    "name": "Household Goods"
+  },
+  {
+    "id": "2",
+    "name": "Bars & Restaurants"
+  },
+  {
+    "id": "3",
+    "name": "Income"
+  },
+  {
+    "id": "4",
+    "name": "Personal Care"
+  },
+  {
+    "id": "5",
+    "name": "Groceries"
+  },
+  {
+    "id": "6",
+    "name": "Entertainment"
+  },
+  {
+    "id": "7",
+    "name": "Transportation"
+  }
+]

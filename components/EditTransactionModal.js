@@ -5,9 +5,12 @@ import {
   Text,
   View,
   DatePickerIOS,
-  TextInput
+  TextInput,
+  Picker
 } from "react-native";
 import Modal from "react-native-modal";
+
+import categoriesData from "../categories.json";
 
 export default function EditTransactionModal({
   transaction,
@@ -30,24 +33,30 @@ export default function EditTransactionModal({
           <Text style={styles.inputLabel}>Name</Text>
           <TextInput
             style={styles.textInput}
-            underlineColorAndroid="transparent"
             value={transaction.name}
             onChangeText={name => console.log(name)}
           />
           <Text style={styles.inputLabel}>Amount</Text>
           <TextInput
             style={styles.textInput}
-            underlineColorAndroid="transparent"
             value={transaction.amount}
             onChangeText={amount => console.log(amount)}
           />
           <Text style={styles.inputLabel}>Category</Text>
-          <TextInput
-            style={styles.textInput}
-            underlineColorAndroid="transparent"
-            value={transaction.category}
-            onChangeText={category => console.log(category)}
-          />
+          <Picker
+            selectedValue={transaction.category}
+            onValueChange={category => console.log(category)}
+          >
+            {categoriesData.map(category => {
+              return (
+                <Picker.Item
+                  key={category.id}
+                  value={category.name}
+                  label={category.name}
+                />
+              );
+            })}
+          </Picker>
           <Text style={styles.inputLabel}>Date</Text>
           <DatePickerIOS
             date={new Date(transaction.date)}
