@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import transactionsData from "./transactions.json";
 import categoriesData from "./categories.json";
 
@@ -8,12 +8,12 @@ export class GlobalContextProvider extends React.Component {
   state = {
     transactions: [],
     categories: []
-  }
+  };
 
   componentDidMount() {
     this.setState({
       transactions: transactionsData,
-      categories: categoriesData,
+      categories: categoriesData
     });
   }
 
@@ -26,27 +26,25 @@ export class GlobalContextProvider extends React.Component {
   //   this.setState({ isOnline: false });
   // }
 
-  render () {
+  render() {
     return (
       <GlobalContext.Provider
         value={{
-          ...this.state,
-          // Every function to updat ethe state should be listed here too:
+          ...this.state
+          // Every function to update the state should be listed here too:
           // switchToOnline: this.switchToOnline,
           // switchToOffline: this.switchToOffline
         }}
       >
         {this.props.children}
       </GlobalContext.Provider>
-    )
+    );
   }
 }
 
 // create the consumer as higher order component
 export const withGlobalContext = ChildComponent => props => (
   <GlobalContext.Consumer>
-    {
-      context => <ChildComponent {...props} global={context}  />
-    }
+    {context => <ChildComponent {...props} global={context} />}
   </GlobalContext.Consumer>
 );

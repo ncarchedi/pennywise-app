@@ -4,7 +4,7 @@ import { ScrollView, StyleSheet, View } from "react-native";
 import TransactionsList from "../components/TransactionsList";
 import EditTransactionModal from "../components/EditTransactionModal";
 
-import { withGlobalContext } from '../GlobalContext';
+import { withGlobalContext } from "../GlobalContext";
 
 class TodoScreen extends React.Component {
   state = {
@@ -24,7 +24,7 @@ class TodoScreen extends React.Component {
   };
 
   render() {
-    transactions = this.props.global.transactions
+    transactions = this.props.global.transactions;
     const { selectedTransaction, isModalVisible } = this.state;
 
     return (

@@ -1,4 +1,5 @@
 # Data model
+
 ```
 {
   transactions: [
@@ -10,7 +11,7 @@
       category: {
         id: "1",
         name: "Food"
-      } 
+      }
     }
   ],
   categories: [
@@ -23,4 +24,4 @@
 }
 ```
 
-Let's usee this to share context for now: https://stackoverflow.com/questions/51187582/how-should-the-new-context-api-work-with-react-native-navigator. 
+Let's use this to share context for now: https://stackoverflow.com/questions/51187582/how-should-the-new-context-api-work-with-react-native-navigator.

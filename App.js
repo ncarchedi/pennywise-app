@@ -7,7 +7,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 import AppNavigator from "./navigation/AppNavigator";
 
-import { GlobalContextProvider } from './GlobalContext';
+import { GlobalContextProvider } from "./GlobalContext";
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);

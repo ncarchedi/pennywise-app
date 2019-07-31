@@ -1,10 +1,9 @@
 import React from "react";
 import { ScrollView, StyleSheet, Text, View, FlatList } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { withGlobalContext } from '../GlobalContext';
+import { withGlobalContext } from "../GlobalContext";
 
-class SpendingScreen extends React.Component { 
-
+class SpendingScreen extends React.Component {
   listItem = (item, index) => {
     return (
       <View style={styles.categoryContainer}>
@@ -55,7 +54,7 @@ class SpendingScreen extends React.Component {
   };
 
   render() {
-    const categories = this.props.global.categories
+    const categories = this.props.global.categories;
 
     return (
       <View style={styles.container}>

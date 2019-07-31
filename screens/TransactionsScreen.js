@@ -4,7 +4,7 @@ import { ScrollView, StyleSheet, View } from "react-native";
 import TransactionsList from "../components/TransactionsList";
 import EditTransactionModal from "../components/EditTransactionModal";
 
-import { withGlobalContext } from '../GlobalContext';
+import { withGlobalContext } from "../GlobalContext";
 
 class TransactionsScreen extends React.Component {
   state = {

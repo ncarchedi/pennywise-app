@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import Modal from "react-native-modal";
 
-import { withGlobalContext } from '../GlobalContext';
+import { withGlobalContext } from "../GlobalContext";
 
 function EditTransactionModal({
   transaction,
@@ -74,7 +74,7 @@ function EditTransactionModal({
   );
 }
 
-export default withGlobalContext(EditTransactionModal)
+export default withGlobalContext(EditTransactionModal);
 
 const styles = StyleSheet.create({
   modalContent: {
