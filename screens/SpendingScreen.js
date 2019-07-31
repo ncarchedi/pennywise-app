@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet, Text, View, FlatList } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { withGlobalContext } from '../GlobalContext';
 
-class SpendingScreen extends React.Component {
+class SpendingScreen extends React.Component { 
 
   listItem = (item, index) => {
     return (
@@ -15,7 +15,8 @@ class SpendingScreen extends React.Component {
         <View style={styles.categorySpendingContainer}>
           <View style={styles.categorySpendingItemContainer}>
             <Text>
-              {Number(item.thisMonth).toLocaleString("en-US", {
+              {/* Todo: replace with actual values */}
+              {Number("400").toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD"
               })}
@@ -23,7 +24,8 @@ class SpendingScreen extends React.Component {
           </View>
           <View style={styles.categorySpendingItemContainer}>
             <Text>
-              {Number(item.lastMonth).toLocaleString("en-US", {
+              {/* Todo: replace with actual values */}
+              {Number("400").toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD"
               })}
