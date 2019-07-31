@@ -3,20 +3,14 @@ import { ScrollView, StyleSheet, View } from "react-native";
 
 import TransactionsList from "../components/TransactionsList";
 import EditTransactionModal from "../components/EditTransactionModal";
-import transactionsData from "../transactions.json";
 
-export default class TodoScreen extends React.Component {
+import { withGlobalContext } from '../GlobalContext';
+
+class TodoScreen extends React.Component {
   state = {
-    transactions: [],
     selectedTransaction: {},
     isModalVisible: false
   };
-
-  componentDidMount() {
-    this.setState({
-      transactions: transactionsData
-    });
-  }
 
   toggleModal = () => {
     this.setState({ isModalVisible: !this.state.isModalVisible });
@@ -30,7 +24,8 @@ export default class TodoScreen extends React.Component {
   };
 
   render() {
-    const { transactions, selectedTransaction, isModalVisible } = this.state;
+    transactions = this.props.global.transactions
+    const { selectedTransaction, isModalVisible } = this.state;
 
     return (
       <View style={styles.container}>
@@ -53,6 +48,8 @@ export default class TodoScreen extends React.Component {
     );
   }
 }
+
+export default withGlobalContext(TodoScreen);
 
 TodoScreen.navigationOptions = {
   title: "To Do"

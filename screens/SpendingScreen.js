@@ -55,6 +55,8 @@ class SpendingScreen extends React.Component {
   };
 
   render() {
+    const categories = this.props.global.categories
+
     return (
       <View style={styles.container}>
         <ScrollView
@@ -63,7 +65,7 @@ class SpendingScreen extends React.Component {
         >
           <View style={styles.spendingContainer}>
             <FlatList
-              data={this.props.global.categories}
+              data={categories}
               renderItem={({ item, index }) => this.listItem(item, index)}
               ListHeaderComponent={() => this.listHeader()}
               keyExtractor={(item, index) => item + index}

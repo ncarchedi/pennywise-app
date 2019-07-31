@@ -10,12 +10,13 @@ import {
 } from "react-native";
 import Modal from "react-native-modal";
 
-import categoriesData from "../categories.json";
+import { withGlobalContext } from '../GlobalContext';
 
-export default function EditTransactionModal({
+function EditTransactionModal({
   transaction,
   isVisible,
-  onExitModal
+  onExitModal,
+  ...props
 }) {
   return (
     <Modal
@@ -47,7 +48,7 @@ export default function EditTransactionModal({
             selectedValue={transaction.category}
             onValueChange={category => console.log(category)}
           >
-            {categoriesData.map(category => {
+            {props.global.categories.map(category => {
               return (
                 <PickerIOS.Item
                   key={category.id}
@@ -72,6 +73,8 @@ export default function EditTransactionModal({
     </Modal>
   );
 }
+
+export default withGlobalContext(EditTransactionModal)
 
 const styles = StyleSheet.create({
   modalContent: {
