@@ -41,6 +41,7 @@ export default class TransactionsScreen extends React.Component {
           <TransactionsList
             transactions={transactions}
             onTransactionPress={this.handleTransactionPress}
+            categorized={true}
           />
           <EditTransactionModal
             transaction={selectedTransaction}

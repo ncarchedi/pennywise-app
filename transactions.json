@@ -60,20 +60,20 @@
     "date": "2019-07-27",
     "name": "Toilet Repair",
     "amount": "-125.00",
-    "category": null
+    "category": "No Category"
   },
   {
     "id": "10",
     "date": "2019-07-27",
     "name": "Verizon",
     "amount": "-59.95",
-    "category": null
+    "category": "No Category"
   },
   {
     "id": "11",
     "date": "2019-07-28",
     "name": "Venmo",
     "amount": "50.00",
-    "category": null
+    "category": "No Category"
   }
 ]

@@ -1,21 +1,57 @@
 import React from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 
-export default function TodoScreen() {
-  return (
-    <View style={styles.container}>
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={styles.contentContainer}
-      >
-        <View style={styles.todoContainer}>
-          <Text style={styles.todoText}>
-            This will show all new transactions.
-          </Text>
-        </View>
-      </ScrollView>
-    </View>
-  );
+import TransactionsList from "../components/TransactionsList";
+import EditTransactionModal from "../components/EditTransactionModal";
+import transactionsData from "../transactions.json";
+
+export default class TodoScreen extends React.Component {
+  state = {
+    transactions: [],
+    selectedTransaction: {},
+    isModalVisible: false
+  };
+
+  componentDidMount() {
+    this.setState({
+      transactions: transactionsData
+    });
+  }
+
+  toggleModal = () => {
+    this.setState({ isModalVisible: !this.state.isModalVisible });
+  };
+
+  handleTransactionPress = item => {
+    this.setState({
+      selectedTransaction: item
+    });
+    this.toggleModal();
+  };
+
+  render() {
+    const { transactions, selectedTransaction, isModalVisible } = this.state;
+
+    return (
+      <View style={styles.container}>
+        <ScrollView
+          style={styles.container}
+          contentContainerStyle={styles.contentContainer}
+        >
+          <TransactionsList
+            transactions={transactions}
+            onTransactionPress={this.handleTransactionPress}
+            categorized={false}
+          />
+          <EditTransactionModal
+            transaction={selectedTransaction}
+            isVisible={isModalVisible}
+            onExitModal={this.toggleModal}
+          />
+        </ScrollView>
+      </View>
+    );
+  }
 }
 
 TodoScreen.navigationOptions = {
@@ -28,15 +64,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff"
   },
   contentContainer: {
-    paddingTop: 30,
-    paddingHorizontal: 20
-  },
-  todoContainer: {
-    alignItems: "center"
-  },
-  todoText: {
-    fontSize: 17,
-    color: "rgba(96, 100, 109, 1)",
-    lineHeight: 24
+    paddingBottom: 30
   }
 });
