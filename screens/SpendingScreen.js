@@ -6,6 +6,10 @@ import _ from "lodash";
 import { withGlobalContext } from "../GlobalContext";
 
 class SpendingScreen extends React.Component {
+  static navigationOptions = {
+    title: "Spending"
+  };
+
   listItem = (item, index) => {
     return (
       <View style={styles.categoryContainer}>
@@ -95,10 +99,6 @@ class SpendingScreen extends React.Component {
 }
 
 export default withGlobalContext(SpendingScreen);
-
-SpendingScreen.navigationOptions = {
-  title: "Spending"
-};
 
 const styles = StyleSheet.create({
   container: {

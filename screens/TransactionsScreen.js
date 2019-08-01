@@ -7,6 +7,10 @@ import EditTransactionModal from "../components/EditTransactionModal";
 import { withGlobalContext } from "../GlobalContext";
 
 class TransactionsScreen extends React.Component {
+  static navigationOptions = {
+    title: "Transactions"
+  };
+
   state = {
     selectedTransaction: {},
     isModalVisible: false
@@ -50,10 +54,6 @@ class TransactionsScreen extends React.Component {
 }
 
 export default withGlobalContext(TransactionsScreen);
-
-TransactionsScreen.navigationOptions = {
-  title: "Transactions"
-};
 
 const styles = StyleSheet.create({
   container: {

@@ -7,6 +7,10 @@ import EditTransactionModal from "../components/EditTransactionModal";
 import { withGlobalContext } from "../GlobalContext";
 
 class TodoScreen extends React.Component {
+  static navigationOptions = {
+    title: "To Do"
+  };
+
   state = {
     selectedTransaction: {},
     isModalVisible: false
@@ -50,10 +54,6 @@ class TodoScreen extends React.Component {
 }
 
 export default withGlobalContext(TodoScreen);
-
-TodoScreen.navigationOptions = {
-  title: "To Do"
-};
 
 const styles = StyleSheet.create({
   container: {
