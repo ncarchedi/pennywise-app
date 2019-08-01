@@ -71,6 +71,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff"
   },
   contentContainer: {
-    marginVertical: 10
+    // marginVertical: 10
   }
 });
