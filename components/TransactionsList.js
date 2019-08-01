@@ -2,10 +2,11 @@ import React from "react";
 import {
   StyleSheet,
   Text,
-  FlatList,
+  SectionList,
   View,
   TouchableOpacity
 } from "react-native";
+import _ from "lodash";
 
 export default function TransactionsList({
   transactions,
@@ -40,15 +41,22 @@ export default function TransactionsList({
   };
 
   // get only the relevant transactions
-  transactions = categorized
-    ? transactions.filter(t => t.category !== "No Category")
-    : transactions.filter(t => t.category === "No Category");
+  transactionsFiltered = categorized
+    ? _.reject(transactions, {
+        data: [{ category: "No Category" }]
+      })
+    : _.filter(transactions, {
+        data: [{ category: "No Category" }]
+      });
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={transactions}
+      <SectionList
+        sections={transactionsFiltered}
         renderItem={({ item, index }) => this.ListItem(item, index)}
+        renderSectionHeader={({ section: { date } }) => (
+          <Text style={{ fontWeight: "bold" }}>{date}</Text>
+        )}
         ItemSeparatorComponent={this.ListItemSeparator}
         keyExtractor={(item, index) => item + index}
       />

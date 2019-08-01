@@ -1,5 +1,6 @@
 import React from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
+import _ from "lodash";
 
 import TransactionsList from "../components/TransactionsList";
 import EditTransactionModal from "../components/EditTransactionModal";
@@ -31,6 +32,15 @@ class TransactionsScreen extends React.Component {
     const transactions = this.props.global.transactions;
     const { selectedTransaction, isModalVisible } = this.state;
 
+    const transactionsByDate = _(transactions)
+      .groupBy("date")
+      .map((transactions, date) => ({
+        date: date,
+        data: transactions
+      }))
+      .sortBy("date")
+      .value();
+
     return (
       <View style={styles.container}>
         <ScrollView
@@ -38,7 +48,7 @@ class TransactionsScreen extends React.Component {
           contentContainerStyle={styles.contentContainer}
         >
           <TransactionsList
-            transactions={transactions}
+            transactions={transactionsByDate}
             onTransactionPress={this.handleTransactionPress}
             categorized={true}
           />
