@@ -129,8 +129,8 @@ const tabNavigator = createBottomTabNavigator({
   TodoStack,
   TransactionsStack,
   SpendingStack,
-  AnalyticsStack,
-  SettingsStack
+  AnalyticsStack
+  // SettingsStack
 });
 
 tabNavigator.path = "";
