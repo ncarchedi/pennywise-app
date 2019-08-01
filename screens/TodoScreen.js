@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff"
   },
   contentContainer: {
-    paddingBottom: 30
+    marginVertical: 10
   },
   newTransactionButton: {
     marginBottom: 15,
