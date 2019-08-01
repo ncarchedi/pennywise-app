@@ -1,7 +1,9 @@
 import React from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 
-export default class AnalyticsScreen extends React.Component {
+import { withGlobalContext } from "../GlobalContext";
+
+class AnalyticsScreen extends React.Component {
   static navigationOptions = {
     title: "Analytics"
   };
@@ -23,6 +25,8 @@ export default class AnalyticsScreen extends React.Component {
     );
   }
 }
+
+export default withGlobalContext(AnalyticsScreen);
 
 const styles = StyleSheet.create({
   container: {
