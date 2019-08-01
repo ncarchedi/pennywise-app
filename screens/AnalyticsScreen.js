@@ -1,26 +1,28 @@
 import React from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 
-export default function AnalyticsScreen() {
-  return (
-    <View style={styles.container}>
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={styles.contentContainer}
-      >
-        <View style={styles.analyticsContainer}>
-          <Text style={styles.analyticsText}>
-            This will show some spending analytics.
-          </Text>
-        </View>
-      </ScrollView>
-    </View>
-  );
-}
+export default class AnalyticsScreen extends React.Component {
+  static navigationOptions = {
+    title: "Analytics"
+  };
 
-AnalyticsScreen.navigationOptions = {
-  title: "Analytics"
-};
+  render() {
+    return (
+      <View style={styles.container}>
+        <ScrollView
+          style={styles.container}
+          contentContainerStyle={styles.contentContainer}
+        >
+          <View style={styles.analyticsContainer}>
+            <Text style={styles.analyticsText}>
+              This will show some spending analytics.
+            </Text>
+          </View>
+        </ScrollView>
+      </View>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   container: {
