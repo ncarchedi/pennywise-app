@@ -1,42 +1,42 @@
 [
   {
     "id": "0",
-    "name": "No Category",
-    "icon": "ios-help"
+    "label": "No Category",
+    "icon": "ios-help-circle-outline"
   },
   {
     "id": "1",
-    "name": "Bars & Restaurants",
+    "label": "Bars & Restaurants",
     "icon": "ios-restaurant"
   },
   {
     "id": "2",
-    "name": "Entertainment",
+    "label": "Entertainment",
     "icon": "ios-tv"
   },
   {
     "id": "3",
-    "name": "Groceries",
+    "label": "Groceries",
     "icon": "ios-cart"
   },
   {
     "id": "4",
-    "name": "Household Goods",
+    "label": "Household Goods",
     "icon": "ios-home"
   },
   {
     "id": "5",
-    "name": "Income",
+    "label": "Income",
     "icon": "ios-cash"
   },
   {
     "id": "6",
-    "name": "Personal Care",
+    "label": "Personal Care",
     "icon": "ios-body"
   },
   {
     "id": "7",
-    "name": "Transportation",
+    "label": "Transportation",
     "icon": "ios-train"
   }
 ]
