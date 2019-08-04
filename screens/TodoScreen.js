@@ -43,6 +43,15 @@ class TodoScreen extends React.Component {
     transactions = this.props.global.transactions;
     const { selectedTransaction, isModalVisible } = this.state;
 
+    const transactionsByDate = _(transactions)
+      .groupBy("date")
+      .map((transactions, date) => ({
+        date: date,
+        data: transactions
+      }))
+      .sortBy("date")
+      .value();
+
     return (
       <View style={styles.container}>
         <ScrollView
@@ -50,7 +59,7 @@ class TodoScreen extends React.Component {
           contentContainerStyle={styles.contentContainer}
         >
           <TransactionsList
-            transactions={transactions}
+            transactions={transactionsByDate}
             onTransactionPress={this.handleTransactionPress}
             categorized={false}
           />
@@ -81,7 +90,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff"
   },
   contentContainer: {
-    paddingBottom: 30
+    // marginVertical: 10
   },
   newTransactionButton: {
     marginBottom: 15,
