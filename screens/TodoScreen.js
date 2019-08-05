@@ -6,7 +6,7 @@ import EditTransactionModal from "../components/EditTransactionModal";
 import { Ionicons } from "@expo/vector-icons";
 import _ from "lodash";
 
-import { withGlobalContext } from "../GlobalContext";
+import { withGlobalContext, addTransaction } from "../GlobalContext";
 
 class TodoScreen extends React.Component {
   static navigationOptions = {
@@ -30,17 +30,12 @@ class TodoScreen extends React.Component {
   };
 
   handleAddNewTransaction = () => {
-    const newTransaction = {
-      name: "",
-      amount: null,
-      category: "No Category",
-      date: new Date(_.now())
-    };
-    this.handleTransactionPress(newTransaction);
+    const { addTransaction } = this.props.global;
+    this.handleTransactionPress(addTransaction());
   };
 
   render() {
-    transactions = this.props.global.transactions;
+    const { transactions } = this.props.global;
     const { selectedTransaction, isModalVisible } = this.state;
 
     const transactionsByDate = _(transactions)

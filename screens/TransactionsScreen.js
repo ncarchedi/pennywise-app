@@ -29,7 +29,7 @@ class TransactionsScreen extends React.Component {
   };
 
   render() {
-    const transactions = this.props.global.transactions;
+    const { transactions } = this.props.global;
     const { selectedTransaction, isModalVisible } = this.state;
 
     const transactionsByDate = _(transactions)

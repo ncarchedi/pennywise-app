@@ -1,6 +1,7 @@
 import React from "react";
 import transactionsData from "./transactions.json";
 import categoriesData from "./categories.json";
+import { createNewTransaction } from "./utils/TransactionUtils";
 
 const GlobalContext = React.createContext({});
 
@@ -17,23 +18,47 @@ export class GlobalContextProvider extends React.Component {
     });
   }
 
-  // We should make methods to update the state like this:
-  // switchToOnline = () => {
-  //   this.setState({ isOnline: true });
-  // }
+  addTransaction = (transaction = {}) => {
+    const { transactions } = this.state;
+    const newTransaction = createNewTransaction(transaction);
 
-  // switchToOffline = () => {
-  //   this.setState({ isOnline: false });
-  // }
+    this.setState({
+      transactions: [...transactions, newTransaction]
+    });
+
+    return newTransaction;
+  };
+
+  updateTransaction = attrs => {
+    const { transactions } = this.state;
+
+    this.setState({
+      transactions: transactions.map(transaction => {
+        if (transaction.id === attrs.id) {
+          const { name, amount, category, date } = attrs;
+
+          return {
+            ...transaction,
+            name,
+            amount,
+            category,
+            date
+          };
+        }
+
+        return transaction;
+      })
+    });
+  };
 
   render() {
     return (
       <GlobalContext.Provider
         value={{
-          ...this.state
-          // Every function to update the state should be listed here too:
-          // switchToOnline: this.switchToOnline,
-          // switchToOffline: this.switchToOffline
+          ...this.state,
+          // Every function to update the state should be listed here:
+          addTransaction: this.addTransaction,
+          updateTransaction: this.updateTransaction
         }}
       >
         {this.props.children}

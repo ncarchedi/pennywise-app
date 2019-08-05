@@ -59,8 +59,7 @@ class SpendingScreen extends React.Component {
   };
 
   render() {
-    const transactions = this.props.global.transactions;
-    const categories = this.props.global.categories;
+    const { transactions, categories } = this.props.global;
 
     // compute amount spent per category (all-time)
     const amountByCategory = _(transactions)
