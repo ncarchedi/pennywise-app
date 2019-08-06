@@ -34,6 +34,13 @@ class TodoScreen extends React.Component {
     this.handleTransactionPress(addTransaction());
   };
 
+  handleChangeTransaction = (key, value) => {
+    const { selectedTransaction } = this.state;
+    const newSelectedTransaction = { ...selectedTransaction, [key]: value };
+
+    this.setState({ selectedTransaction: newSelectedTransaction });
+  };
+
   render() {
     const { transactions } = this.props.global;
     const { selectedTransaction, isModalVisible } = this.state;
@@ -62,6 +69,7 @@ class TodoScreen extends React.Component {
             transaction={selectedTransaction}
             isVisible={isModalVisible}
             onExitModal={this.toggleModal}
+            onChangeTransaction={this.handleChangeTransaction}
           />
         </ScrollView>
         <View style={{ alignItems: "center" }}>

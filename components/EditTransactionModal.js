@@ -16,6 +16,7 @@ function EditTransactionModal({
   transaction,
   isVisible,
   onExitModal,
+  onChangeTransaction,
   ...props
 }) {
   const { name, amount, category, date } = transaction;
@@ -36,7 +37,7 @@ function EditTransactionModal({
           <TextInput
             style={styles.textInput}
             value={name}
-            onChangeText={name => console.log(name)}
+            onChangeText={name => onChangeTransaction("name", name)}
           />
           <Text style={styles.inputLabel}>Amount</Text>
           <TextInput
@@ -48,12 +49,14 @@ function EditTransactionModal({
                 currency: "USD"
               })
             }
-            onChangeText={amount => console.log(amount)}
+            onChangeText={amount => onChangeTransaction("amount", amount)}
           />
           <Text style={styles.inputLabel}>Category</Text>
           <PickerIOS
             selectedValue={category}
-            onValueChange={category => console.log(category)}
+            onValueChange={category =>
+              onChangeTransaction("category", category)
+            }
           >
             {props.global.categories.map(category => {
               return (
@@ -68,7 +71,8 @@ function EditTransactionModal({
           <Text style={styles.inputLabel}>Date</Text>
           <DatePickerIOS
             date={new Date(date)}
-            onDateChange={date => console.log(date)}
+            onDateChange={date => onChangeTransaction("date", date)}
+            mode="date"
           />
           <Button
             style={{ marginBottom: 0 }}
