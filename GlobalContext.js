@@ -36,16 +36,19 @@ export class GlobalContextProvider extends React.Component {
       transactions: transactions.map(transaction => {
         if (transaction.id === attrs.id) {
           const { name, amount, category, date } = attrs;
-
-          return {
+          const updatedTransaction = {
             ...transaction,
             name,
             amount,
             category,
             date
           };
+
+          // if it's a match, then return the updated transaction
+          return updatedTransaction;
         }
 
+        //  else, return the original transaction
         return transaction;
       })
     });

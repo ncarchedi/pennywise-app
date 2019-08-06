@@ -6,7 +6,11 @@ import EditTransactionModal from "../components/EditTransactionModal";
 import { Ionicons } from "@expo/vector-icons";
 import _ from "lodash";
 
-import { withGlobalContext, addTransaction } from "../GlobalContext";
+import {
+  withGlobalContext,
+  addTransaction,
+  updateTransaction
+} from "../GlobalContext";
 
 class TodoScreen extends React.Component {
   static navigationOptions = {
@@ -32,6 +36,17 @@ class TodoScreen extends React.Component {
   handleAddNewTransaction = () => {
     const { addTransaction } = this.props.global;
     this.handleTransactionPress(addTransaction());
+  };
+
+  handleExitModal = () => {
+    const { updateTransaction } = this.props.global;
+    const { selectedTransaction } = this.state;
+
+    updateTransaction(selectedTransaction);
+
+    this.setState({
+      isModalVisible: false
+    });
   };
 
   handleChangeTransaction = (key, value) => {
@@ -68,7 +83,7 @@ class TodoScreen extends React.Component {
           <EditTransactionModal
             transaction={selectedTransaction}
             isVisible={isModalVisible}
-            onExitModal={this.toggleModal}
+            onExitModal={this.handleExitModal}
             onChangeTransaction={this.handleChangeTransaction}
           />
         </ScrollView>

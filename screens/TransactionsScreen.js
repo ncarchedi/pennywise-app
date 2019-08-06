@@ -5,7 +5,7 @@ import _ from "lodash";
 import TransactionsList from "../components/TransactionsList";
 import EditTransactionModal from "../components/EditTransactionModal";
 
-import { withGlobalContext } from "../GlobalContext";
+import { withGlobalContext, updateTransaction } from "../GlobalContext";
 
 class TransactionsScreen extends React.Component {
   static navigationOptions = {
@@ -35,6 +35,17 @@ class TransactionsScreen extends React.Component {
     this.setState({ selectedTransaction: newSelectedTransaction });
   };
 
+  handleExitModal = () => {
+    const { updateTransaction } = this.props.global;
+    const { selectedTransaction } = this.state;
+
+    updateTransaction(selectedTransaction);
+
+    this.setState({
+      isModalVisible: false
+    });
+  };
+
   render() {
     const { transactions } = this.props.global;
     const { selectedTransaction, isModalVisible } = this.state;
@@ -62,7 +73,7 @@ class TransactionsScreen extends React.Component {
           <EditTransactionModal
             transaction={selectedTransaction}
             isVisible={isModalVisible}
-            onExitModal={this.toggleModal}
+            onExitModal={this.handleExitModal}
             onChangeTransaction={this.handleChangeTransaction}
           />
         </ScrollView>
