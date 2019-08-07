@@ -41,7 +41,7 @@ export default function TransactionsList({
   };
 
   // get only the relevant transactions
-  transactionsFiltered = categorized
+  const transactionsFiltered = categorized
     ? _.reject(transactions, {
         data: [{ category: "No Category" }]
       })
@@ -51,15 +51,19 @@ export default function TransactionsList({
 
   return (
     <View style={styles.container}>
-      <SectionList
-        sections={transactionsFiltered}
-        renderItem={({ item, index }) => this.ListItem(item, index)}
-        renderSectionHeader={({ section: { date } }) => (
-          <Text style={styles.sectionHeader}>{date}</Text>
-        )}
-        ItemSeparatorComponent={this.ListItemSeparator}
-        keyExtractor={(item, index) => item + index}
-      />
+      {!transactionsFiltered.length ? (
+        <Text style={styles.emptyScreenText}>Nothing to see here! 🎉</Text>
+      ) : (
+        <SectionList
+          sections={transactionsFiltered}
+          renderItem={({ item, index }) => this.ListItem(item, index)}
+          renderSectionHeader={({ section: { date } }) => (
+            <Text style={styles.sectionHeader}>{date}</Text>
+          )}
+          ItemSeparatorComponent={this.ListItemSeparator}
+          keyExtractor={(item, index) => item + index}
+        />
+      )}
     </View>
   );
 }
@@ -78,5 +82,11 @@ const styles = StyleSheet.create({
     fontSize: 22,
     backgroundColor: "lightblue",
     paddingLeft: 10
+  },
+  emptyScreenText: {
+    height: "100%",
+    textAlign: "center",
+    marginTop: 30,
+    fontSize: 22
   }
 });
