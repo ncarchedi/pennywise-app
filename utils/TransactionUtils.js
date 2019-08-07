@@ -11,3 +11,11 @@ export const createNewTransaction = (attrs = {}) => {
 
   return Transaction;
 };
+
+export const convertToISO = date => {
+  // if date is an actual date object, convert to string
+  if (typeof date == "object") return date.toISOString().slice(0, 10);
+
+  // else, just return the existing string
+  return date;
+};

@@ -1,7 +1,7 @@
 import React from "react";
 import transactionsData from "./transactions.json";
 import categoriesData from "./categories.json";
-import { createNewTransaction } from "./utils/TransactionUtils";
+import { createNewTransaction, convertToISO } from "./utils/TransactionUtils";
 
 const GlobalContext = React.createContext({});
 
@@ -36,12 +36,14 @@ export class GlobalContextProvider extends React.Component {
       transactions: transactions.map(transaction => {
         if (transaction.id === attrs.id) {
           const { name, amount, category, date } = attrs;
+          const dateString = convertToISO(date);
+
           const updatedTransaction = {
             ...transaction,
-            name,
-            amount,
-            category,
-            date
+            name: name,
+            amount: amount,
+            category: category,
+            date: dateString
           };
 
           // if it's a match, then return the updated transaction
