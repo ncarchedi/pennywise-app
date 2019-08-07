@@ -26,11 +26,14 @@ class TodoScreen extends React.Component {
     this.setState({ isModalVisible: !this.state.isModalVisible });
   };
 
-  handleTransactionPress = item => {
-    this.setState({
-      selectedTransaction: item
-    });
-    this.toggleModal();
+  handleTransactionPress = transaction => {
+    this.setState(
+      {
+        selectedTransaction: transaction
+      },
+      // open modal after state is set
+      () => this.toggleModal()
+    );
   };
 
   handleAddNewTransaction = () => {
@@ -43,10 +46,7 @@ class TodoScreen extends React.Component {
     const { selectedTransaction } = this.state;
 
     updateTransaction(selectedTransaction);
-
-    this.setState({
-      isModalVisible: false
-    });
+    this.toggleModal();
   };
 
   handleChangeTransaction = (key, value) => {
@@ -57,6 +57,8 @@ class TodoScreen extends React.Component {
   };
 
   render() {
+    console.log("rendering todo screen...");
+
     const { transactions } = this.props.global;
     const { selectedTransaction, isModalVisible } = this.state;
 

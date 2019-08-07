@@ -21,11 +21,14 @@ class TransactionsScreen extends React.Component {
     this.setState({ isModalVisible: !this.state.isModalVisible });
   };
 
-  handleTransactionPress = item => {
-    this.setState({
-      selectedTransaction: item
-    });
-    this.toggleModal();
+  handleTransactionPress = transaction => {
+    this.setState(
+      {
+        selectedTransaction: transaction
+      },
+      // open modal after state is set
+      () => this.toggleModal()
+    );
   };
 
   handleChangeTransaction = (key, value) => {
@@ -40,13 +43,12 @@ class TransactionsScreen extends React.Component {
     const { selectedTransaction } = this.state;
 
     updateTransaction(selectedTransaction);
-
-    this.setState({
-      isModalVisible: false
-    });
+    this.toggleModal();
   };
 
   render() {
+    console.log("rendering transactions screen...");
+
     const { transactions } = this.props.global;
     const { selectedTransaction, isModalVisible } = this.state;
 
