@@ -80,8 +80,10 @@ const styles = StyleSheet.create({
   sectionHeader: {
     fontWeight: "bold",
     fontSize: 22,
-    backgroundColor: "lightblue",
-    paddingLeft: 10
+    backgroundColor: "maroon",
+    color: "#fff",
+    paddingLeft: 10,
+    paddingVertical: 1
   },
   emptyScreenText: {
     height: "100%",
