@@ -52,15 +52,6 @@ class TransactionsScreen extends React.Component {
     const { transactions } = this.props.global;
     const { selectedTransaction, isModalVisible } = this.state;
 
-    const transactionsByDate = _(transactions)
-      .groupBy("date")
-      .map((transactions, date) => ({
-        date: date,
-        data: transactions
-      }))
-      .sortBy("date")
-      .value();
-
     return (
       <View style={styles.container}>
         <ScrollView
@@ -68,7 +59,7 @@ class TransactionsScreen extends React.Component {
           contentContainerStyle={styles.contentContainer}
         >
           <TransactionsList
-            transactions={transactionsByDate}
+            transactions={transactions}
             onTransactionPress={this.handleTransactionPress}
             categorized={true}
           />

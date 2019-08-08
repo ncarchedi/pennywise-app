@@ -20,6 +20,8 @@ function EditTransactionModal({
   onChangeTransaction,
   ...props
 }) {
+  // todo: can we keep input values in component state to avoid
+  // updating parent components on change events?
   const { name, amount, category, date } = transaction;
   return (
     <Modal

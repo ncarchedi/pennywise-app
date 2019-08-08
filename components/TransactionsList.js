@@ -43,19 +43,31 @@ export default function TransactionsList({
   // get only the relevant transactions
   const transactionsFiltered = categorized
     ? _.reject(transactions, {
-        data: [{ category: "No Category" }]
+        category: "No Category"
       })
     : _.filter(transactions, {
-        data: [{ category: "No Category" }]
+        category: "No Category"
       });
+
+  // reshape the transactions list for the section list
+  const transactionsByDate = _(transactionsFiltered)
+    .groupBy("date")
+    .map((transactions, date) => ({
+      date: date,
+      data: transactions
+    }))
+    .sortBy("date")
+    .value();
+
+  console.log("rendering transactions list...");
 
   return (
     <View style={styles.container}>
-      {!transactionsFiltered.length ? (
+      {!transactionsByDate.length ? (
         <Text style={styles.emptyScreenText}>Nothing to see here! 🎉</Text>
       ) : (
         <SectionList
-          sections={transactionsFiltered}
+          sections={transactionsByDate}
           renderItem={({ item, index }) => this.ListItem(item, index)}
           renderSectionHeader={({ section: { date } }) => (
             <Text style={styles.sectionHeader}>{date}</Text>
