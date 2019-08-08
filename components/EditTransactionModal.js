@@ -31,7 +31,7 @@ function EditTransactionModal({
       animationInTiming={50}
       backdropTransitionInTiming={50}
     >
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.modalContent}>
           <View style={styles.modalHeader}>
             <Text style={styles.modalTitle}>Edit Transaction</Text>
