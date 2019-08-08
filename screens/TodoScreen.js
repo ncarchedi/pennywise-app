@@ -6,7 +6,11 @@ import EditTransactionModal from "../components/EditTransactionModal";
 import { Ionicons } from "@expo/vector-icons";
 import _ from "lodash";
 
-import { withGlobalContext, addTransaction } from "../GlobalContext";
+import {
+  withGlobalContext,
+  addTransaction,
+  updateTransaction
+} from "../GlobalContext";
 
 class TodoScreen extends React.Component {
   static navigationOptions = {
@@ -22,16 +26,27 @@ class TodoScreen extends React.Component {
     this.setState({ isModalVisible: !this.state.isModalVisible });
   };
 
-  handleTransactionPress = item => {
-    this.setState({
-      selectedTransaction: item
-    });
-    this.toggleModal();
+  handleTransactionPress = transaction => {
+    this.setState(
+      {
+        selectedTransaction: transaction
+      },
+      // open modal after state is set
+      () => this.toggleModal()
+    );
   };
 
   handleAddNewTransaction = () => {
     const { addTransaction } = this.props.global;
     this.handleTransactionPress(addTransaction());
+  };
+
+  handleExitModal = () => {
+    const { updateTransaction } = this.props.global;
+    const { selectedTransaction } = this.state;
+
+    updateTransaction(selectedTransaction);
+    this.toggleModal();
   };
 
   handleChangeTransaction = (key, value) => {
@@ -42,17 +57,10 @@ class TodoScreen extends React.Component {
   };
 
   render() {
+    console.log("rendering todo screen...");
+
     const { transactions } = this.props.global;
     const { selectedTransaction, isModalVisible } = this.state;
-
-    const transactionsByDate = _(transactions)
-      .groupBy("date")
-      .map((transactions, date) => ({
-        date: date,
-        data: transactions
-      }))
-      .sortBy("date")
-      .value();
 
     return (
       <View style={styles.container}>
@@ -61,14 +69,14 @@ class TodoScreen extends React.Component {
           contentContainerStyle={styles.contentContainer}
         >
           <TransactionsList
-            transactions={transactionsByDate}
+            transactions={transactions}
             onTransactionPress={this.handleTransactionPress}
             categorized={false}
           />
           <EditTransactionModal
             transaction={selectedTransaction}
             isVisible={isModalVisible}
-            onExitModal={this.toggleModal}
+            onExitModal={this.handleExitModal}
             onChangeTransaction={this.handleChangeTransaction}
           />
         </ScrollView>

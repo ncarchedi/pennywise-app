@@ -41,25 +41,41 @@ export default function TransactionsList({
   };
 
   // get only the relevant transactions
-  transactionsFiltered = categorized
+  const transactionsFiltered = categorized
     ? _.reject(transactions, {
-        data: [{ category: "No Category" }]
+        category: "No Category"
       })
     : _.filter(transactions, {
-        data: [{ category: "No Category" }]
+        category: "No Category"
       });
+
+  // reshape the transactions list for the section list
+  const transactionsByDate = _(transactionsFiltered)
+    .groupBy("date")
+    .map((transactions, date) => ({
+      date: date,
+      data: transactions
+    }))
+    .sortBy("date")
+    .value();
+
+  console.log("rendering transactions list...");
 
   return (
     <View style={styles.container}>
-      <SectionList
-        sections={transactionsFiltered}
-        renderItem={({ item, index }) => this.ListItem(item, index)}
-        renderSectionHeader={({ section: { date } }) => (
-          <Text style={styles.sectionHeader}>{date}</Text>
-        )}
-        ItemSeparatorComponent={this.ListItemSeparator}
-        keyExtractor={(item, index) => item + index}
-      />
+      {!transactionsByDate.length ? (
+        <Text style={styles.emptyScreenText}>Nothing to see here! 🎉</Text>
+      ) : (
+        <SectionList
+          sections={transactionsByDate}
+          renderItem={({ item, index }) => this.ListItem(item, index)}
+          renderSectionHeader={({ section: { date } }) => (
+            <Text style={styles.sectionHeader}>{date}</Text>
+          )}
+          ItemSeparatorComponent={this.ListItemSeparator}
+          keyExtractor={(item, index) => item + index}
+        />
+      )}
     </View>
   );
 }
@@ -76,7 +92,15 @@ const styles = StyleSheet.create({
   sectionHeader: {
     fontWeight: "bold",
     fontSize: 22,
-    backgroundColor: "lightblue",
-    paddingLeft: 10
+    backgroundColor: "maroon",
+    color: "#fff",
+    paddingLeft: 10,
+    paddingVertical: 1
+  },
+  emptyScreenText: {
+    height: "100%",
+    textAlign: "center",
+    marginTop: 30,
+    fontSize: 22
   }
 });
