@@ -79,19 +79,23 @@ class SpendingScreen extends React.Component {
 
     return (
       <View style={styles.container}>
-        <ScrollView
-          style={styles.container}
-          contentContainerStyle={styles.contentContainer}
-        >
-          <View style={styles.spendingContainer}>
-            <FlatList
-              data={amountByCategory}
-              renderItem={({ item, index }) => this.listItem(item, index)}
-              ListHeaderComponent={() => this.listHeader()}
-              keyExtractor={(item, index) => item + index}
-            />
-          </View>
-        </ScrollView>
+        {!transactions ? (
+          <Text style={styles.emptyScreenText}>Nothing to see here! 🎉</Text>
+        ) : (
+          <ScrollView
+            style={styles.container}
+            contentContainerStyle={styles.contentContainer}
+          >
+            <View style={styles.spendingContainer}>
+              <FlatList
+                data={amountByCategory}
+                renderItem={({ item, index }) => this.listItem(item, index)}
+                ListHeaderComponent={() => this.listHeader()}
+                keyExtractor={(item, index) => item + index}
+              />
+            </View>
+          </ScrollView>
+        )}
       </View>
     );
   }
@@ -132,5 +136,11 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontWeight: "bold"
+  },
+  emptyScreenText: {
+    height: "100%",
+    textAlign: "center",
+    marginTop: 30,
+    fontSize: 22
   }
 });
