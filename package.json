@@ -26,7 +26,8 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-33.0.0.tar.gz",
     "react-native-modal": "^11.2.0",
     "react-native-web": "^0.11.4",
-    "react-navigation": "^3.11.0"
+    "react-navigation": "^3.11.0",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "babel-preset-expo": "^5.1.0",

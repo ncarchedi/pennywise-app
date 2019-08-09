@@ -5,7 +5,7 @@ import _ from "lodash";
 import TransactionsList from "../components/TransactionsList";
 import EditTransactionModal from "../components/EditTransactionModal";
 
-import { withGlobalContext } from "../GlobalContext";
+import { withGlobalContext, updateTransaction } from "../GlobalContext";
 
 class TransactionsScreen extends React.Component {
   static navigationOptions = {
@@ -21,25 +21,36 @@ class TransactionsScreen extends React.Component {
     this.setState({ isModalVisible: !this.state.isModalVisible });
   };
 
-  handleTransactionPress = item => {
-    this.setState({
-      selectedTransaction: item
-    });
+  handleTransactionPress = transaction => {
+    this.setState(
+      {
+        selectedTransaction: transaction
+      },
+      // open modal after state is set
+      () => this.toggleModal()
+    );
+  };
+
+  handleChangeTransaction = (key, value) => {
+    const { selectedTransaction } = this.state;
+    const newSelectedTransaction = { ...selectedTransaction, [key]: value };
+
+    this.setState({ selectedTransaction: newSelectedTransaction });
+  };
+
+  handleExitModal = () => {
+    const { updateTransaction } = this.props.global;
+    const { selectedTransaction } = this.state;
+
+    updateTransaction(selectedTransaction);
     this.toggleModal();
   };
 
   render() {
-    const transactions = this.props.global.transactions;
-    const { selectedTransaction, isModalVisible } = this.state;
+    console.log("rendering transactions screen...");
 
-    const transactionsByDate = _(transactions)
-      .groupBy("date")
-      .map((transactions, date) => ({
-        date: date,
-        data: transactions
-      }))
-      .sortBy("date")
-      .value();
+    const { transactions } = this.props.global;
+    const { selectedTransaction, isModalVisible } = this.state;
 
     return (
       <View style={styles.container}>
@@ -48,14 +59,15 @@ class TransactionsScreen extends React.Component {
           contentContainerStyle={styles.contentContainer}
         >
           <TransactionsList
-            transactions={transactionsByDate}
+            transactions={transactions}
             onTransactionPress={this.handleTransactionPress}
             categorized={true}
           />
           <EditTransactionModal
             transaction={selectedTransaction}
             isVisible={isModalVisible}
-            onExitModal={this.toggleModal}
+            onExitModal={this.handleExitModal}
+            onChangeTransaction={this.handleChangeTransaction}
           />
         </ScrollView>
       </View>

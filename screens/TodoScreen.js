@@ -6,7 +6,11 @@ import EditTransactionModal from "../components/EditTransactionModal";
 import { Ionicons } from "@expo/vector-icons";
 import _ from "lodash";
 
-import { withGlobalContext } from "../GlobalContext";
+import {
+  withGlobalContext,
+  addTransaction,
+  updateTransaction
+} from "../GlobalContext";
 
 class TodoScreen extends React.Component {
   static navigationOptions = {
@@ -22,35 +26,41 @@ class TodoScreen extends React.Component {
     this.setState({ isModalVisible: !this.state.isModalVisible });
   };
 
-  handleTransactionPress = item => {
-    this.setState({
-      selectedTransaction: item
-    });
+  handleTransactionPress = transaction => {
+    this.setState(
+      {
+        selectedTransaction: transaction
+      },
+      // open modal after state is set
+      () => this.toggleModal()
+    );
+  };
+
+  handleAddNewTransaction = async () => {
+    const { addTransaction } = this.props.global;
+    this.handleTransactionPress(await addTransaction());
+  };
+
+  handleExitModal = () => {
+    const { updateTransaction } = this.props.global;
+    const { selectedTransaction } = this.state;
+
+    updateTransaction(selectedTransaction);
     this.toggleModal();
   };
 
-  handleAddNewTransaction = () => {
-    const newTransaction = {
-      name: "",
-      amount: null,
-      category: "No Category",
-      date: new Date(_.now())
-    };
-    this.handleTransactionPress(newTransaction);
+  handleChangeTransaction = (key, value) => {
+    const { selectedTransaction } = this.state;
+    const newSelectedTransaction = { ...selectedTransaction, [key]: value };
+
+    this.setState({ selectedTransaction: newSelectedTransaction });
   };
 
   render() {
-    transactions = this.props.global.transactions;
-    const { selectedTransaction, isModalVisible } = this.state;
+    console.log("rendering todo screen...");
 
-    const transactionsByDate = _(transactions)
-      .groupBy("date")
-      .map((transactions, date) => ({
-        date: date,
-        data: transactions
-      }))
-      .sortBy("date")
-      .value();
+    const { transactions } = this.props.global;
+    const { selectedTransaction, isModalVisible } = this.state;
 
     return (
       <View style={styles.container}>
@@ -59,14 +69,15 @@ class TodoScreen extends React.Component {
           contentContainerStyle={styles.contentContainer}
         >
           <TransactionsList
-            transactions={transactionsByDate}
+            transactions={transactions}
             onTransactionPress={this.handleTransactionPress}
             categorized={false}
           />
           <EditTransactionModal
             transaction={selectedTransaction}
             isVisible={isModalVisible}
-            onExitModal={this.toggleModal}
+            onExitModal={this.handleExitModal}
+            onChangeTransaction={this.handleChangeTransaction}
           />
         </ScrollView>
         <View style={{ alignItems: "center" }}>

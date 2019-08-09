@@ -1,6 +1,7 @@
 import React from "react";
 import {
   StyleSheet,
+  ScrollView,
   Button,
   Text,
   View,
@@ -16,8 +17,11 @@ function EditTransactionModal({
   transaction,
   isVisible,
   onExitModal,
+  onChangeTransaction,
   ...props
 }) {
+  // todo: can we keep input values in component state to avoid
+  // updating parent components on change events?
   const { name, amount, category, date } = transaction;
   return (
     <Modal
@@ -27,56 +31,61 @@ function EditTransactionModal({
       animationInTiming={50}
       backdropTransitionInTiming={50}
     >
-      <View style={styles.modalContent}>
-        <View style={styles.modalHeader}>
-          <Text style={styles.modalTitle}>Edit Transaction</Text>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.modalContent}>
+          <View style={styles.modalHeader}>
+            <Text style={styles.modalTitle}>Edit Transaction</Text>
+          </View>
+          <View style={styles.modalBody}>
+            <Text style={styles.inputLabel}>Name</Text>
+            <TextInput
+              style={styles.textInput}
+              value={name}
+              onChangeText={name => onChangeTransaction("name", name)}
+            />
+            <Text style={styles.inputLabel}>Amount</Text>
+            <TextInput
+              style={styles.textInput}
+              value={
+                amount &&
+                amount.toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "USD"
+                })
+              }
+              onChangeText={amount => onChangeTransaction("amount", amount)}
+            />
+            <Text style={styles.inputLabel}>Category</Text>
+            <PickerIOS
+              selectedValue={category}
+              onValueChange={category =>
+                onChangeTransaction("category", category)
+              }
+            >
+              {props.global.categories.map(category => {
+                return (
+                  <PickerIOS.Item
+                    key={category.id}
+                    value={category.label}
+                    label={category.label}
+                  />
+                );
+              })}
+            </PickerIOS>
+            <Text style={styles.inputLabel}>Date</Text>
+            <DatePickerIOS
+              date={new Date(date)}
+              onDateChange={date => onChangeTransaction("date", date)}
+              mode="date"
+            />
+            <Button
+              style={{ marginBottom: 0 }}
+              title="Done"
+              onPress={onExitModal}
+            />
+          </View>
         </View>
-        <View style={styles.modalBody}>
-          <Text style={styles.inputLabel}>Name</Text>
-          <TextInput
-            style={styles.textInput}
-            value={name}
-            onChangeText={name => console.log(name)}
-          />
-          <Text style={styles.inputLabel}>Amount</Text>
-          <TextInput
-            style={styles.textInput}
-            value={
-              amount &&
-              amount.toLocaleString("en-US", {
-                style: "currency",
-                currency: "USD"
-              })
-            }
-            onChangeText={amount => console.log(amount)}
-          />
-          <Text style={styles.inputLabel}>Category</Text>
-          <PickerIOS
-            selectedValue={category}
-            onValueChange={category => console.log(category)}
-          >
-            {props.global.categories.map(category => {
-              return (
-                <PickerIOS.Item
-                  key={category.id}
-                  value={category.label}
-                  label={category.label}
-                />
-              );
-            })}
-          </PickerIOS>
-          <Text style={styles.inputLabel}>Date</Text>
-          <DatePickerIOS
-            date={new Date(date)}
-            onDateChange={date => console.log(date)}
-          />
-          <Button
-            style={{ marginBottom: 0 }}
-            title="Done"
-            onPress={onExitModal}
-          />
-        </View>
-      </View>
+      </ScrollView>
     </Modal>
   );
 }
