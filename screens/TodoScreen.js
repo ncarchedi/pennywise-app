@@ -2,6 +2,7 @@ import React from "react";
 import { ScrollView, StyleSheet, View, TouchableOpacity } from "react-native";
 
 import TransactionsList from "../components/TransactionsList";
+import PlaidLinkModal from "../components/PlaidLinkModal";
 import EditTransactionModal from "../components/EditTransactionModal";
 import { Ionicons } from "@expo/vector-icons";
 import _ from "lodash";
@@ -15,11 +16,16 @@ class TodoScreen extends React.Component {
 
   state = {
     selectedTransaction: {},
-    isModalVisible: false
+    isModalVisible: false,
+    isPlaidLinkVisible: false,
   };
 
   toggleModal = () => {
     this.setState({ isModalVisible: !this.state.isModalVisible });
+  };
+
+  togglePlaidLinkModal = () => {
+    this.setState({ isPlaidLinkVisible: !this.state.isPlaidLinkVisible });
   };
 
   handleTransactionPress = item => {
@@ -27,6 +33,10 @@ class TodoScreen extends React.Component {
       selectedTransaction: item
     });
     this.toggleModal();
+  };
+
+  handlePlaidSyncPress = item => {
+    this.togglePlaidLinkModal();
   };
 
   handleAddNewTransaction = () => {
@@ -41,7 +51,7 @@ class TodoScreen extends React.Component {
 
   render() {
     transactions = this.props.global.transactions;
-    const { selectedTransaction, isModalVisible } = this.state;
+    const { selectedTransaction, isModalVisible, isPlaidLinkVisible } = this.state;
 
     const transactionsByDate = _(transactions)
       .groupBy("date")
@@ -68,13 +78,23 @@ class TodoScreen extends React.Component {
             isVisible={isModalVisible}
             onExitModal={this.toggleModal}
           />
+          <PlaidLinkModal 
+            isVisible={isPlaidLinkVisible}
+            onExitModal={this.togglePlaidLinkModal}
+          />
         </ScrollView>
-        <View style={{ alignItems: "center" }}>
+        <View style={{ alignItems: "center", flexDirection: "row", justifyContent: "space-around" }}>
           <TouchableOpacity
             onPress={this.handleAddNewTransaction}
             style={styles.newTransactionButton}
           >
             <Ionicons name="ios-add" size={40} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={this.handlePlaidSyncPress}
+            style={styles.newTransactionButton}
+          >
+            <Ionicons name="ios-sync" size={40} />
           </TouchableOpacity>
         </View>
       </View>
