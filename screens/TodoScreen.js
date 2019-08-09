@@ -36,9 +36,9 @@ class TodoScreen extends React.Component {
     );
   };
 
-  handleAddNewTransaction = () => {
+  handleAddNewTransaction = async () => {
     const { addTransaction } = this.props.global;
-    this.handleTransactionPress(addTransaction());
+    this.handleTransactionPress(await addTransaction());
   };
 
   handleExitModal = () => {

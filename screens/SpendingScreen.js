@@ -11,11 +11,14 @@ class SpendingScreen extends React.Component {
   };
 
   listItem = (item, index) => {
+    const { amount, category, icon } = item;
+    const amountAsNumber = Number(amount);
+
     return (
       <View style={styles.categoryContainer}>
         <View style={styles.categoryNameContainer}>
-          <Ionicons name={item.icon} size={20} style={{ width: 20 }} />
-          <Text style={styles.nameText}>{item.category}</Text>
+          <Ionicons name={icon} size={20} style={{ width: 20 }} />
+          <Text style={styles.nameText}>{category}</Text>
         </View>
         <View style={styles.categorySpendingContainer}>
           <View style={styles.categorySpendingItemContainer}>
@@ -29,7 +32,7 @@ class SpendingScreen extends React.Component {
           </View>
           <View style={styles.categorySpendingItemContainer}>
             <Text>
-              {item.amount.toLocaleString("en-US", {
+              {amountAsNumber.toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD"
               })}
@@ -60,6 +63,14 @@ class SpendingScreen extends React.Component {
 
   render() {
     const { transactions, categories } = this.props.global;
+
+    if (!transactions || !transactions.length) {
+      return (
+        <View style={styles.container}>
+          <Text style={styles.emptyScreenText}>Nothing to see here! 🎉</Text>
+        </View>
+      );
+    }
 
     // compute amount spent per category (all-time)
     const amountByCategory = _(transactions)
@@ -132,5 +143,11 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontWeight: "bold"
+  },
+  emptyScreenText: {
+    height: "100%",
+    textAlign: "center",
+    marginTop: 30,
+    fontSize: 22
   }
 });

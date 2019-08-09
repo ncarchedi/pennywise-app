@@ -1,5 +1,11 @@
 import React from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity
+} from "react-native";
 
 import { withGlobalContext } from "../GlobalContext";
 
@@ -9,6 +15,8 @@ class AnalyticsScreen extends React.Component {
   };
 
   render() {
+    const { clearAllTransactions, loadDummyData } = this.props.global;
+
     return (
       <View style={styles.container}>
         <ScrollView
@@ -19,6 +27,18 @@ class AnalyticsScreen extends React.Component {
             <Text style={styles.analyticsText}>
               This will show some spending analytics.
             </Text>
+            <TouchableOpacity
+              onPress={clearAllTransactions}
+              style={{ paddingTop: 20 }}
+            >
+              <Text>Clear All Transactions</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={loadDummyData}
+              style={{ paddingTop: 20 }}
+            >
+              <Text>Load Example Transactions</Text>
+            </TouchableOpacity>
           </View>
         </ScrollView>
       </View>
