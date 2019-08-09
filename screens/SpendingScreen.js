@@ -11,11 +11,14 @@ class SpendingScreen extends React.Component {
   };
 
   listItem = (item, index) => {
+    const { amount, category, icon } = item;
+    const amountAsNumber = Number(amount);
+
     return (
       <View style={styles.categoryContainer}>
         <View style={styles.categoryNameContainer}>
-          <Ionicons name={item.icon} size={20} style={{ width: 20 }} />
-          <Text style={styles.nameText}>{item.category}</Text>
+          <Ionicons name={icon} size={20} style={{ width: 20 }} />
+          <Text style={styles.nameText}>{category}</Text>
         </View>
         <View style={styles.categorySpendingContainer}>
           <View style={styles.categorySpendingItemContainer}>
@@ -29,7 +32,7 @@ class SpendingScreen extends React.Component {
           </View>
           <View style={styles.categorySpendingItemContainer}>
             <Text>
-              {item.amount.toLocaleString("en-US", {
+              {amountAsNumber.toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD"
               })}
@@ -61,6 +64,14 @@ class SpendingScreen extends React.Component {
   render() {
     const { transactions, categories } = this.props.global;
 
+    if (!transactions || !transactions.length) {
+      return (
+        <View style={styles.container}>
+          <Text style={styles.emptyScreenText}>Nothing to see here! 🎉</Text>
+        </View>
+      );
+    }
+
     // compute amount spent per category (all-time)
     const amountByCategory = _(transactions)
       .groupBy("category")
@@ -79,23 +90,19 @@ class SpendingScreen extends React.Component {
 
     return (
       <View style={styles.container}>
-        {!transactions ? (
-          <Text style={styles.emptyScreenText}>Nothing to see here! 🎉</Text>
-        ) : (
-          <ScrollView
-            style={styles.container}
-            contentContainerStyle={styles.contentContainer}
-          >
-            <View style={styles.spendingContainer}>
-              <FlatList
-                data={amountByCategory}
-                renderItem={({ item, index }) => this.listItem(item, index)}
-                ListHeaderComponent={() => this.listHeader()}
-                keyExtractor={(item, index) => item + index}
-              />
-            </View>
-          </ScrollView>
-        )}
+        <ScrollView
+          style={styles.container}
+          contentContainerStyle={styles.contentContainer}
+        >
+          <View style={styles.spendingContainer}>
+            <FlatList
+              data={amountByCategory}
+              renderItem={({ item, index }) => this.listItem(item, index)}
+              ListHeaderComponent={() => this.listHeader()}
+              keyExtractor={(item, index) => item + index}
+            />
+          </View>
+        </ScrollView>
       </View>
     );
   }
