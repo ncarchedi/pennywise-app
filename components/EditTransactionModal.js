@@ -41,6 +41,7 @@ function EditTransactionModal({
             <TextInput
               style={styles.textInput}
               value={name}
+              placeholder="New Transaction"
               onChangeText={name => onChangeTransaction("name", name)}
             />
             <Text style={styles.inputLabel}>Amount</Text>
@@ -53,6 +54,7 @@ function EditTransactionModal({
                   currency: "USD"
                 })
               }
+              placeholder="24.99"
               onChangeText={amount => onChangeTransaction("amount", amount)}
             />
             <Text style={styles.inputLabel}>Category</Text>

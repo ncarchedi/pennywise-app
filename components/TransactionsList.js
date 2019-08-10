@@ -20,21 +20,21 @@ export default function TransactionsList({
   };
 
   ListItem = (item, index) => {
+    const { name, amount, category } = item;
+
     return (
       <TouchableOpacity onPress={() => onTransactionPress(item)}>
         <View style={styles.transactionsListItem} key={index}>
           <View style={{ flexDirection: "row" }}>
-            <Text style={{ fontWeight: "bold" }}>{item.name}</Text>
+            <Text style={{ fontWeight: "bold" }}>{name || "No Name"}</Text>
             <Text style={{ marginLeft: "auto" }}>
-              {Number(item.amount).toLocaleString("en-US", {
+              {Number(amount).toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD"
               })}
             </Text>
           </View>
-          <Text style={{ fontStyle: "italic", marginTop: 5 }}>
-            {item.category}
-          </Text>
+          <Text style={{ fontStyle: "italic", marginTop: 5 }}>{category}</Text>
         </View>
       </TouchableOpacity>
     );
