@@ -57,6 +57,7 @@ export default function TransactionsList({
       data: transactions
     }))
     .sortBy("date")
+    .reverse()
     .value();
 
   console.log("rendering transactions list...");
