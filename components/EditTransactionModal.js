@@ -23,6 +23,7 @@ function EditTransactionModal({
   // todo: can we keep input values in component state to avoid
   // updating parent components on change events?
   const { name, amount, category, date } = transaction;
+
   return (
     <Modal
       isVisible={isVisible}
@@ -47,15 +48,10 @@ function EditTransactionModal({
             <Text style={styles.inputLabel}>Amount</Text>
             <TextInput
               style={styles.textInput}
-              value={
-                amount &&
-                amount.toLocaleString("en-US", {
-                  style: "currency",
-                  currency: "USD"
-                })
-              }
+              value={amount}
               placeholder="24.99"
               onChangeText={amount => onChangeTransaction("amount", amount)}
+              autoCorrect={false}
             />
             <Text style={styles.inputLabel}>Category</Text>
             <PickerIOS

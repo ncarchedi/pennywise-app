@@ -12,7 +12,6 @@ class SpendingScreen extends React.Component {
 
   listItem = (item, index) => {
     const { amount, category, icon } = item;
-    const amountAsNumber = Number(amount);
 
     return (
       <View style={styles.categoryContainer}>
@@ -32,7 +31,7 @@ class SpendingScreen extends React.Component {
           </View>
           <View style={styles.categorySpendingItemContainer}>
             <Text>
-              {amountAsNumber.toLocaleString("en-US", {
+              {Number(amount).toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD"
               })}
