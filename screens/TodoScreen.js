@@ -6,11 +6,7 @@ import EditTransactionModal from "../components/EditTransactionModal";
 import { Ionicons } from "@expo/vector-icons";
 import _ from "lodash";
 
-import {
-  withGlobalContext,
-  addTransaction,
-  updateTransaction
-} from "../GlobalContext";
+import { withGlobalContext } from "../GlobalContext";
 
 class TodoScreen extends React.Component {
   static navigationOptions = {
