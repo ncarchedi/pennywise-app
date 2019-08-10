@@ -71,7 +71,9 @@ export default function TransactionsList({
           sections={transactionsByDate}
           renderItem={({ item, index }) => this.ListItem(item, index)}
           renderSectionHeader={({ section: { date } }) => (
-            <Text style={styles.sectionHeader}>{date}</Text>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionHeaderText}>{date}</Text>
+            </View>
           )}
           ItemSeparatorComponent={this.ListItemSeparator}
           keyExtractor={(item, index) => item + index}
@@ -91,12 +93,13 @@ const styles = StyleSheet.create({
     marginHorizontal: 10
   },
   sectionHeader: {
-    fontWeight: "bold",
-    fontSize: 22,
-    backgroundColor: "maroon",
-    color: "#fff",
     paddingLeft: 10,
-    paddingVertical: 1
+    paddingVertical: 4,
+    borderBottomWidth: 1,
+    borderBottomColor: "#f1f1f1"
+  },
+  sectionHeaderText: {
+    fontSize: 28
   },
   emptyScreenText: {
     height: "100%",
