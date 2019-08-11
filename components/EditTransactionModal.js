@@ -23,9 +23,6 @@ function EditTransactionModal({
   // TODO: https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html
   const { name, amount, category, date } = transaction;
 
-  console.log(amount);
-  console.log(typeof amount);
-
   return (
     <Modal
       isVisible={isVisible}
