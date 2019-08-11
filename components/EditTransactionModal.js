@@ -28,8 +28,8 @@ function EditTransactionModal({
       isVisible={isVisible}
       backdropOpacity={1}
       backdropColor="#fff"
-      animationInTiming={50}
-      backdropTransitionInTiming={50}
+      animationInTiming={200}
+      backdropTransitionInTiming={0}
     >
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.modalContent}>
