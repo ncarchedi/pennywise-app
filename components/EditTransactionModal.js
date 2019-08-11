@@ -43,6 +43,7 @@ function EditTransactionModal({
               value={name}
               placeholder="New Transaction"
               onChangeText={name => onChangeTransaction("name", name)}
+              autoFocus
             />
             <Text style={styles.inputLabel}>Amount</Text>
             <TextInput
