@@ -44,6 +44,10 @@ function EditTransactionModal({
               placeholder="New Transaction"
               onChangeText={name => onChangeTransaction("name", name)}
               autoFocus
+              onSubmitEditing={() => {
+                this.amountInput.focus();
+              }}
+              blurOnSubmit={false}
             />
             <Text style={styles.inputLabel}>Amount</Text>
             <TextInput
@@ -52,6 +56,9 @@ function EditTransactionModal({
               placeholder="24.99"
               onChangeText={amount => onChangeTransaction("amount", amount)}
               autoCorrect={false}
+              ref={input => {
+                this.amountInput = input;
+              }}
             />
             <Text style={styles.inputLabel}>Category</Text>
             <PickerIOS
