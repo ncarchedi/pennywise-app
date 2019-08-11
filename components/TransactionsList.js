@@ -8,6 +8,8 @@ import {
 } from "react-native";
 import _ from "lodash";
 
+import { toPrettyDate } from "../utils/TransactionUtils";
+
 export default function TransactionsList({
   transactions,
   onTransactionPress,
@@ -53,7 +55,7 @@ export default function TransactionsList({
   const transactionsByDate = _(transactionsFiltered)
     .groupBy("date")
     .map((transactions, date) => ({
-      date: date,
+      date: toPrettyDate(date),
       data: transactions
     }))
     .sortBy("date")

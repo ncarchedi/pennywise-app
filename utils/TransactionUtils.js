@@ -6,16 +6,16 @@ export const createNewTransaction = (attrs = {}) => {
     name: attrs.name || "",
     amount: attrs.amount || "",
     category: attrs.category || "No Category",
-    date: new Date().toISOString().slice(0, 10)
+    date: new Date()
   };
 
   return transaction;
 };
 
-export const convertToISO = date => {
-  // if date is an actual date object, convert to string
-  if (typeof date == "object") return date.toISOString().slice(0, 10);
+export const toPrettyDate = date => {
+  // if date is a string, convert to a date
+  if (typeof date == "string") date = new Date(date);
 
   // else, just return the existing string
-  return date;
+  return date.toISOString().slice(0, 10);
 };

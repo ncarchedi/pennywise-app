@@ -71,7 +71,7 @@ function EditTransactionModal({
             </PickerIOS>
             <Text style={styles.inputLabel}>Date</Text>
             <DatePickerIOS
-              date={new Date(date)}
+              date={date}
               onDateChange={date => onChangeTransaction("date", date)}
               mode="date"
             />
