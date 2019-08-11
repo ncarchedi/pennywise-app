@@ -20,8 +20,7 @@ function EditTransactionModal({
   onChangeTransaction,
   ...props
 }) {
-  // todo: can we keep input values in component state to avoid
-  // updating parent components on change events?
+  // TODO: https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html
   const { name, amount, category, date } = transaction;
 
   console.log(amount);
