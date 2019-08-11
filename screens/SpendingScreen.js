@@ -11,7 +11,7 @@ class SpendingScreen extends React.Component {
   };
 
   listItem = (item, index) => {
-    const { amount, category, icon } = item;
+    const { amountThisMonth, amountLastMonth, category, icon } = item;
 
     return (
       <View style={styles.categoryContainer}>
@@ -22,8 +22,7 @@ class SpendingScreen extends React.Component {
         <View style={styles.categorySpendingContainer}>
           <View style={styles.categorySpendingItemContainer}>
             <Text>
-              {/* Todo: replace with actual values */}
-              {Number("400").toLocaleString("en-US", {
+              {Number(amountLastMonth).toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD"
               })}
@@ -31,7 +30,7 @@ class SpendingScreen extends React.Component {
           </View>
           <View style={styles.categorySpendingItemContainer}>
             <Text>
-              {Number(amount).toLocaleString("en-US", {
+              {Number(amountThisMonth).toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD"
               })}
@@ -50,10 +49,10 @@ class SpendingScreen extends React.Component {
         </View>
         <View style={styles.categorySpendingContainer}>
           <View style={styles.categorySpendingItemContainer}>
-            <Text style={styles.headerText}>Last month</Text>
+            <Text style={styles.headerText}>Last Month</Text>
           </View>
           <View style={styles.categorySpendingItemContainer}>
-            <Text style={styles.headerText}>This month</Text>
+            <Text style={styles.headerText}>This Month</Text>
           </View>
         </View>
       </View>
@@ -71,12 +70,19 @@ class SpendingScreen extends React.Component {
       );
     }
 
-    // compute amount spent per category (all-time)
+    // compute amount spent by category for this and last month
+    today = new Date();
+
     const amountByCategory = _(transactions)
       .groupBy("category")
-      .map((category, name) => ({
+      .map((group, name) => ({
         category: name,
-        amount: _.sumBy(category, "amount")
+        amountThisMonth: _(group)
+          .filter(t => t.date.getMonth() === today.getMonth())
+          .sumBy("amount"),
+        amountLastMonth: _(group)
+          .filter(t => t.date.getMonth() === today.getMonth() - 1)
+          .sumBy("amount")
       }))
       .sortBy("category")
       .value();
