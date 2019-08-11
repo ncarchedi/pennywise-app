@@ -55,6 +55,7 @@ function EditTransactionModal({
               value={String(amount)}
               placeholder="24.99"
               onChangeText={amount => onChangeTransaction("amount", amount)}
+              keyboardType="numeric"
               autoCorrect={false}
               ref={input => {
                 this.amountInput = input;
