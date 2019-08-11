@@ -83,6 +83,7 @@ class EditTransactionModal extends React.Component {
                     this.nameInput.focus();
                   }}
                   blurOnSubmit={false}
+                  returnKeyType="next"
                   autoFocus
                 />
               </View>
@@ -96,6 +97,8 @@ class EditTransactionModal extends React.Component {
                   this.nameInput = input;
                 }}
                 autoCorrect={false}
+                clearButtonMode="always"
+                returnKeyType="next"
               />
               <Text style={styles.inputLabel}>Category</Text>
               <PickerIOS
