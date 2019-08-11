@@ -24,6 +24,9 @@ function EditTransactionModal({
   // updating parent components on change events?
   const { name, amount, category, date } = transaction;
 
+  console.log(amount);
+  console.log(typeof amount);
+
   return (
     <Modal
       isVisible={isVisible}
@@ -48,7 +51,7 @@ function EditTransactionModal({
             <Text style={styles.inputLabel}>Amount</Text>
             <TextInput
               style={styles.textInput}
-              value={amount}
+              value={String(amount)}
               placeholder="24.99"
               onChangeText={amount => onChangeTransaction("amount", amount)}
               autoCorrect={false}
