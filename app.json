@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "Conscious Spending App",
-    "slug": "conscious-spending-app",
+    "name": "Conscious Spending",
+    "slug": "conscious-spending",
     "privacy": "public",
     "sdkVersion": "33.0.0",
-    "platforms": ["ios", "android", "web"],
-    "version": "1.0.0",
+    "platforms": ["ios"],
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "splash": {
@@ -18,6 +18,7 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
+      "bundleIdentifier": "com.dayonelabs.conscious-spending",
       "supportsTablet": true
     }
   }

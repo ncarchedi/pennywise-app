@@ -7,7 +7,11 @@ import EditTransactionModal from "../components/EditTransactionModal";
 import { Ionicons } from "@expo/vector-icons";
 import _ from "lodash";
 
-import { withGlobalContext } from "../GlobalContext";
+import {
+  withGlobalContext,
+  addTransaction,
+  updateTransaction
+} from "../GlobalContext";
 
 class TodoScreen extends React.Component {
   static navigationOptions = {
@@ -28,39 +32,62 @@ class TodoScreen extends React.Component {
     this.setState({ isPlaidLinkVisible: !this.state.isPlaidLinkVisible });
   };
 
-  handleTransactionPress = item => {
-    this.setState({
-      selectedTransaction: item
-    });
-    this.toggleModal();
-  };
+  // handleTransactionPress = item => {
+  //   this.setState({
+  //     selectedTransaction: item
+  //   });
+  //   this.toggleModal();
+  // };
 
   handlePlaidSyncPress = item => {
     this.togglePlaidLinkModal();
   };
 
-  handleAddNewTransaction = () => {
-    const newTransaction = {
-      name: "",
-      amount: null,
-      category: "No Category",
-      date: new Date(_.now())
-    };
-    this.handleTransactionPress(newTransaction);
+  // handleAddNewTransaction = () => {
+  //   const newTransaction = {
+  //     name: "",
+  //     amount: null,
+  //     category: "No Category",
+  //     date: new Date(_.now())
+  //   };
+  //   this.handleTransactionPress(newTransaction);
+  // };
+
+  handleTransactionPress = transaction => {
+    this.setState(
+      {
+        selectedTransaction: transaction
+      },
+      // open modal after state is set
+      () => this.toggleModal()
+    );
+  };
+
+  handleAddNewTransaction = async () => {
+    const { addTransaction } = this.props.global;
+    this.handleTransactionPress(await addTransaction());
+  };
+
+  handleExitModal = () => {
+    const { updateTransaction } = this.props.global;
+    const { selectedTransaction } = this.state;
+
+    updateTransaction(selectedTransaction);
+    this.toggleModal();
+  };
+
+  handleChangeTransaction = (key, value) => {
+    const { selectedTransaction } = this.state;
+    const newSelectedTransaction = { ...selectedTransaction, [key]: value };
+
+    this.setState({ selectedTransaction: newSelectedTransaction });
   };
 
   render() {
-    transactions = this.props.global.transactions;
-    const { selectedTransaction, isModalVisible, isPlaidLinkVisible } = this.state;
+    console.log("rendering todo screen...");
 
-    const transactionsByDate = _(transactions)
-      .groupBy("date")
-      .map((transactions, date) => ({
-        date: date,
-        data: transactions
-      }))
-      .sortBy("date")
-      .value();
+    const { transactions } = this.props.global;
+    const { selectedTransaction, isModalVisible, isPlaidLinkVisible } = this.state;
 
     return (
       <View style={styles.container}>
@@ -69,14 +96,15 @@ class TodoScreen extends React.Component {
           contentContainerStyle={styles.contentContainer}
         >
           <TransactionsList
-            transactions={transactionsByDate}
+            transactions={transactions}
             onTransactionPress={this.handleTransactionPress}
             categorized={false}
           />
           <EditTransactionModal
             transaction={selectedTransaction}
             isVisible={isModalVisible}
-            onExitModal={this.toggleModal}
+            onExitModal={this.handleExitModal}
+            onChangeTransaction={this.handleChangeTransaction}
           />
           <PlaidLinkModal 
             isVisible={isPlaidLinkVisible}

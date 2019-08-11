@@ -1,5 +1,11 @@
 import React from "react";
-import { ScrollView, StyleSheet, Text, View, Button } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity
+} from "react-native";
 
 import { withGlobalContext } from "../GlobalContext";
 
@@ -15,58 +21,34 @@ class AnalyticsScreen extends React.Component {
   }
 
   render() {
-    // return (
-    //   <View style={styles.container}>
-    //     <ScrollView
-    //       style={styles.container}
-    //       contentContainerStyle={styles.contentContainer}
-    //     >
-    //       <View style={styles.analyticsContainer}>
-    //         <Text style={styles.analyticsText}>
-    //           This will show some spending analytics.
-    //         </Text>
-    //       </View>
-    //     </ScrollView>
-    //   </View>
-    // );
+    const { clearAllTransactions, loadDummyData } = this.props.global;
 
-    if(!this.state.isReady) {
-      return <PlaidAuthenticator
-        onMessage={this.onMessage}
-        publicKey="aef79d0fac8493ad10a8760b0c01a6"
-        env="sandbox"
-        product="transactions"
-        clientName="Conscious Spending Client"
-        selectAccount={false}
-      />
-    } else {
-      return (
-        <View style={styles.container}>
-          <Text>
-            Ready! Public token: {this.state.metadata.public_token}
-          </Text>
-          <Button
-            onPress={this.cleanState}
-            title="Clean State"
-            color="#841584"
-            accessibilityLabel="Learn more about this purple button"
-          />
-        </View>
-      )
-    }
-  }
-
-  onMessage = (data) => {
-    if(data.action.includes('connected')) {
-      this.props.global.getAccessTokenFromPublicToken(data.metadata.public_token)
-      this.setState({...data, isReady: true})
-    } else (
-      this.setState({data})
-    )
-  }
-
-  cleanState = () => {
-    this.setState({isReady: false})
+    return (
+      <View style={styles.container}>
+        <ScrollView
+          style={styles.container}
+          contentContainerStyle={styles.contentContainer}
+        >
+          <View style={styles.analyticsContainer}>
+            <Text style={styles.analyticsText}>
+              This will show some spending analytics.
+            </Text>
+            <TouchableOpacity
+              onPress={clearAllTransactions}
+              style={{ paddingTop: 20 }}
+            >
+              <Text>Clear All Transactions</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={loadDummyData}
+              style={{ paddingTop: 20 }}
+            >
+              <Text>Load Example Transactions</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </View>
+    );
   }
 }
 
