@@ -48,6 +48,7 @@ function EditTransactionModal({
                 this.amountInput.focus();
               }}
               blurOnSubmit={false}
+              autoCorrect={false}
             />
             <Text style={styles.inputLabel}>Amount</Text>
             <TextInput
