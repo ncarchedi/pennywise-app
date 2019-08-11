@@ -60,6 +60,8 @@ class EditTransactionModal extends React.Component {
                   <Switch
                     value={isIncome}
                     onValueChange={() => this.toggleSwitch()}
+                    trackColor={{ false: "red", true: "green" }}
+                    ios_backgroundColor="red"
                   />
                 </View>
                 <Text
