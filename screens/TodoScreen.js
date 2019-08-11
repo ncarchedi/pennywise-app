@@ -81,7 +81,7 @@ class TodoScreen extends React.Component {
             onPress={this.handleAddNewTransaction}
             style={styles.newTransactionButton}
           >
-            <Ionicons name="ios-add" size={40} />
+            <Ionicons name="ios-add" size={80} />
           </TouchableOpacity>
         </View>
       </View>
@@ -100,12 +100,8 @@ const styles = StyleSheet.create({
     // marginVertical: 10
   },
   newTransactionButton: {
-    marginBottom: 15,
-    borderWidth: 1,
-    borderColor: "rgba(0,0,0,0.2)",
+    marginBottom: 30,
     alignItems: "center",
-    justifyContent: "center",
-    width: 60,
     height: 60,
     borderRadius: 30
   }
