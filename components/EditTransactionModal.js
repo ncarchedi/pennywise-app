@@ -28,8 +28,10 @@ function EditTransactionModal({
       isVisible={isVisible}
       backdropOpacity={1}
       backdropColor="#fff"
-      animationInTiming={200}
+      animationInTiming={400}
+      animationOutTiming={400}
       backdropTransitionInTiming={0}
+      backdropTransitionOutTiming={0}
     >
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.modalContent}>
@@ -37,30 +39,32 @@ function EditTransactionModal({
             <Text style={styles.modalTitle}>Edit Transaction</Text>
           </View>
           <View style={styles.modalBody}>
+            <View style={{ flexDirection: "row" }}>
+              <Text style={styles.dollarSign}>$</Text>
+              <TextInput
+                style={styles.amountInput}
+                value={String(amount)}
+                placeholder="24.99"
+                onChangeText={amount => onChangeTransaction("amount", amount)}
+                keyboardType={"numbers-and-punctuation"}
+                autoCorrect={false}
+                onSubmitEditing={() => {
+                  this.nameInput.focus();
+                }}
+                blurOnSubmit={false}
+                autoFocus
+              />
+            </View>
             <Text style={styles.inputLabel}>Name</Text>
             <TextInput
               style={styles.textInput}
               value={name}
               placeholder="New Transaction"
               onChangeText={name => onChangeTransaction("name", name)}
-              autoFocus
-              onSubmitEditing={() => {
-                this.amountInput.focus();
-              }}
-              blurOnSubmit={false}
-              autoCorrect={false}
-            />
-            <Text style={styles.inputLabel}>Amount</Text>
-            <TextInput
-              style={styles.textInput}
-              value={String(amount)}
-              placeholder="24.99"
-              onChangeText={amount => onChangeTransaction("amount", amount)}
-              keyboardType="numeric"
-              autoCorrect={false}
               ref={input => {
-                this.amountInput = input;
+                this.nameInput = input;
               }}
+              autoCorrect={false}
             />
             <Text style={styles.inputLabel}>Category</Text>
             <PickerIOS
@@ -87,7 +91,7 @@ function EditTransactionModal({
             />
             <Button
               style={{ marginBottom: 0 }}
-              title="Done"
+              title="Save Changes"
               onPress={onExitModal}
             />
           </View>
@@ -126,6 +130,13 @@ const styles = StyleSheet.create({
     borderColor: "#f1f1f1",
     borderRadius: 5,
     borderWidth: 1
+  },
+  dollarSign: {
+    fontSize: 50,
+    marginRight: 5
+  },
+  amountInput: {
+    fontSize: 50
   },
   inputLabel: {
     fontWeight: "bold",
