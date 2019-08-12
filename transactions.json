@@ -1,77 +1,77 @@
 [
   {
     "id": "1",
-    "date": "2019-07-20",
+    "date": "2019-07-27",
     "name": "Amazon.com",
-    "amount": -84.33,
+    "amount": 84.33,
     "category": "Household Goods"
   },
   {
     "id": "2",
-    "date": "2019-07-20",
+    "date": "2019-07-28",
     "name": "Union Square Cafe",
-    "amount": -104,
-    "category": "Bars & Restaurants"
+    "amount": 104,
+    "category": "Restaurants"
   },
   {
     "id": "3",
-    "date": "2019-07-21",
+    "date": "2019-07-29",
     "name": "ACME, Inc.",
-    "amount": 2000,
-    "category": "Income"
+    "amount": 200,
+    "category": "Insurance"
   },
   {
     "id": "4",
-    "date": "2019-07-23",
+    "date": "2019-07-29",
     "name": "The Corner Store",
-    "amount": -9.95,
+    "amount": 9.95,
     "category": "Personal Care"
   },
   {
     "id": "5",
-    "date": "2019-07-24",
+    "date": "2019-07-30",
     "name": "Ace Hardware",
-    "amount": -25.99,
+    "amount": 25.99,
     "category": "Household Goods"
   },
   {
     "id": "6",
-    "date": "2019-07-24",
+    "date": "2019-08-01",
     "name": "Whole Foods",
-    "amount": -49.45,
+    "amount": 49.45,
     "category": "Groceries"
   },
   {
     "id": "7",
-    "date": "2019-07-24",
+    "date": "2019-08-02",
     "name": "Netflix",
-    "amount": -14.99,
+    "amount": 14.99,
     "category": "Entertainment"
   },
   {
     "id": "8",
-    "date": "2019-07-25",
+    "date": "2019-08-02",
     "name": "Tequila Sunrise",
-    "amount": -75.25,
-    "category": "Bars & Restaurants"
+    "amount": 75.25,
+    "category": "Bars & Alcohol"
   },
   {
     "id": "9",
-    "date": "2019-07-27",
+    "date": "2019-08-03",
     "name": "Toilet Repair",
-    "amount": -125,
+    "amount": 125,
     "category": "No Category"
   },
   {
     "id": "10",
-    "date": "2019-07-27",
+    "date": "2019-08-04",
     "name": "Verizon",
-    "amount": -59.95,
+    "amount": 59.95,
     "category": "No Category"
   },
   {
     "id": "11",
-    "date": "2019-07-28",
+    "date": "2019-08-04",
     "name": "Venmo",
     "amount": 50,
     "category": "No Category"

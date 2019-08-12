@@ -2,7 +2,7 @@ import React from "react";
 import { AsyncStorage } from "react-native";
 import transactionsData from "./transactions.json";
 import categoriesData from "./categories.json";
-import { createNewTransaction, convertToISO } from "./utils/TransactionUtils";
+import { createNewTransaction } from "./utils/TransactionUtils";
 
 const GlobalContext = React.createContext({});
 
@@ -14,9 +14,17 @@ export class GlobalContextProvider extends React.Component {
 
   componentDidMount = async () => {
     try {
-      const transactions = JSON.parse(
+      const transactionsRaw = JSON.parse(
         await AsyncStorage.getItem("transactions")
       );
+
+      const transactions = transactionsRaw.map(t => ({
+        id: t.id,
+        name: t.name,
+        amount: t.amount,
+        category: t.category,
+        date: new Date(t.date)
+      }));
 
       this.setState({ transactions });
     } catch (error) {
@@ -54,14 +62,13 @@ export class GlobalContextProvider extends React.Component {
     const updatedTransactions = transactions.map(transaction => {
       if (transaction.id === attrs.id) {
         const { name, amount, category, date } = attrs;
-        const dateString = convertToISO(date);
 
         const updatedTransaction = {
           ...transaction,
-          name: name,
-          amount: amount,
-          category: category,
-          date: dateString
+          name,
+          amount,
+          category,
+          date
         };
 
         // if it's a match, then return the updated transaction
@@ -99,16 +106,21 @@ export class GlobalContextProvider extends React.Component {
   loadDummyData = async () => {
     console.log("loading dummy data...");
 
+    const dummyData = transactionsData.map(t => ({
+      id: t.id,
+      name: t.name,
+      amount: t.amount,
+      category: t.category,
+      date: new Date(t.date)
+    }));
+
     try {
-      await AsyncStorage.setItem(
-        "transactions",
-        JSON.stringify(transactionsData)
-      );
+      await AsyncStorage.setItem("transactions", JSON.stringify(dummyData));
     } catch (error) {
       console.log(error.message);
     }
 
-    this.setState({ transactions: transactionsData });
+    this.setState({ transactions: dummyData });
   };
 
   render() {
