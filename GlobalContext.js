@@ -55,8 +55,27 @@ export class GlobalContextProvider extends React.Component {
     this.setState({ categories: categoriesData });
   };
 
-  addTransaction = async (transaction = {}) => {
-    this.addTransactions([transaction]);
+  // TODO: merge this with addTransactions?
+  addTransaction = async () => {
+    const { transactions } = this.state;
+    const newTransaction = createNewTransaction();
+
+    const updatedTransactions = [...transactions, newTransaction];
+
+    try {
+      await AsyncStorage.setItem(
+        "transactions",
+        JSON.stringify(updatedTransactions)
+      );
+    } catch (error) {
+      console.log(error.message);
+    }
+
+    this.setState({
+      transactions: updatedTransactions
+    });
+
+    return newTransaction;
   };
 
   addTransactions = async newTransactionsData => {
