@@ -20,16 +20,18 @@ function EditTransactionModal({
   onChangeTransaction,
   ...props
 }) {
-  // todo: can we keep input values in component state to avoid
-  // updating parent components on change events?
+  // TODO: https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html
   const { name, amount, category, date } = transaction;
+
   return (
     <Modal
       isVisible={isVisible}
       backdropOpacity={1}
       backdropColor="#fff"
-      animationInTiming={50}
-      backdropTransitionInTiming={50}
+      animationInTiming={400}
+      animationOutTiming={400}
+      backdropTransitionInTiming={0}
+      backdropTransitionOutTiming={0}
     >
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.modalContent}>
@@ -37,23 +39,35 @@ function EditTransactionModal({
             <Text style={styles.modalTitle}>Edit Transaction</Text>
           </View>
           <View style={styles.modalBody}>
+            <View style={{ flexDirection: "row", alignSelf: "center" }}>
+              <Text style={[styles.dollarSign]}>$</Text>
+              <TextInput
+                style={styles.amountInput}
+                value={String(amount)}
+                placeholder="24.99"
+                onChangeText={amount => onChangeTransaction("amount", amount)}
+                keyboardType={"numbers-and-punctuation"}
+                autoCorrect={false}
+                onSubmitEditing={() => {
+                  this.nameInput.focus();
+                }}
+                blurOnSubmit={false}
+                returnKeyType="next"
+                autoFocus
+              />
+            </View>
             <Text style={styles.inputLabel}>Name</Text>
             <TextInput
               style={styles.textInput}
               value={name}
+              placeholder="New Transaction"
               onChangeText={name => onChangeTransaction("name", name)}
-            />
-            <Text style={styles.inputLabel}>Amount</Text>
-            <TextInput
-              style={styles.textInput}
-              value={
-                amount &&
-                amount.toLocaleString("en-US", {
-                  style: "currency",
-                  currency: "USD"
-                })
-              }
-              onChangeText={amount => onChangeTransaction("amount", amount)}
+              ref={input => {
+                this.nameInput = input;
+              }}
+              autoCorrect={false}
+              clearButtonMode="always"
+              returnKeyType="next"
             />
             <Text style={styles.inputLabel}>Category</Text>
             <PickerIOS
@@ -65,7 +79,7 @@ function EditTransactionModal({
               {props.global.categories.map(category => {
                 return (
                   <PickerIOS.Item
-                    key={category.id}
+                    key={category.label}
                     value={category.label}
                     label={category.label}
                   />
@@ -74,13 +88,13 @@ function EditTransactionModal({
             </PickerIOS>
             <Text style={styles.inputLabel}>Date</Text>
             <DatePickerIOS
-              date={new Date(date)}
+              date={date}
               onDateChange={date => onChangeTransaction("date", date)}
               mode="date"
             />
             <Button
               style={{ marginBottom: 0 }}
-              title="Done"
+              title="Save Changes"
               onPress={onExitModal}
             />
           </View>
@@ -119,6 +133,13 @@ const styles = StyleSheet.create({
     borderColor: "#f1f1f1",
     borderRadius: 5,
     borderWidth: 1
+  },
+  dollarSign: {
+    fontSize: 50,
+    marginRight: 5
+  },
+  amountInput: {
+    fontSize: 50
   },
   inputLabel: {
     fontWeight: "bold",

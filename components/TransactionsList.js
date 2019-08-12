@@ -8,6 +8,8 @@ import {
 } from "react-native";
 import _ from "lodash";
 
+import { toPrettyDate } from "../utils/TransactionUtils";
+
 export default function TransactionsList({
   transactions,
   onTransactionPress,
@@ -20,21 +22,21 @@ export default function TransactionsList({
   };
 
   ListItem = (item, index) => {
+    const { name, amount, category } = item;
+
     return (
       <TouchableOpacity onPress={() => onTransactionPress(item)}>
         <View style={styles.transactionsListItem} key={index}>
           <View style={{ flexDirection: "row" }}>
-            <Text style={{ fontWeight: "bold" }}>{item.name}</Text>
+            <Text style={{ fontWeight: "bold" }}>{name || "No Name"}</Text>
             <Text style={{ marginLeft: "auto" }}>
-              {Number(item.amount).toLocaleString("en-US", {
+              {Number(amount).toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD"
               })}
             </Text>
           </View>
-          <Text style={{ fontStyle: "italic", marginTop: 5 }}>
-            {item.category}
-          </Text>
+          <Text style={{ fontStyle: "italic", marginTop: 5 }}>{category}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -53,10 +55,11 @@ export default function TransactionsList({
   const transactionsByDate = _(transactionsFiltered)
     .groupBy("date")
     .map((transactions, date) => ({
-      date: date,
+      date: toPrettyDate(date),
       data: transactions
     }))
     .sortBy("date")
+    .reverse()
     .value();
 
   console.log("rendering transactions list...");
@@ -70,7 +73,9 @@ export default function TransactionsList({
           sections={transactionsByDate}
           renderItem={({ item, index }) => this.ListItem(item, index)}
           renderSectionHeader={({ section: { date } }) => (
-            <Text style={styles.sectionHeader}>{date}</Text>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionHeaderText}>{date}</Text>
+            </View>
           )}
           ItemSeparatorComponent={this.ListItemSeparator}
           keyExtractor={(item, index) => item + index}
@@ -90,12 +95,13 @@ const styles = StyleSheet.create({
     marginHorizontal: 10
   },
   sectionHeader: {
-    fontWeight: "bold",
-    fontSize: 22,
-    backgroundColor: "maroon",
-    color: "#fff",
     paddingLeft: 10,
-    paddingVertical: 1
+    paddingVertical: 4,
+    borderBottomWidth: 1,
+    borderBottomColor: "#f1f1f1"
+  },
+  sectionHeaderText: {
+    fontSize: 28
   },
   emptyScreenText: {
     height: "100%",

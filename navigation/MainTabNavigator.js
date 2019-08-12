@@ -18,8 +18,6 @@ const config = Platform.select({
   default: {}
 });
 
-// Todo screen
-
 const TodoStack = createStackNavigator(
   {
     Todo: TodoScreen
@@ -39,10 +37,6 @@ TodoStack.navigationOptions = {
   )
 };
 
-TodoStack.path = "";
-
-// Transactions screen
-
 const TransactionsStack = createStackNavigator(
   {
     Transactions: TransactionsScreen
@@ -59,10 +53,6 @@ TransactionsStack.navigationOptions = {
     />
   )
 };
-
-TransactionsStack.path = "";
-
-// Spending screen
 
 const SpendingStack = createStackNavigator(
   {
@@ -81,10 +71,6 @@ SpendingStack.navigationOptions = {
   )
 };
 
-SpendingStack.path = "";
-
-// Analytics screen
-
 const AnalyticsStack = createStackNavigator(
   {
     Analytics: AnalyticsScreen
@@ -102,37 +88,11 @@ AnalyticsStack.navigationOptions = {
   )
 };
 
-AnalyticsStack.path = "";
-
-// Settings screen
-
-const SettingsStack = createStackNavigator(
-  {
-    Settings: SettingsScreen
-  },
-  config
-);
-
-SettingsStack.navigationOptions = {
-  tabBarLabel: "Settings",
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === "ios" ? "ios-options" : "md-options"}
-    />
-  )
-};
-
-SettingsStack.path = "";
-
 const tabNavigator = createBottomTabNavigator({
   TodoStack,
   TransactionsStack,
   SpendingStack,
   AnalyticsStack
-  // SettingsStack
 });
-
-tabNavigator.path = "";
 
 export default tabNavigator;
