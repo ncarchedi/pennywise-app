@@ -7,8 +7,7 @@ import {
   View,
   DatePickerIOS,
   TextInput,
-  PickerIOS,
-  Switch
+  PickerIOS
 } from "react-native";
 import Modal from "react-native-modal";
 
