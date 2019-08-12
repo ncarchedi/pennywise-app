@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff"
   },
   transactionsListItem: {
-    marginVertical: 15,
+    marginVertical: 12,
     marginHorizontal: 10
   },
   sectionHeader: {

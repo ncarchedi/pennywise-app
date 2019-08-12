@@ -56,7 +56,7 @@ function EditTransactionModal({
                 autoFocus
               />
             </View>
-            <Text style={styles.inputLabel}>Name</Text>
+            {/* <Text style={styles.inputLabel}>Name</Text> */}
             <TextInput
               style={styles.textInput}
               value={name}
@@ -69,7 +69,7 @@ function EditTransactionModal({
               clearButtonMode="always"
               returnKeyType="next"
             />
-            <Text style={styles.inputLabel}>Category</Text>
+            {/* <Text style={styles.inputLabel}>Category</Text> */}
             <PickerIOS
               selectedValue={category}
               onValueChange={category =>
@@ -86,7 +86,7 @@ function EditTransactionModal({
                 );
               })}
             </PickerIOS>
-            <Text style={styles.inputLabel}>Date</Text>
+            {/* <Text style={styles.inputLabel}>Date</Text> */}
             <DatePickerIOS
               date={date}
               onDateChange={date => onChangeTransaction("date", date)}
@@ -139,7 +139,8 @@ const styles = StyleSheet.create({
     marginRight: 5
   },
   amountInput: {
-    fontSize: 50
+    fontSize: 50,
+    marginBottom: 10
   },
   inputLabel: {
     fontWeight: "bold",
