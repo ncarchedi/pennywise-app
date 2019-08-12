@@ -30,7 +30,7 @@ class PlaidLinkModal extends React.Component {
       <PlaidAuthenticator
         onMessage={(data) => this.onMessage(data, onExitModal)}
         publicKey="aef79d0fac8493ad10a8760b0c01a6"
-        env="sandbox"
+        env="development"
         product="transactions"
         clientName="Conscious Spending Client"
         selectAccount={false}
