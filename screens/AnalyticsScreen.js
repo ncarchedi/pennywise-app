@@ -11,7 +11,7 @@ import PlaidLinkModal from "../components/PlaidLinkModal";
 
 import { withGlobalContext } from "../GlobalContext";
 
-import PlaidAuthenticator from 'react-native-plaid-link';
+import PlaidAuthenticator from "react-native-plaid-link";
 
 class AnalyticsScreen extends React.Component {
   static navigationOptions = {
@@ -21,7 +21,7 @@ class AnalyticsScreen extends React.Component {
   state = {
     isReady: false,
     isPlaidLinkVisible: false
-  }
+  };
 
   togglePlaidLinkModal = () => {
     this.setState({ isPlaidLinkVisible: !this.state.isPlaidLinkVisible });
@@ -40,9 +40,9 @@ class AnalyticsScreen extends React.Component {
           style={styles.container}
           contentContainerStyle={styles.contentContainer}
         >
-          <PlaidLinkModal 
+          <PlaidLinkModal
             isVisible={this.state.isPlaidLinkVisible}
-            onExitModal={(this.togglePlaidLinkModal)}
+            onExitModal={this.togglePlaidLinkModal}
           />
           <View style={styles.analyticsContainer}>
             <Text style={styles.analyticsText}>

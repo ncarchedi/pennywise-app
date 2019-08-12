@@ -12,7 +12,7 @@ import Modal from "react-native-modal";
 
 import { withGlobalContext } from "../GlobalContext";
 
-import PlaidAuthenticator from 'react-native-plaid-link';
+import PlaidAuthenticator from "react-native-plaid-link";
 
 class PlaidLinkModal extends React.Component {
   render() {
@@ -21,33 +21,33 @@ class PlaidLinkModal extends React.Component {
 
     return (
       <Modal
-      isVisible={isVisible}
-      backdropOpacity={1}
-      backdropColor="#fff"
-      animationInTiming={50}
-      backdropTransitionInTiming={50}
-    >
-      <PlaidAuthenticator
-        onMessage={(data) => this.onMessage(data, onExitModal)}
-        publicKey="aef79d0fac8493ad10a8760b0c01a6"
-        env="development"
-        product="transactions"
-        clientName="Conscious Spending Client"
-        selectAccount={false}
-      />
-    </Modal>
-    )
+        isVisible={isVisible}
+        backdropOpacity={1}
+        backdropColor="#fff"
+        animationInTiming={50}
+        backdropTransitionInTiming={50}
+      >
+        <PlaidAuthenticator
+          onMessage={data => this.onMessage(data, onExitModal)}
+          publicKey="aef79d0fac8493ad10a8760b0c01a6"
+          env="development"
+          product="transactions"
+          clientName="Conscious Spending Client"
+          selectAccount={false}
+        />
+      </Modal>
+    );
   }
 
   onMessage = (data, onCompleted) => {
-    if(data.action.includes('connected')) {
-      this.props.global.getAccessTokenFromPublicToken(data.metadata.public_token)
-      this.setState({data})
-      onCompleted()
-    } else (
-      this.setState({data})
-    )
-  }
+    if (data.action.includes("connected")) {
+      this.props.global.getAccessTokenFromPublicToken(
+        data.metadata.public_token
+      );
+      this.setState({ data });
+      onCompleted();
+    } else this.setState({ data });
+  };
 }
 
 export default withGlobalContext(PlaidLinkModal);

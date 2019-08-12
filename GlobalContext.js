@@ -6,19 +6,21 @@ import { createNewTransaction } from "./utils/TransactionUtils";
 
 const GlobalContext = React.createContext({});
 
-const BACKEND_DEV = 'http://localhost:5001/conscious-spending-backend/us-central1/'
-const BACKEND_PROD = 'https://us-central1-conscious-spending-backend.cloudfunctions.net/'
+const BACKEND_DEV =
+  "http://localhost:5001/conscious-spending-backend/us-central1/";
+const BACKEND_PROD =
+  "https://us-central1-conscious-spending-backend.cloudfunctions.net/";
 
-const BACKEND_URL = BACKEND_PROD
+const BACKEND_URL = BACKEND_PROD;
 
-const ACCESS_TOKEN_URL = BACKEND_URL + 'getAccessTokenFromPublicToken'
-const TRANSACTIONS_URL = BACKEND_URL + 'getPlaidTransactions'
+const ACCESS_TOKEN_URL = BACKEND_URL + "getAccessTokenFromPublicToken";
+const TRANSACTIONS_URL = BACKEND_URL + "getPlaidTransactions";
 
 export class GlobalContextProvider extends React.Component {
   state = {
     transactions: [],
     categories: [],
-    access_token: ''
+    access_token: ""
   };
 
   componentDidMount = async () => {
@@ -53,11 +55,11 @@ export class GlobalContextProvider extends React.Component {
     this.setState({ categories: categoriesData });
   };
 
-  addTransaction = async (transaction = {}) => { 
+  addTransaction = async (transaction = {}) => {
     this.addTransactions([transaction]);
-  }
+  };
 
-  addTransactions = async (newTransactionsData) => { 
+  addTransactions = async newTransactionsData => {
     const { transactions } = this.state;
 
     let updatedTransactions = transactions;
@@ -77,12 +79,12 @@ export class GlobalContextProvider extends React.Component {
       // });
 
       // if(!exisintTransaction) {
-      //   let newTransaction = createNewTransaction(nextNewTransaction); 
+      //   let newTransaction = createNewTransaction(nextNewTransaction);
       //   updatedTransactions.push(newTransaction)
       // }
 
-      let newTransaction = createNewTransaction(nextNewTransaction); 
-      updatedTransactions.push(newTransaction)
+      let newTransaction = createNewTransaction(nextNewTransaction);
+      updatedTransactions.push(newTransaction);
     }
 
     try {
@@ -97,14 +99,11 @@ export class GlobalContextProvider extends React.Component {
     this.setState({
       transactions: updatedTransactions
     });
-  }
+  };
 
-  setAccessToken = async (accessToken) => { 
+  setAccessToken = async accessToken => {
     try {
-      await AsyncStorage.setItem(
-        "access_token",
-        JSON.stringify(accessToken)
-      );
+      await AsyncStorage.setItem("access_token", JSON.stringify(accessToken));
     } catch (error) {
       console.log(error.message);
     }
@@ -112,83 +111,85 @@ export class GlobalContextProvider extends React.Component {
     this.setState({
       access_token: accessToken
     });
-  }
+  };
 
-  getAccessTokenFromPublicToken = (publicToken) => {
-    console.log('public token');
+  getAccessTokenFromPublicToken = publicToken => {
+    console.log("public token");
     console.log(publicToken);
-    
+
     return fetch(ACCESS_TOKEN_URL, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
+        Accept: "application/json",
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        public_token: publicToken,
-      }),
-    }).then((response) => response.json())
-    .then((responseJson) => {
-      console.log('access token response'); 
-      console.log(responseJson);
-
-      this.setAccessToken(responseJson.access_token);
-
-      return responseJson;
+        public_token: publicToken
+      })
     })
-    .catch((error) => {
-      console.error(error);
-    });
-  }
+      .then(response => response.json())
+      .then(responseJson => {
+        console.log("access token response");
+        console.log(responseJson);
 
-  getPlaidTransactions = () => {   
+        this.setAccessToken(responseJson.access_token);
+
+        return responseJson;
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
+
+  getPlaidTransactions = () => {
     const accessToken = this.state.access_token;
 
     return fetch(TRANSACTIONS_URL, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
+        Accept: "application/json",
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        access_token: accessToken,
-      }),
-    }).then((response) => response.json())
-    .then((responseJson) => {
-      // Here we get all transactions  
-      //console.log(responseJson);
+        access_token: accessToken
+      })
+    })
+      .then(response => response.json())
+      .then(responseJson => {
+        // Here we get all transactions
+        //console.log(responseJson);
 
-      plaidTransactions = responseJson.transactions.transactions;
+        plaidTransactions = responseJson.transactions.transactions;
 
-      if(plaidTransactions) {
-        let newTransactions = []
+        if (plaidTransactions) {
+          let newTransactions = [];
 
-        for (let plaidTransaction of plaidTransactions) { 
-          const {name, amount, date} = plaidTransaction;
+          for (let plaidTransaction of plaidTransactions) {
+            const { name, amount, date } = plaidTransaction;
 
-          // Todo: We can not use plaid's transaction_id as unique identifier, as it depends
-          // on the access token.
-          // I've tried plaidTransaction.payment_meta.reference_number, but 
-          // that is usually null (at least in the test data)
-          let transaction = {
-            plaid_id: plaidTransaction.transaction_id,
-            name,
-            amount,
-            date
+            // Todo: We can not use plaid's transaction_id as unique identifier, as it depends
+            // on the access token.
+            // I've tried plaidTransaction.payment_meta.reference_number, but
+            // that is usually null (at least in the test data)
+            let transaction = {
+              plaid_id: plaidTransaction.transaction_id,
+              name,
+              amount,
+              date
+            };
+
+            newTransactions = [...newTransactions, transaction];
           }
 
-          newTransactions = [...newTransactions, transaction]
+          this.addTransactions(newTransactions);
         }
 
-        this.addTransactions(newTransactions);
-      }
-
-      return responseJson;
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-  }
+        return responseJson;
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
 
   updateTransaction = async attrs => {
     const { transactions } = this.state;
