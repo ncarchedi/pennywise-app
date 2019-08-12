@@ -40,7 +40,7 @@ class TodoScreen extends React.Component {
   // };
 
   handlePlaidSyncPress = item => {
-    this.togglePlaidLinkModal();
+    this.props.global.getPlaidTransactions(); 
   };
 
   // handleAddNewTransaction = () => {

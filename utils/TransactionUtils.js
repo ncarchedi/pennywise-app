@@ -1,12 +1,16 @@
 import uuidv4 from "uuid/v4";
 
 export const createNewTransaction = (attrs = {}) => {
+  console.log('lol');
+  console.log(attrs);
+
   const transaction = {
     id: uuidv4(),
+    plaid_id: attrs.plaid_id || "",
     name: attrs.name || "New Transaction",
     amount: attrs.amount || "0",
     category: attrs.category || "No Category",
-    date: new Date().toISOString().slice(0, 10)
+    date: attrs.date || new Date().toISOString().slice(0, 10)
   };
 
   return transaction;
