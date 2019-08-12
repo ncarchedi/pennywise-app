@@ -49,7 +49,7 @@ class TransactionsScreen extends React.Component {
   render() {
     console.log("rendering transactions screen...");
 
-    const { transactions } = this.props.global;
+    const { transactions, categories } = this.props.global;
     const { selectedTransaction, isModalVisible } = this.state;
 
     return (
@@ -60,6 +60,7 @@ class TransactionsScreen extends React.Component {
         >
           <TransactionsList
             transactions={transactions}
+            categories={categories}
             onTransactionPress={this.handleTransactionPress}
             categorized={true}
           />
