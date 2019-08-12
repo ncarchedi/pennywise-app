@@ -2,7 +2,7 @@ import React from "react";
 import {
   StyleSheet,
   Text,
-  SectionList,
+  FlatList,
   View,
   TouchableOpacity
 } from "react-native";
@@ -22,7 +22,7 @@ export default function TransactionsList({
   };
 
   ListItem = (item, index) => {
-    const { name, amount, category } = item;
+    const { name, amount, date, category } = item;
 
     return (
       <TouchableOpacity onPress={() => onTransactionPress(item)}>
@@ -36,7 +36,12 @@ export default function TransactionsList({
               })}
             </Text>
           </View>
-          <Text style={{ fontStyle: "italic", marginTop: 5 }}>{category}</Text>
+          <View style={{ flexDirection: "row", marginTop: 5 }}>
+            <Text>{toPrettyDate(date)}</Text>
+            <Text style={{ fontStyle: "italic", marginLeft: "auto" }}>
+              {category}
+            </Text>
+          </View>
         </View>
       </TouchableOpacity>
     );
@@ -51,13 +56,7 @@ export default function TransactionsList({
         category: "No Category"
       });
 
-  // reshape the transactions list for the section list
-  const transactionsByDate = _(transactionsFiltered)
-    .groupBy("date")
-    .map((transactions, date) => ({
-      date: toPrettyDate(date),
-      data: transactions
-    }))
+  const transactionsFinal = _(transactionsFiltered)
     .sortBy("date")
     .reverse()
     .value();
@@ -66,17 +65,12 @@ export default function TransactionsList({
 
   return (
     <View style={styles.container}>
-      {!transactionsByDate.length ? (
+      {!transactionsFinal.length ? (
         <Text style={styles.emptyScreenText}>Nothing to see here! 🎉</Text>
       ) : (
-        <SectionList
-          sections={transactionsByDate}
+        <FlatList
+          data={transactionsFinal}
           renderItem={({ item, index }) => this.ListItem(item, index)}
-          renderSectionHeader={({ section: { date } }) => (
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionHeaderText}>{date}</Text>
-            </View>
-          )}
           ItemSeparatorComponent={this.ListItemSeparator}
           keyExtractor={(item, index) => item + index}
         />
