@@ -114,9 +114,9 @@ class TodoScreen extends React.Component {
         </ScrollView>
         <View
           style={{
-            alignItems: "center",
             flexDirection: "row",
-            justifyContent: "space-around"
+            justifyContent: "space-around",
+            alignItems: "center"
           }}
         >
           <TouchableOpacity
@@ -127,9 +127,9 @@ class TodoScreen extends React.Component {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={this.handlePlaidSyncPress}
-            style={styles.newTransactionButton}
+            style={styles.syncTransactionsButton}
           >
-            <Ionicons name="ios-sync" size={40} />
+            <Ionicons name="ios-sync" size={50} />
           </TouchableOpacity>
         </View>
       </View>
@@ -144,13 +144,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff"
   },
-  contentContainer: {
-    // marginVertical: 10
-  },
-  newTransactionButton: {
-    marginBottom: 30,
-    alignItems: "center",
-    height: 60,
-    borderRadius: 30
-  }
+  contentContainer: {},
+  newTransactionButton: {},
+  syncTransactionsButton: {}
 });
