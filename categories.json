@@ -1,42 +1,90 @@
 [
   {
-    "id": "0",
     "label": "No Category",
     "icon": "ios-help-circle-outline"
   },
   {
-    "id": "1",
-    "label": "Bars & Restaurants",
-    "icon": "ios-restaurant"
+    "label": "Bars & Alcohol",
+    "icon": "ios-beer"
   },
   {
-    "id": "2",
+    "label": "Clothing",
+    "icon": "ios-shirt"
+  },
+  {
+    "label": "Education",
+    "icon": "ios-school"
+  },
+  {
     "label": "Entertainment",
     "icon": "ios-tv"
   },
   {
-    "id": "3",
+    "label": "Fitness",
+    "icon": "ios-fitness"
+  },
+  {
+    "label": "Gifts",
+    "icon": "ios-gift"
+  },
+  {
     "label": "Groceries",
     "icon": "ios-cart"
   },
   {
-    "id": "4",
+    "label": "Healthcare",
+    "icon": "ios-medkit"
+  },
+  {
+    "label": "Hobbies",
+    "icon": "ios-color-palette"
+  },
+  {
     "label": "Household Goods",
     "icon": "ios-home"
   },
   {
-    "id": "5",
-    "label": "Income",
+    "label": "Housing",
+    "icon": "ios-home"
+  },
+  {
+    "label": "Insurance",
+    "icon": "ios-filing"
+  },
+  {
+    "label": "Loan Payments",
     "icon": "ios-cash"
   },
   {
-    "id": "6",
+    "label": "Miscellaneous",
+    "icon": "ios-card"
+  },
+  {
     "label": "Personal Care",
     "icon": "ios-body"
   },
   {
-    "id": "7",
+    "label": "Professional",
+    "icon": "ios-briefcase"
+  },
+  {
+    "label": "Restaurants",
+    "icon": "ios-restaurant"
+  },
+  {
+    "label": "Subscriptions",
+    "icon": "ios-repeat"
+  },
+  {
     "label": "Transportation",
-    "icon": "ios-train"
+    "icon": "ios-subway"
+  },
+  {
+    "label": "Utilities",
+    "icon": "ios-bulb"
+  },
+  {
+    "label": "Vacation",
+    "icon": "ios-map"
   }
 ]

@@ -80,7 +80,7 @@ function EditTransactionModal({
               {props.global.categories.map(category => {
                 return (
                   <PickerIOS.Item
-                    key={category.id}
+                    key={category.label}
                     value={category.label}
                     label={category.label}
                   />
