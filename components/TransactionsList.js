@@ -6,12 +6,14 @@ import {
   View,
   TouchableOpacity
 } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import _ from "lodash";
 
-import { toPrettyDate } from "../utils/TransactionUtils";
+import { toPrettyDate, leftJoin } from "../utils/TransactionUtils";
 
 export default function TransactionsList({
   transactions,
+  categories,
   onTransactionPress,
   categorized
 }) {
@@ -22,25 +24,35 @@ export default function TransactionsList({
   };
 
   ListItem = (item, index) => {
-    const { name, amount, date, category } = item;
+    const { name, amount, date, category, icon } = item;
 
     return (
       <TouchableOpacity onPress={() => onTransactionPress(item)}>
         <View style={styles.transactionsListItem} key={index}>
-          <View style={{ flexDirection: "row" }}>
-            <Text style={{ fontWeight: "bold" }}>{name || "No Name"}</Text>
-            <Text style={{ marginLeft: "auto" }}>
-              {Number(amount).toLocaleString("en-US", {
-                style: "currency",
-                currency: "USD"
-              })}
-            </Text>
+          <View
+            style={{
+              alignSelf: "center",
+              width: 25
+            }}
+          >
+            <Ionicons name={icon} size={25} style={{ alignSelf: "center" }} />
           </View>
-          <View style={{ flexDirection: "row", marginTop: 5 }}>
-            <Text>{toPrettyDate(date)}</Text>
-            <Text style={{ fontStyle: "italic", marginLeft: "auto" }}>
-              {category}
-            </Text>
+          <View style={{ flex: 1, marginLeft: 10 }}>
+            <View style={{ flexDirection: "row" }}>
+              <Text style={{ fontWeight: "bold" }}>{name || "No Name"}</Text>
+              <Text style={{ marginLeft: "auto" }}>
+                {Number(amount).toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "USD"
+                })}
+              </Text>
+            </View>
+            <View style={{ flexDirection: "row", marginTop: 5 }}>
+              <Text>{toPrettyDate(date)}</Text>
+              <Text style={{ fontStyle: "italic", marginLeft: "auto" }}>
+                {category}
+              </Text>
+            </View>
           </View>
         </View>
       </TouchableOpacity>
@@ -56,7 +68,14 @@ export default function TransactionsList({
         category: "No Category"
       });
 
-  const transactionsFinal = _(transactionsFiltered)
+  const transactionsWithIcons = leftJoin(
+    transactionsFiltered,
+    categories,
+    "category",
+    "label"
+  );
+
+  const transactionsFinal = _(transactionsWithIcons)
     .sortBy("date")
     .reverse()
     .value();
@@ -86,7 +105,8 @@ const styles = StyleSheet.create({
   },
   transactionsListItem: {
     marginVertical: 12,
-    marginHorizontal: 10
+    marginHorizontal: 10,
+    flexDirection: "row"
   },
   sectionHeader: {
     paddingLeft: 10,
