@@ -7,8 +7,8 @@ export const createNewTransaction = (attrs = {}) => {
   const transaction = {
     id: uuidv4(),
     plaid_id: attrs.plaid_id || "",
-    name: attrs.name || "New Transaction",
-    amount: attrs.amount || "0",
+    name: attrs.name || "",
+    amount: attrs.amount || "",
     category: attrs.category || "No Category",
     date: attrs.date || new Date().toISOString().slice(0, 10)
   };
@@ -16,10 +16,10 @@ export const createNewTransaction = (attrs = {}) => {
   return transaction;
 };
 
-export const convertToISO = date => {
-  // if date is an actual date object, convert to string
-  if (typeof date == "object") return date.toISOString().slice(0, 10);
+export const toPrettyDate = date => {
+  // if date is a string, convert to a date
+  if (typeof date == "string") date = new Date(date);
 
   // else, just return the existing string
-  return date;
+  return date.toISOString().slice(0, 10);
 };

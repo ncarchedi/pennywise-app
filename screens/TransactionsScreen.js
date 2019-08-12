@@ -5,7 +5,7 @@ import _ from "lodash";
 import TransactionsList from "../components/TransactionsList";
 import EditTransactionModal from "../components/EditTransactionModal";
 
-import { withGlobalContext, updateTransaction } from "../GlobalContext";
+import { withGlobalContext } from "../GlobalContext";
 
 class TransactionsScreen extends React.Component {
   static navigationOptions = {
