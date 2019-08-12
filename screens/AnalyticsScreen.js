@@ -7,11 +7,28 @@ import {
   TouchableOpacity
 } from "react-native";
 
+import PlaidLinkModal from "../components/PlaidLinkModal";
+
 import { withGlobalContext } from "../GlobalContext";
+
+import PlaidAuthenticator from "react-native-plaid-link";
 
 class AnalyticsScreen extends React.Component {
   static navigationOptions = {
     title: "Analytics"
+  };
+
+  state = {
+    isReady: false,
+    isPlaidLinkVisible: false
+  };
+
+  togglePlaidLinkModal = () => {
+    this.setState({ isPlaidLinkVisible: !this.state.isPlaidLinkVisible });
+  };
+
+  handlePlaidSyncPress = item => {
+    this.togglePlaidLinkModal();
   };
 
   render() {
@@ -23,6 +40,10 @@ class AnalyticsScreen extends React.Component {
           style={styles.container}
           contentContainerStyle={styles.contentContainer}
         >
+          <PlaidLinkModal
+            isVisible={this.state.isPlaidLinkVisible}
+            onExitModal={this.togglePlaidLinkModal}
+          />
           <View style={styles.analyticsContainer}>
             <Text style={styles.analyticsText}>
               This will show some spending analytics.
@@ -38,6 +59,12 @@ class AnalyticsScreen extends React.Component {
               style={{ paddingTop: 20 }}
             >
               <Text>Load Example Transactions</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={this.handlePlaidSyncPress}
+              style={{ paddingTop: 20 }}
+            >
+              <Text>Get plaid access token</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>

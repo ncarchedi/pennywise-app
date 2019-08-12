@@ -2,6 +2,7 @@ import React from "react";
 import { ScrollView, StyleSheet, View, TouchableOpacity } from "react-native";
 
 import TransactionsList from "../components/TransactionsList";
+import PlaidLinkModal from "../components/PlaidLinkModal";
 import EditTransactionModal from "../components/EditTransactionModal";
 import { Ionicons } from "@expo/vector-icons";
 import _ from "lodash";
@@ -15,12 +16,38 @@ class TodoScreen extends React.Component {
 
   state = {
     selectedTransaction: {},
-    isModalVisible: false
+    isModalVisible: false,
+    isPlaidLinkVisible: false
   };
 
   toggleModal = () => {
     this.setState({ isModalVisible: !this.state.isModalVisible });
   };
+
+  togglePlaidLinkModal = () => {
+    this.setState({ isPlaidLinkVisible: !this.state.isPlaidLinkVisible });
+  };
+
+  // handleTransactionPress = item => {
+  //   this.setState({
+  //     selectedTransaction: item
+  //   });
+  //   this.toggleModal();
+  // };
+
+  handlePlaidSyncPress = item => {
+    this.props.global.getPlaidTransactions();
+  };
+
+  // handleAddNewTransaction = () => {
+  //   const newTransaction = {
+  //     name: "",
+  //     amount: null,
+  //     category: "No Category",
+  //     date: new Date(_.now())
+  //   };
+  //   this.handleTransactionPress(newTransaction);
+  // };
 
   handleTransactionPress = transaction => {
     this.setState(
@@ -56,7 +83,11 @@ class TodoScreen extends React.Component {
     console.log("rendering todo screen...");
 
     const { transactions, categories } = this.props.global;
-    const { selectedTransaction, isModalVisible } = this.state;
+    const {
+      selectedTransaction,
+      isModalVisible,
+      isPlaidLinkVisible
+    } = this.state;
 
     return (
       <View style={styles.container}>
@@ -76,13 +107,29 @@ class TodoScreen extends React.Component {
             onExitModal={this.handleExitModal}
             onChangeTransaction={this.handleChangeTransaction}
           />
+          <PlaidLinkModal
+            isVisible={isPlaidLinkVisible}
+            onExitModal={this.togglePlaidLinkModal}
+          />
         </ScrollView>
-        <View style={{ alignItems: "center" }}>
+        <View
+          style={{
+            alignItems: "center",
+            flexDirection: "row",
+            justifyContent: "space-around"
+          }}
+        >
           <TouchableOpacity
             onPress={this.handleAddNewTransaction}
             style={styles.newTransactionButton}
           >
             <Ionicons name="ios-add" size={80} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={this.handlePlaidSyncPress}
+            style={styles.newTransactionButton}
+          >
+            <Ionicons name="ios-sync" size={40} />
           </TouchableOpacity>
         </View>
       </View>

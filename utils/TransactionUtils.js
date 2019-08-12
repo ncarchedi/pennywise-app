@@ -4,6 +4,7 @@ import _ from "lodash";
 export const createNewTransaction = (attrs = {}) => {
   const transaction = {
     id: uuidv4(),
+    plaid_id: attrs.plaid_id || "",
     name: attrs.name || "",
     amount: attrs.amount || "",
     category: attrs.category || "No Category",
