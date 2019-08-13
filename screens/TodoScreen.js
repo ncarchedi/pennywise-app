@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
-    backgroundColor: "transparent",
+    backgroundColor: "rgba(211, 211, 211, 0.7)",
     position: "absolute",
     bottom: 0,
     width: "100%"
