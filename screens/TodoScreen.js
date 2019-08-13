@@ -112,13 +112,7 @@ class TodoScreen extends React.Component {
             onExitModal={this.togglePlaidLinkModal}
           />
         </ScrollView>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-around",
-            alignItems: "center"
-          }}
-        >
+        <View style={styles.buttonContainer}>
           <TouchableOpacity
             onPress={this.handleAddNewTransaction}
             style={styles.newTransactionButton}
@@ -146,5 +140,14 @@ const styles = StyleSheet.create({
   },
   contentContainer: {},
   newTransactionButton: {},
-  syncTransactionsButton: {}
+  syncTransactionsButton: {},
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    backgroundColor: "transparent",
+    position: "absolute",
+    bottom: 0,
+    width: "100%"
+  }
 });
