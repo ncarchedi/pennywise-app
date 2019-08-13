@@ -18,10 +18,11 @@ function EditTransactionModal({
   isVisible,
   onExitModal,
   onChangeTransaction,
+  onDeleteTransaction,
   ...props
 }) {
   // TODO: https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html
-  const { name, amount, category, date } = transaction;
+  const { id, name, amount, category, date } = transaction;
 
   return (
     <Modal
@@ -96,6 +97,12 @@ function EditTransactionModal({
               style={{ marginBottom: 0 }}
               title="Save Changes"
               onPress={onExitModal}
+            />
+            <Button
+              title="Delete Transaction"
+              style={{ marginBottom: 0 }}
+              color="red"
+              onPress={() => onDeleteTransaction(id)}
             />
           </View>
         </View>

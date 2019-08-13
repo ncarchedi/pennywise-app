@@ -38,6 +38,13 @@ class TransactionsScreen extends React.Component {
     this.setState({ selectedTransaction: newSelectedTransaction });
   };
 
+  handleDeleteTransaction = id => {
+    const { deleteTransaction } = this.props.global;
+
+    this.toggleModal();
+    deleteTransaction(id);
+  };
+
   handleExitModal = () => {
     const { updateTransaction } = this.props.global;
     const { selectedTransaction } = this.state;
@@ -69,6 +76,7 @@ class TransactionsScreen extends React.Component {
             isVisible={isModalVisible}
             onExitModal={this.handleExitModal}
             onChangeTransaction={this.handleChangeTransaction}
+            onDeleteTransaction={this.handleDeleteTransaction}
           />
         </ScrollView>
       </View>
@@ -83,7 +91,5 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff"
   },
-  contentContainer: {
-    // marginVertical: 10
-  }
+  contentContainer: {}
 });

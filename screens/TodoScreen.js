@@ -79,6 +79,13 @@ class TodoScreen extends React.Component {
     this.setState({ selectedTransaction: newSelectedTransaction });
   };
 
+  handleDeleteTransaction = id => {
+    const { deleteTransaction } = this.props.global;
+
+    this.toggleModal();
+    deleteTransaction(id);
+  };
+
   render() {
     console.log("rendering todo screen...");
 
@@ -106,6 +113,7 @@ class TodoScreen extends React.Component {
             isVisible={isModalVisible}
             onExitModal={this.handleExitModal}
             onChangeTransaction={this.handleChangeTransaction}
+            onDeleteTransaction={this.handleDeleteTransaction}
           />
           <PlaidLinkModal
             isVisible={isPlaidLinkVisible}
