@@ -84,6 +84,7 @@ class SpendingScreen extends React.Component {
           .filter(t => t.date.getMonth() === today.getMonth() - 1)
           .sumBy("amount")
       }))
+      .filter(t => t.category !== "No Category")
       .sortBy("category")
       .value();
 
