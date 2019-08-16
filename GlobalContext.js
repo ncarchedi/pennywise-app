@@ -59,7 +59,7 @@ export class GlobalContextProvider extends React.Component {
   };
 
   addTransaction = async (transaction = {}) => {
-    this.addTransactions([transaction]);
+    return (await this.addTransactions([transaction]))[0];
   };
 
   addTransactions = async newTransactionsData => {
@@ -68,20 +68,22 @@ export class GlobalContextProvider extends React.Component {
     let newTransactions = newTransactionsData.map(item => createNewTransaction(item));
 
     // Only add transactions we don't have already
-    let updatedTransactionsLIst = _.unionBy(transactions, newTransactions, 'hash_id');
+    let updatedTransactionsList = _.unionBy(transactions, newTransactions, 'hash_id');
 
     try {
       await AsyncStorage.setItem(
         "transactions",
-        JSON.stringify(updatedTransactionsLIst)
+        JSON.stringify(updatedTransactionsList)
       );
     } catch (error) {
       console.log(error.message);
     }
 
     this.setState({
-      transactions: updatedTransactionsLIst
+      transactions: updatedTransactionsList
     });
+
+    return newTransactions;
   };
 
   setAccessToken = async accessToken => {
