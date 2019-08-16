@@ -75,14 +75,6 @@ class SpendingScreen extends React.Component {
   render() {
     const { transactions, categories } = this.props.global;
 
-    if (!transactions || !transactions.length) {
-      return (
-        <View style={styles.container}>
-          <Text style={styles.emptyScreenText}>Nothing to see here! 🎉</Text>
-        </View>
-      );
-    }
-
     // compute amount spent by category for this and last month
     today = new Date();
 
@@ -100,6 +92,14 @@ class SpendingScreen extends React.Component {
       .filter(t => t.category !== "No Category")
       .sortBy("category")
       .value();
+
+    if (!amountByCategory || !amountByCategory.length) {
+      return (
+        <View style={styles.container}>
+          <Text style={styles.emptyScreenText}>Add some transactions! 💰</Text>
+        </View>
+      );
+    }
 
     // merge icons with amounts by category
     _.merge(
