@@ -4,11 +4,11 @@ import _ from "lodash";
 export const createNewTransaction = (attrs = {}) => {
   const transaction = {
     id: uuidv4(),
-    plaid_id: attrs.plaid_id || "",
+    hash_id: attrs.hash_id || uuidv4(),
     name: attrs.name || "",
     amount: attrs.amount || "",
     category: attrs.category || "No Category",
-    date: new Date()
+    date: attrs.date ? new Date(attrs.date) : new Date()
   };
 
   return transaction;

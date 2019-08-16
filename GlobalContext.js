@@ -1,5 +1,8 @@
 import React from "react";
 import { AsyncStorage } from "react-native";
+import hash from "object-hash";
+import _ from "lodash";
+
 import transactionsData from "./transactions.json";
 import categoriesData from "./categories.json";
 import { createNewTransaction } from "./utils/TransactionUtils";
@@ -55,69 +58,34 @@ export class GlobalContextProvider extends React.Component {
     this.setState({ categories: categoriesData });
   };
 
-  // TODO: merge this with addTransactions?
-  addTransaction = async () => {
-    const { transactions } = this.state;
-    const newTransaction = createNewTransaction();
-
-    const updatedTransactions = [...transactions, newTransaction];
-
-    try {
-      await AsyncStorage.setItem(
-        "transactions",
-        JSON.stringify(updatedTransactions)
-      );
-    } catch (error) {
-      console.log(error.message);
-    }
-
-    this.setState({
-      transactions: updatedTransactions
-    });
-
-    return newTransaction;
+  addTransaction = async (transaction = {}) => {
+    return (await this.addTransactions([transaction]))[0];
   };
 
   addTransactions = async newTransactionsData => {
     const { transactions } = this.state;
 
-    let updatedTransactions = transactions;
+    let newTransactions = newTransactionsData.map(item => createNewTransaction(item));
 
-    for (let nextNewTransaction of newTransactionsData) {
-      // Todo: only add new transactions
-      // let exisintTransaction = transactions.find((element) => {
-      //   if(element.plaid_id) {
-      //     console.log('hey how');
-      //     console.log(element.plaid_id);
-      //     console.log(nextNewTransaction.plaid_id);
-
-      //     return element.plaid_id === nextNewTransaction.plaid_id;
-      //   } else {
-      //     return false;
-      //   }
-      // });
-
-      // if(!exisintTransaction) {
-      //   let newTransaction = createNewTransaction(nextNewTransaction);
-      //   updatedTransactions.push(newTransaction)
-      // }
-
-      let newTransaction = createNewTransaction(nextNewTransaction);
-      updatedTransactions.push(newTransaction);
-    }
+    // Only add transactions we don't have already
+    // Reason for not using 'unionBy' is that you can't control with that method from which
+    // array to pick in case of duplicates.
+    let updatedTransactionsList = _.uniqBy(_.concat(transactions, newTransactions), 'hash_id');
 
     try {
       await AsyncStorage.setItem(
         "transactions",
-        JSON.stringify(updatedTransactions)
+        JSON.stringify(updatedTransactionsList)
       );
     } catch (error) {
       console.log(error.message);
     }
 
     this.setState({
-      transactions: updatedTransactions
+      transactions: updatedTransactionsList
     });
+
+    return newTransactions;
   };
 
   setAccessToken = async accessToken => {
@@ -170,14 +138,12 @@ export class GlobalContextProvider extends React.Component {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        access_token: accessToken
+        access_token: accessToken,
+        nb_days: 1
       })
     })
       .then(response => response.json())
       .then(responseJson => {
-        // Here we get all transactions
-        //console.log(responseJson);
-
         plaidTransactions = responseJson.transactions.transactions;
 
         if (plaidTransactions) {
@@ -185,13 +151,11 @@ export class GlobalContextProvider extends React.Component {
 
           for (let plaidTransaction of plaidTransactions) {
             const { name, amount, date } = plaidTransaction;
+            // Copy the part of the plaidTransaction that we want to use for hasing in hashTransactionProperties
+            const { account_id, category_id, pending_transaction_id, transaction_id, ...hashTransactionProperties } = plaidTransaction;
 
-            // Todo: We can not use plaid's transaction_id as unique identifier, as it depends
-            // on the access token.
-            // I've tried plaidTransaction.payment_meta.reference_number, but
-            // that is usually null (at least in the test data)
             let transaction = {
-              plaid_id: plaidTransaction.transaction_id,
+              hash_id: hash(hashTransactionProperties),
               name,
               amount,
               date
@@ -200,6 +164,12 @@ export class GlobalContextProvider extends React.Component {
             newTransactions = [...newTransactions, transaction];
           }
 
+          // Todo: deal with the situation where we have two identical transactions, e.g. when you buy
+          // the same taco twice.
+          if(_.uniqBy(newTransactions, 'hash_id').length !== newTransactions.length) {
+            console.log('Identical transactions detected. Todo: deal with this situation.');
+          }
+          
           this.addTransactions(newTransactions);
         }
 
