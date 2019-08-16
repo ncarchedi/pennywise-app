@@ -68,7 +68,9 @@ export class GlobalContextProvider extends React.Component {
     let newTransactions = newTransactionsData.map(item => createNewTransaction(item));
 
     // Only add transactions we don't have already
-    let updatedTransactionsList = _.unionBy(transactions, newTransactions, 'hash_id');
+    // Reason for not using 'unionBy' is that you can't control with that method from which
+    // array to pick in case of duplicates.
+    let updatedTransactionsList = _.uniqBy(_.concat(transactions, newTransactions), 'hash_id');
 
     try {
       await AsyncStorage.setItem(
