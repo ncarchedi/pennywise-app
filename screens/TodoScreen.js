@@ -1,5 +1,11 @@
 import React from "react";
-import { ScrollView, StyleSheet, View, TouchableOpacity } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  RefreshControl
+} from "react-native";
 
 import TransactionsList from "../components/TransactionsList";
 import PlaidLinkModal from "../components/PlaidLinkModal";
@@ -17,7 +23,8 @@ class TodoScreen extends React.Component {
   state = {
     selectedTransaction: {},
     isModalVisible: false,
-    isPlaidLinkVisible: false
+    isPlaidLinkVisible: false,
+    refreshing: false
   };
 
   toggleModal = () => {
@@ -28,27 +35,6 @@ class TodoScreen extends React.Component {
     this.setState({ isPlaidLinkVisible: !this.state.isPlaidLinkVisible });
   };
 
-  // handleTransactionPress = item => {
-  //   this.setState({
-  //     selectedTransaction: item
-  //   });
-  //   this.toggleModal();
-  // };
-
-  handlePlaidSyncPress = item => {
-    this.props.global.getPlaidTransactions();
-  };
-
-  // handleAddNewTransaction = () => {
-  //   const newTransaction = {
-  //     name: "",
-  //     amount: null,
-  //     category: "No Category",
-  //     date: new Date(_.now())
-  //   };
-  //   this.handleTransactionPress(newTransaction);
-  // };
-
   handleTransactionPress = transaction => {
     this.setState(
       {
@@ -57,6 +43,16 @@ class TodoScreen extends React.Component {
       // open modal after state is set
       () => this.toggleModal()
     );
+  };
+
+  handleRefresh = async () => {
+    const { getPlaidTransactions } = this.props.global;
+
+    console.log("refreshing todo list");
+
+    this.setState({ refreshing: true });
+    await getPlaidTransactions();
+    this.setState({ refreshing: false });
   };
 
   handleAddNewTransaction = async () => {
@@ -93,7 +89,8 @@ class TodoScreen extends React.Component {
     const {
       selectedTransaction,
       isModalVisible,
-      isPlaidLinkVisible
+      isPlaidLinkVisible,
+      refreshing
     } = this.state;
 
     return (
@@ -101,6 +98,12 @@ class TodoScreen extends React.Component {
         <ScrollView
           style={styles.container}
           contentContainerStyle={styles.contentContainer}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this.handleRefresh}
+            />
+          }
         >
           <TransactionsList
             transactions={transactions}
@@ -121,17 +124,8 @@ class TodoScreen extends React.Component {
           />
         </ScrollView>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            onPress={this.handleAddNewTransaction}
-            style={styles.newTransactionButton}
-          >
+          <TouchableOpacity onPress={this.handleAddNewTransaction}>
             <Ionicons name="ios-add" size={80} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={this.handlePlaidSyncPress}
-            style={styles.syncTransactionsButton}
-          >
-            <Ionicons name="ios-sync" size={50} />
           </TouchableOpacity>
         </View>
       </View>
@@ -147,10 +141,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff"
   },
   contentContainer: {},
-  newTransactionButton: {},
-  syncTransactionsButton: {},
   buttonContainer: {
-    flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
     backgroundColor: "rgba(211, 211, 211, 0.7)",

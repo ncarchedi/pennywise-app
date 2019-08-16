@@ -64,7 +64,7 @@ class AnalyticsScreen extends React.Component {
               onPress={this.handlePlaidSyncPress}
               style={{ paddingTop: 20 }}
             >
-              <Text>Get plaid access token</Text>
+              <Text>Get Plaid Access Token</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
