@@ -65,12 +65,17 @@ export class GlobalContextProvider extends React.Component {
   addTransactions = async newTransactionsData => {
     const { transactions } = this.state;
 
-    let newTransactions = newTransactionsData.map(item => createNewTransaction(item));
+    let newTransactions = newTransactionsData.map(item =>
+      createNewTransaction(item)
+    );
 
     // Only add transactions we don't have already
     // Reason for not using 'unionBy' is that you can't control with that method from which
     // array to pick in case of duplicates.
-    let updatedTransactionsList = _.uniqBy(_.concat(transactions, newTransactions), 'hash_id');
+    let updatedTransactionsList = _.uniqBy(
+      _.concat(transactions, newTransactions),
+      "hash_id"
+    );
 
     try {
       await AsyncStorage.setItem(
@@ -139,7 +144,7 @@ export class GlobalContextProvider extends React.Component {
       },
       body: JSON.stringify({
         access_token: accessToken,
-        nb_days: 1
+        nb_days: 3
       })
     })
       .then(response => response.json())
@@ -152,7 +157,13 @@ export class GlobalContextProvider extends React.Component {
           for (let plaidTransaction of plaidTransactions) {
             const { name, amount, date } = plaidTransaction;
             // Copy the part of the plaidTransaction that we want to use for hasing in hashTransactionProperties
-            const { account_id, category_id, pending_transaction_id, transaction_id, ...hashTransactionProperties } = plaidTransaction;
+            const {
+              account_id,
+              category_id,
+              pending_transaction_id,
+              transaction_id,
+              ...hashTransactionProperties
+            } = plaidTransaction;
 
             let transaction = {
               hash_id: hash(hashTransactionProperties),
@@ -166,10 +177,15 @@ export class GlobalContextProvider extends React.Component {
 
           // Todo: deal with the situation where we have two identical transactions, e.g. when you buy
           // the same taco twice.
-          if(_.uniqBy(newTransactions, 'hash_id').length !== newTransactions.length) {
-            console.log('Identical transactions detected. Todo: deal with this situation.');
+          if (
+            _.uniqBy(newTransactions, "hash_id").length !==
+            newTransactions.length
+          ) {
+            console.log(
+              "Identical transactions detected. Todo: deal with this situation."
+            );
           }
-          
+
           this.addTransactions(newTransactions);
         }
 
