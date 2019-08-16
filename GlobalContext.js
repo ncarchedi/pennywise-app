@@ -215,6 +215,23 @@ export class GlobalContextProvider extends React.Component {
     this.setState({ transactions: updatedTransactions });
   };
 
+  deleteTransaction = async id => {
+    const { transactions } = this.state;
+
+    const updatedTransactions = transactions.filter(t => t.id !== id);
+
+    try {
+      await AsyncStorage.setItem(
+        "transactions",
+        JSON.stringify(updatedTransactions)
+      );
+    } catch (error) {
+      console.log(error.message);
+    }
+
+    this.setState({ transactions: updatedTransactions });
+  };
+
   clearAllTransactions = async () => {
     console.log("clearing all transactions...");
 
@@ -255,6 +272,7 @@ export class GlobalContextProvider extends React.Component {
           // Every function to update the state should be listed here:
           addTransaction: this.addTransaction,
           updateTransaction: this.updateTransaction,
+          deleteTransaction: this.deleteTransaction,
           clearAllTransactions: this.clearAllTransactions,
           loadDummyData: this.loadDummyData,
           getAccessTokenFromPublicToken: this.getAccessTokenFromPublicToken,

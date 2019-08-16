@@ -79,6 +79,13 @@ class TodoScreen extends React.Component {
     this.setState({ selectedTransaction: newSelectedTransaction });
   };
 
+  handleDeleteTransaction = id => {
+    const { deleteTransaction } = this.props.global;
+
+    this.toggleModal();
+    deleteTransaction(id);
+  };
+
   render() {
     console.log("rendering todo screen...");
 
@@ -106,19 +113,14 @@ class TodoScreen extends React.Component {
             isVisible={isModalVisible}
             onExitModal={this.handleExitModal}
             onChangeTransaction={this.handleChangeTransaction}
+            onDeleteTransaction={this.handleDeleteTransaction}
           />
           <PlaidLinkModal
             isVisible={isPlaidLinkVisible}
             onExitModal={this.togglePlaidLinkModal}
           />
         </ScrollView>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-around",
-            alignItems: "center"
-          }}
-        >
+        <View style={styles.buttonContainer}>
           <TouchableOpacity
             onPress={this.handleAddNewTransaction}
             style={styles.newTransactionButton}
@@ -146,5 +148,14 @@ const styles = StyleSheet.create({
   },
   contentContainer: {},
   newTransactionButton: {},
-  syncTransactionsButton: {}
+  syncTransactionsButton: {},
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    backgroundColor: "rgba(211, 211, 211, 0.7)",
+    position: "absolute",
+    bottom: 0,
+    width: "100%"
+  }
 });
