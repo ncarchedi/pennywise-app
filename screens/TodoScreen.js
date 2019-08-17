@@ -100,7 +100,7 @@ class TodoScreen extends React.Component {
           contentContainerStyle={styles.contentContainer}
           refreshControl={
             <RefreshControl
-              refreshing={this.state.refreshing}
+              refreshing={refreshing}
               onRefresh={this.handleRefresh}
             />
           }
