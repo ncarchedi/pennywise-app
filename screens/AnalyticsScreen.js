@@ -8,10 +8,7 @@ import {
 } from "react-native";
 
 import PlaidLinkModal from "../components/PlaidLinkModal";
-
 import { withGlobalContext } from "../GlobalContext";
-
-import PlaidAuthenticator from "react-native-plaid-link";
 
 class AnalyticsScreen extends React.Component {
   static navigationOptions = {
