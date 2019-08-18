@@ -2,6 +2,7 @@ import React from "react";
 import { AsyncStorage } from "react-native";
 import hash from "object-hash";
 import _ from "lodash";
+import moment from "moment";
 
 import transactionsData from "./transactions.json";
 import categoriesData from "./categories.json";
@@ -33,10 +34,7 @@ export class GlobalContextProvider extends React.Component {
       );
 
       const transactions = transactionsRaw.map(t => ({
-        id: t.id,
-        name: t.name,
-        amount: t.amount,
-        category: t.category,
+        ...t,
         date: new Date(t.date)
       }));
 
@@ -135,6 +133,18 @@ export class GlobalContextProvider extends React.Component {
 
   getPlaidTransactions = () => {
     const accessToken = this.state.access_token;
+    let lastTransactionDate = this.getLastPlaidTransactionDate();
+
+    let startDate;
+    let endDate = moment().format("YYYY-MM-DD");
+
+    if (lastTransactionDate) {
+      startDate = moment(startDate).format("YYYY-MM-DD");
+    } else {
+      startDate = moment()
+        .subtract(3, "days")
+        .format("YYYY-MM-DD");
+    }
 
     return fetch(TRANSACTIONS_URL, {
       method: "POST",
@@ -144,7 +154,8 @@ export class GlobalContextProvider extends React.Component {
       },
       body: JSON.stringify({
         access_token: accessToken,
-        nb_days: 3
+        start_date: startDate,
+        end_date: endDate
       })
     })
       .then(response => response.json())
@@ -278,6 +289,21 @@ export class GlobalContextProvider extends React.Component {
     }
 
     this.setState({ transactions: dummyData });
+  };
+
+  getLastPlaidTransactionDate = () => {
+    let lastTransaction = _(this.state.transactions)
+      .filter(item => {
+        return item.hash_id != null;
+      })
+      .sortBy("date")
+      .last();
+
+    if (lastTransaction) {
+      return lastTransaction.date;
+    } else {
+      return null;
+    }
   };
 
   render() {
