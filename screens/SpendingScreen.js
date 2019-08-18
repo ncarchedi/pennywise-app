@@ -10,13 +10,26 @@ class SpendingScreen extends React.Component {
     title: "Spending"
   };
 
+  ListItemSeparator = () => {
+    return (
+      <View style={{ height: 1, width: "100%", backgroundColor: "#f1f1f1" }} />
+    );
+  };
+
   listItem = (item, index) => {
     const { amountThisMonth, amountLastMonth, category, icon } = item;
 
     return (
       <View style={styles.categoryContainer}>
         <View style={styles.categoryNameContainer}>
-          <Ionicons name={icon} size={20} style={{ width: 20 }} />
+          <View
+            style={{
+              alignSelf: "center",
+              width: 25
+            }}
+          >
+            <Ionicons name={icon} size={25} style={{ alignSelf: "center" }} />
+          </View>
           <Text style={styles.nameText}>{category}</Text>
         </View>
         <View style={styles.categorySpendingContainer}>
@@ -62,14 +75,6 @@ class SpendingScreen extends React.Component {
   render() {
     const { transactions, categories } = this.props.global;
 
-    if (!transactions || !transactions.length) {
-      return (
-        <View style={styles.container}>
-          <Text style={styles.emptyScreenText}>Nothing to see here! 🎉</Text>
-        </View>
-      );
-    }
-
     // compute amount spent by category for this and last month
     today = new Date();
 
@@ -88,6 +93,14 @@ class SpendingScreen extends React.Component {
       .sortBy("category")
       .value();
 
+    if (!amountByCategory || !amountByCategory.length) {
+      return (
+        <View style={styles.container}>
+          <Text style={styles.emptyScreenText}>Add some transactions! 💰</Text>
+        </View>
+      );
+    }
+
     // merge icons with amounts by category
     _.merge(
       _.keyBy(amountByCategory, "category"),
@@ -105,6 +118,7 @@ class SpendingScreen extends React.Component {
               data={amountByCategory}
               renderItem={({ item, index }) => this.listItem(item, index)}
               ListHeaderComponent={() => this.listHeader()}
+              ItemSeparatorComponent={this.ListItemSeparator}
               keyExtractor={(item, index) => item + index}
             />
           </View>
@@ -133,7 +147,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between"
   },
   nameText: {
-    marginHorizontal: 10
+    marginHorizontal: 10,
+    alignSelf: "center"
   },
   categoryNameContainer: {
     flexDirection: "row",
@@ -144,8 +159,9 @@ const styles = StyleSheet.create({
   },
   categorySpendingItemContainer: {
     minWidth: 85,
-    marginVertical: 10,
-    flexDirection: "row-reverse"
+    marginVertical: 12,
+    flexDirection: "row-reverse",
+    alignSelf: "center"
   },
   headerText: {
     fontWeight: "bold"
