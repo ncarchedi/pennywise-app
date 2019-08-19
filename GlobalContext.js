@@ -26,8 +26,8 @@ export class GlobalContextProvider extends React.Component {
   state = {
     transactions: [],
     categories: [],
-    access_token: "",
-    notification_time: {
+    accessToken: "",
+    notificationTime: {
       hours: 8,
       minutes: 0
     }
@@ -50,21 +50,23 @@ export class GlobalContextProvider extends React.Component {
     }
 
     try {
-      const access_token = JSON.parse(
-        await AsyncStorage.getItem("access_token")
-      );
+      const accessToken = JSON.parse(await AsyncStorage.getItem("accessToken"));
 
-      this.setState({ access_token });
+      this.setState({ accessToken });
     } catch (error) {
       console.log(error.message);
     }
 
     try {
-      const notification_time = JSON.parse(
-        await AsyncStorage.getItem("notification_time")
+      let notificationTime = JSON.parse(
+        await AsyncStorage.getItem("notificationTime")
       );
 
-      this.setState({ notification_time });
+      if (!notificationTime) {
+        notificationTime = this.state.notificationTime;
+      }
+
+      this.setState({ notificationTime });
     } catch (error) {
       console.log(error.message);
     }
@@ -109,13 +111,13 @@ export class GlobalContextProvider extends React.Component {
 
   setAccessToken = async accessToken => {
     try {
-      await AsyncStorage.setItem("access_token", JSON.stringify(accessToken));
+      await AsyncStorage.setItem("accessToken", JSON.stringify(accessToken));
     } catch (error) {
       console.log(error.message);
     }
 
     this.setState({
-      access_token: accessToken
+      accessToken: accessToken
     });
   };
 
@@ -148,7 +150,7 @@ export class GlobalContextProvider extends React.Component {
   };
 
   getPlaidTransactions = () => {
-    const accessToken = this.state.access_token;
+    const accessToken = this.state.accessToken;
     let lastTransactionDate = this.getLastPlaidTransactionDate();
 
     let startDate;
@@ -322,21 +324,21 @@ export class GlobalContextProvider extends React.Component {
     }
   };
 
-  setNotificaitonTime = async newNotificationTime => {
+  setNotificationTime = async newNotificationTime => {
     try {
       await AsyncStorage.setItem(
-        "notification_time",
+        "notificationTime",
         JSON.stringify(newNotificationTime)
       );
     } catch (error) {
       console.log(error.message);
     }
 
-    this.setState({ notification_time: newNotificationTime });
+    this.setState({ notificationTime: newNotificationTime });
   };
 
   /**
-   * Schedules notifications for the next 7 days, based on the notification_time of state.
+   * Schedules notifications for the next 7 days, based on the notificationTime of state.
    * Will ask permission to the user if that was not yet granted.
    */
   scheduleNotifications = async () => {
@@ -353,8 +355,8 @@ export class GlobalContextProvider extends React.Component {
 
     // Calculate the time to send the next notification
     let notificationDate = moment(new Date())
-      .hours(this.state.notification_time.hours)
-      .minutes(this.state.notification_time.minutes);
+      .hours(this.state.notificationTime.hours)
+      .minutes(this.state.notificationTime.minutes);
 
     // Make sure this 'date' is after now
     if (moment(new Date()).diff(notificationDate) >= 0) {
@@ -405,7 +407,7 @@ export class GlobalContextProvider extends React.Component {
           getAccessTokenFromPublicToken: this.getAccessTokenFromPublicToken,
           getPlaidTransactions: this.getPlaidTransactions,
           setAccessToken: this.setAccessToken,
-          setNotificaitonTime: this.setNotificaitonTime,
+          setNotificationTime: this.setNotificationTime,
           scheduleNotifications: this.scheduleNotifications,
           cancelNotifications: this.cancelNotifications
         }}

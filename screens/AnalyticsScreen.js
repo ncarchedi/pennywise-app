@@ -21,7 +21,7 @@ class AnalyticsScreen extends React.Component {
   state = {
     isReady: false,
     isPlaidLinkVisible: false,
-    notificationTime: this.props.global.notification_time
+    notificationTime: this.props.global.notificationTime
   };
 
   togglePlaidLinkModal = () => {
@@ -44,7 +44,7 @@ class AnalyticsScreen extends React.Component {
   };
 
   handleScheduleNotifications = async item => {
-    await this.props.global.setNotificaitonTime(this.state.notificationTime);
+    await this.props.global.setNotificationTime(this.state.notificationTime);
     await this.props.global.scheduleNotifications();
   };
 
