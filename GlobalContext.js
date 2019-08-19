@@ -2,6 +2,7 @@ import React from "react";
 import { AsyncStorage } from "react-native";
 import hash from "object-hash";
 import _ from "lodash";
+import hoistNonReactStatic from "hoist-non-react-statics";
 
 import transactionsData from "./transactions.json";
 import categoriesData from "./categories.json";
@@ -302,9 +303,13 @@ export class GlobalContextProvider extends React.Component {
   }
 }
 
-// create the consumer as higher order component
-export const withGlobalContext = ChildComponent => props => (
-  <GlobalContext.Consumer>
-    {context => <ChildComponent {...props} global={context} />}
-  </GlobalContext.Consumer>
-);
+export const withGlobalContext = ChildComponent => {
+  ComponentWithContext = props => (
+    <GlobalContext.Consumer>
+      {context => <ChildComponent {...props} global={context} />}
+    </GlobalContext.Consumer>
+  );
+  // necessary for retaining static properties (e.g. header titles)
+  hoistNonReactStatic(ComponentWithContext, ChildComponent);
+  return ComponentWithContext;
+};
