@@ -4,11 +4,14 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableOpacity
+  TouchableOpacity,
+  DatePickerIOS
 } from "react-native";
 
 import PlaidLinkModal from "../components/PlaidLinkModal";
 import { withGlobalContext } from "../GlobalContext";
+
+import moment from "moment";
 
 class AnalyticsScreen extends React.Component {
   static navigationOptions = {
@@ -17,7 +20,8 @@ class AnalyticsScreen extends React.Component {
 
   state = {
     isReady: false,
-    isPlaidLinkVisible: false
+    isPlaidLinkVisible: false,
+    notificationTime: this.props.global.notification_time
   };
 
   togglePlaidLinkModal = () => {
@@ -28,8 +32,29 @@ class AnalyticsScreen extends React.Component {
     this.togglePlaidLinkModal();
   };
 
+  setNotificationDate = newDate => {
+    let momentDate = moment(newDate);
+
+    const newNotificationTime = {
+      hours: momentDate.hours(),
+      minutes: momentDate.minutes()
+    };
+
+    this.setState({ notificationTime: newNotificationTime });
+  };
+
+  handleScheduleNotifications = async item => {
+    await this.props.global.setNotificaitonTime(this.state.notificationTime);
+    await this.props.global.scheduleNotifications();
+  };
+
   render() {
     const { clearAllTransactions, loadDummyData } = this.props.global;
+
+    const notificationDate = moment(new Date())
+      .hours(this.state.notificationTime.hours)
+      .minutes(this.state.notificationTime.minutes)
+      .toDate();
 
     return (
       <View style={styles.container}>
@@ -63,6 +88,19 @@ class AnalyticsScreen extends React.Component {
             >
               <Text>Get Plaid Access Token</Text>
             </TouchableOpacity>
+            <View style={styles.notificationContainer}>
+              <DatePickerIOS
+                date={notificationDate}
+                onDateChange={this.setNotificationDate}
+                mode={"time"}
+              />
+              <TouchableOpacity
+                onPress={this.handleScheduleNotifications}
+                style={{ paddingVertical: 20, alignSelf: "center" }}
+              >
+                <Text>Schedule notifications</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </ScrollView>
       </View>
@@ -88,5 +126,13 @@ const styles = StyleSheet.create({
     fontSize: 17,
     color: "rgba(96, 100, 109, 1)",
     lineHeight: 24
+  },
+  notificationContainer: {
+    flexDirection: "column",
+    width: "100%",
+    borderRadius: 4,
+    borderWidth: 0.5,
+    borderColor: "gray",
+    margin: 20
   }
 });

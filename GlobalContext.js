@@ -3,6 +3,8 @@ import { AsyncStorage } from "react-native";
 import hash from "object-hash";
 import _ from "lodash";
 import moment from "moment";
+import { Notifications } from "expo";
+import * as Permissions from "expo-permissions";
 
 import transactionsData from "./transactions.json";
 import categoriesData from "./categories.json";
@@ -24,7 +26,11 @@ export class GlobalContextProvider extends React.Component {
   state = {
     transactions: [],
     categories: [],
-    access_token: ""
+    access_token: "",
+    notification_time: {
+      hours: 8,
+      minutes: 0
+    }
   };
 
   componentDidMount = async () => {
@@ -49,6 +55,16 @@ export class GlobalContextProvider extends React.Component {
       );
 
       this.setState({ access_token });
+    } catch (error) {
+      console.log(error.message);
+    }
+
+    try {
+      const notification_time = JSON.parse(
+        await AsyncStorage.getItem("notification_time")
+      );
+
+      this.setState({ notification_time });
     } catch (error) {
       console.log(error.message);
     }
@@ -306,6 +322,75 @@ export class GlobalContextProvider extends React.Component {
     }
   };
 
+  setNotificaitonTime = async newNotificationTime => {
+    try {
+      await AsyncStorage.setItem(
+        "notification_time",
+        JSON.stringify(newNotificationTime)
+      );
+    } catch (error) {
+      console.log(error.message);
+    }
+
+    this.setState({ notification_time: newNotificationTime });
+  };
+
+  /**
+   * Schedules notifications for the next 7 days, based on the notification_time of state.
+   * Will ask permission to the user if that was not yet granted.
+   */
+  scheduleNotifications = async () => {
+    // First cancel any already scheduled notifications
+    this.cancelNotifications();
+
+    // Ask permission to send notifications if needed
+    // If permissions were not granted, the code below will just execute but not have any effect
+    const notificationStatus = await Permissions.askAsync(
+      Permissions.NOTIFICATIONS
+    );
+    console.log("notification permission status:");
+    console.log(notificationStatus);
+
+    // Calculate the time to send the next notification
+    let notificationDate = moment(new Date())
+      .hours(this.state.notification_time.hours)
+      .minutes(this.state.notification_time.minutes);
+
+    // Make sure this 'date' is after now
+    if (moment(new Date()).diff(notificationDate) >= 0) {
+      notificationDate.add(1, "days");
+    }
+
+    let notification = {
+      title: "Ready to check your transactions?",
+      body:
+        "Categorize any new transactions now and stay on top of your expenses.",
+      ios: {
+        sound: true,
+        _displayInForeground: true
+      }
+    };
+
+    // Schedule the next 7 notifications
+    // If the time specified above has passed already, only 6 notifications will be scheduled
+    for (let i = 0; i < 7; i += 1) {
+      const nextNotificationDate = notificationDate.add(i, "days");
+
+      const response = await Notifications.scheduleLocalNotificationAsync(
+        notification,
+        {
+          time: nextNotificationDate.toDate()
+        }
+      );
+
+      console.log(response);
+    }
+  };
+
+  cancelNotifications = async () => {
+    await Notifications.cancelAllScheduledNotificationsAsync();
+  };
+
   render() {
     return (
       <GlobalContext.Provider
@@ -319,7 +404,10 @@ export class GlobalContextProvider extends React.Component {
           loadDummyData: this.loadDummyData,
           getAccessTokenFromPublicToken: this.getAccessTokenFromPublicToken,
           getPlaidTransactions: this.getPlaidTransactions,
-          setAccessToken: this.setAccessToken
+          setAccessToken: this.setAccessToken,
+          setNotificaitonTime: this.setNotificaitonTime,
+          scheduleNotifications: this.scheduleNotifications,
+          cancelNotifications: this.cancelNotifications
         }}
       >
         {this.props.children}
