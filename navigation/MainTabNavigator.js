@@ -1,5 +1,4 @@
 import React from "react";
-import { Platform } from "react-native";
 import {
   createStackNavigator,
   createBottomTabNavigator
@@ -11,17 +10,19 @@ import TodoScreen from "../screens/TodoScreen";
 import TransactionsScreen from "../screens/TransactionsScreen";
 import SpendingScreen from "../screens/SpendingScreen";
 import SettingsScreen from "../screens/SettingsScreen";
+import EditTransactionModal from "../components/EditTransactionModal";
 
-const config = Platform.select({
+const config = {
   web: { headerMode: "screen" },
   default: {}
-});
+};
 
 const TodoStack = createStackNavigator(
   {
-    Todo: TodoScreen
+    Todo: TodoScreen,
+    EditModalTodo: EditTransactionModal
   },
-  config
+  { ...config, mode: "modal" }
 );
 
 TodoStack.navigationOptions = {
@@ -33,7 +34,8 @@ TodoStack.navigationOptions = {
 
 const TransactionsStack = createStackNavigator(
   {
-    Transactions: TransactionsScreen
+    Transactions: TransactionsScreen,
+    EditModalTransactions: EditTransactionModal
   },
   config
 );

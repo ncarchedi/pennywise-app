@@ -3,7 +3,6 @@ import { ScrollView, StyleSheet, View } from "react-native";
 import _ from "lodash";
 
 import TransactionsList from "../components/TransactionsList";
-import EditTransactionModal from "../components/EditTransactionModal";
 
 import { withGlobalContext } from "../GlobalContext";
 
@@ -13,12 +12,7 @@ class TransactionsScreen extends React.Component {
   };
 
   state = {
-    selectedTransaction: {},
-    isModalVisible: false
-  };
-
-  toggleModal = () => {
-    this.setState({ isModalVisible: !this.state.isModalVisible });
+    selectedTransaction: {}
   };
 
   handleTransactionPress = transaction => {
@@ -27,7 +21,13 @@ class TransactionsScreen extends React.Component {
         selectedTransaction: transaction
       },
       // open modal after state is set
-      () => this.toggleModal()
+      () =>
+        this.props.navigation.navigate("EditModalTransactions", {
+          transaction: this.state.selectedTransaction,
+          onExitModal: this.handleExitModal,
+          onChangeTransaction: this.handleChangeTransaction,
+          onDeleteTransaction: this.handleDeleteTransaction
+        })
     );
   };
 
@@ -41,7 +41,7 @@ class TransactionsScreen extends React.Component {
   handleDeleteTransaction = id => {
     const { deleteTransaction } = this.props.global;
 
-    this.toggleModal();
+    this.props.navigation.navigate("Transactions");
     deleteTransaction(id);
   };
 
@@ -50,18 +50,13 @@ class TransactionsScreen extends React.Component {
     const { selectedTransaction } = this.state;
 
     updateTransaction(selectedTransaction);
-    this.toggleModal();
-  };
-
-  handleCancelModal = () => {
-    this.toggleModal();
+    this.props.navigation.navigate("Transactions");
   };
 
   render() {
     console.log("rendering transactions screen...");
 
     const { transactions, categories } = this.props.global;
-    const { selectedTransaction, isModalVisible } = this.state;
 
     return (
       <View style={styles.container}>
@@ -74,14 +69,6 @@ class TransactionsScreen extends React.Component {
             categories={categories}
             onTransactionPress={this.handleTransactionPress}
             categorized={true}
-          />
-          <EditTransactionModal
-            transaction={selectedTransaction}
-            isVisible={isModalVisible}
-            onExitModal={this.handleExitModal}
-            onCancelModal={this.handleCancelModal}
-            onChangeTransaction={this.handleChangeTransaction}
-            onDeleteTransaction={this.handleDeleteTransaction}
           />
         </ScrollView>
       </View>

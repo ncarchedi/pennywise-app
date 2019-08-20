@@ -9,37 +9,23 @@ import {
   TextInput,
   PickerIOS
 } from "react-native";
-import Modal from "react-native-modal";
 
 import { withGlobalContext } from "../GlobalContext";
 
-function EditTransactionModal({
-  transaction,
-  isVisible,
-  onExitModal,
-  onCancelModal,
-  onChangeTransaction,
-  onDeleteTransaction,
-  ...props
-}) {
-  // TODO: https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html
-  const { id, name, amount, category, date, notes } = transaction;
+class EditTransactionModal extends React.Component {
+  render() {
+    const { navigation } = this.props;
+    const transaction = navigation.getParam("transaction");
+    const onExitModal = navigation.getParam("onExitModal");
+    const onChangeTransaction = navigation.getParam("onChangeTransaction");
+    const onDeleteTransaction = navigation.getParam("onDeleteTransaction");
 
-  return (
-    <Modal
-      isVisible={isVisible}
-      backdropOpacity={1}
-      backdropColor="#fff"
-      animationInTiming={400}
-      animationOutTiming={400}
-      backdropTransitionInTiming={0}
-      backdropTransitionOutTiming={0}
-    >
+    // TODO: https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html
+    const { id, name, amount, category, date, notes } = transaction;
+
+    return (
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.modalContent}>
-          <View style={styles.modalHeader}>
-            <Text style={styles.modalTitle}>Edit Transaction</Text>
-          </View>
           <View style={styles.modalBody}>
             <View style={{ flexDirection: "row", alignSelf: "center" }}>
               <Text style={[styles.dollarSign]}>$</Text>
@@ -79,7 +65,7 @@ function EditTransactionModal({
               clearButtonMode="always"
             />
             {/* <Text style={styles.inputLabel}>Category</Text> */}
-            <PickerIOS
+            {/* <PickerIOS
               selectedValue={category}
               onValueChange={category =>
                 onChangeTransaction("category", category)
@@ -94,23 +80,17 @@ function EditTransactionModal({
                   />
                 );
               })}
-            </PickerIOS>
+            </PickerIOS> */}
             {/* <Text style={styles.inputLabel}>Date</Text> */}
-            <DatePickerIOS
+            {/* <DatePickerIOS
               date={date}
               onDateChange={date => onChangeTransaction("date", date)}
               mode="date"
-            />
+            /> */}
             <Button
               style={{ marginBottom: 0 }}
               title="Save"
               onPress={onExitModal}
-            />
-            <Button
-              title="Cancel"
-              style={{ marginBottom: 0 }}
-              color="gray"
-              onPress={onCancelModal}
             />
             <Button
               title="Delete"
@@ -121,8 +101,8 @@ function EditTransactionModal({
           </View>
         </View>
       </ScrollView>
-    </Modal>
-  );
+    );
+  }
 }
 
 export default withGlobalContext(EditTransactionModal);
@@ -131,18 +111,6 @@ const styles = StyleSheet.create({
   modalContent: {
     paddingTop: 40,
     flex: 1
-  },
-  modalHeader: {
-    paddingBottom: 10,
-    borderBottomColor: "#f1f1f1",
-    borderBottomWidth: 0.5,
-    width: "100%",
-    alignItems: "center"
-  },
-  modalTitle: {
-    fontWeight: "600",
-    fontSize: 17,
-    color: "rgba(0, 0, 0, 0.9)"
   },
   modalBody: {
     marginTop: 15
