@@ -39,7 +39,9 @@ export default function TransactionsList({
           </View>
           <View style={{ flex: 1, marginLeft: 10 }}>
             <View style={{ flexDirection: "row" }}>
-              <Text style={{ fontWeight: "bold" }}>{name || "No Name"}</Text>
+              <Text style={{ fontWeight: "bold", flex: 1, flexWrap: "wrap" }}>
+                {name || "No Name"}
+              </Text>
               <Text style={{ marginLeft: "auto" }}>
                 {Number(amount).toLocaleString("en-US", {
                   style: "currency",
