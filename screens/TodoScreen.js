@@ -16,8 +16,18 @@ import _ from "lodash";
 import { withGlobalContext } from "../GlobalContext";
 
 class TodoScreen extends React.Component {
-  static navigationOptions = {
-    title: "To Do"
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: "To Do",
+      headerRight: (
+        <TouchableOpacity
+          onPress={navigation.getParam("addTransaction")}
+          style={{ marginRight: 20 }}
+        >
+          <Ionicons name="ios-add" size={40} />
+        </TouchableOpacity>
+      )
+    };
   };
 
   state = {
@@ -26,6 +36,14 @@ class TodoScreen extends React.Component {
     isPlaidLinkVisible: false,
     refreshing: false
   };
+
+  componentDidMount() {
+    // necessary for parameterizing the header bar button. See:
+    // https://reactnavigation.org/docs/en/header-buttons.html#adding-a-button-to-the-header
+    this.props.navigation.setParams({
+      addTransaction: this.handleAddNewTransaction
+    });
+  }
 
   toggleModal = () => {
     this.setState({ isModalVisible: !this.state.isModalVisible });
@@ -123,11 +141,6 @@ class TodoScreen extends React.Component {
             onExitModal={this.togglePlaidLinkModal}
           />
         </ScrollView>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={this.handleAddNewTransaction}>
-            <Ionicons name="ios-add" size={80} />
-          </TouchableOpacity>
-        </View>
       </View>
     );
   }
@@ -140,13 +153,5 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff"
   },
-  contentContainer: {},
-  buttonContainer: {
-    justifyContent: "space-around",
-    alignItems: "center",
-    backgroundColor: "rgba(211, 211, 211, 0.7)",
-    position: "absolute",
-    bottom: 0,
-    width: "100%"
-  }
+  contentContainer: {}
 });
