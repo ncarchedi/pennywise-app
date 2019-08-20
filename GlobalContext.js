@@ -357,8 +357,9 @@ export class GlobalContextProvider extends React.Component {
     const notificationStatus = await Permissions.askAsync(
       Permissions.NOTIFICATIONS
     );
-    console.log("notification permission status:");
-    console.log(notificationStatus);
+
+    // console.log("notification permission status:");
+    // console.log(notificationStatus);
 
     // Calculate the time to send the next notification
     let notificationDate = moment(new Date())
@@ -392,7 +393,7 @@ export class GlobalContextProvider extends React.Component {
         }
       );
 
-      console.log(response);
+      // console.log(response);
     }
   };
 

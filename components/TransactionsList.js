@@ -98,7 +98,13 @@ export default function TransactionsList({
         ListEmptyComponent={() => (
           <View>
             <Text style={styles.emptyScreenEmoji}>🎉</Text>
-            <Text style={styles.emptyScreenQuote}>{quote}</Text>
+            <Text style={styles.emptyScreenHeader}>All done for today!</Text>
+            <View style={styles.emptyScreenQuoteBox}>
+              <Text style={styles.emptyScreenQuoteText}>{quote.text}</Text>
+              <Text style={styles.emptyScreenQuoteSource}>
+                {"-" + quote.source}
+              </Text>
+            </View>
           </View>
         )}
       />
@@ -130,12 +136,27 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 30
   },
-  emptyScreenQuote: {
-    textAlign: "center",
+  emptyScreenHeader: {
     fontSize: 22,
-    marginTop: 30,
+    marginTop: 15,
+    textAlign: "center"
+  },
+  emptyScreenQuoteBox: {
+    backgroundColor: "#f1f1f1",
+    marginTop: 50,
+    paddingVertical: 30
+  },
+  emptyScreenQuoteText: {
+    textAlign: "center",
+    fontSize: 17,
     marginHorizontal: 30,
     fontStyle: "italic",
-    color: "gray"
+    color: "grey"
+  },
+  emptyScreenQuoteSource: {
+    textAlign: "center",
+    fontSize: 17,
+    marginTop: 10,
+    color: "grey"
   }
 });

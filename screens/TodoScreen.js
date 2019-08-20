@@ -66,8 +66,6 @@ class TodoScreen extends React.Component {
   handleRefresh = async () => {
     const { getPlaidTransactions, scheduleNotifications } = this.props.global;
 
-    console.log("refreshing todo list");
-
     // We should probably do this somewhere else, but for now it's good enough
     // Goal: make sure people that use the app get notifications by scheduling them for the next 7 days
     scheduleNotifications();
