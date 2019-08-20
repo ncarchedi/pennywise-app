@@ -17,6 +17,7 @@ function EditTransactionModal({
   transaction,
   isVisible,
   onExitModal,
+  onCancelModal,
   onChangeTransaction,
   onDeleteTransaction,
   ...props
@@ -102,11 +103,17 @@ function EditTransactionModal({
             />
             <Button
               style={{ marginBottom: 0 }}
-              title="Save Changes"
+              title="Save"
               onPress={onExitModal}
             />
             <Button
-              title="Delete Transaction"
+              title="Cancel"
+              style={{ marginBottom: 0 }}
+              color="gray"
+              onPress={onCancelModal}
+            />
+            <Button
+              title="Delete"
               style={{ marginBottom: 0 }}
               color="red"
               onPress={() => onDeleteTransaction(id)}

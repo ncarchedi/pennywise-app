@@ -90,6 +90,10 @@ class TodoScreen extends React.Component {
     this.toggleModal();
   };
 
+  handleCancelModal = () => {
+    this.toggleModal();
+  };
+
   handleChangeTransaction = (key, value) => {
     const { selectedTransaction } = this.state;
     const newSelectedTransaction = { ...selectedTransaction, [key]: value };
@@ -137,6 +141,7 @@ class TodoScreen extends React.Component {
             transaction={selectedTransaction}
             isVisible={isModalVisible}
             onExitModal={this.handleExitModal}
+            onCancelModal={this.handleCancelModal}
             onChangeTransaction={this.handleChangeTransaction}
             onDeleteTransaction={this.handleDeleteTransaction}
           />
