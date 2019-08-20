@@ -5,6 +5,7 @@ import _ from "lodash";
 import moment from "moment";
 import { Notifications } from "expo";
 import * as Permissions from "expo-permissions";
+import hoistNonReactStatic from "hoist-non-react-statics";
 
 import transactionsData from "./transactions.json";
 import categoriesData from "./categories.json";
@@ -75,7 +76,10 @@ export class GlobalContextProvider extends React.Component {
   };
 
   addTransaction = async (transaction = {}) => {
-    return (await this.addTransactions([transaction]))[0];
+    // returns an array of length 1
+    const result = await this.addTransactions([transaction]);
+    // return the first element (an object of length 1)
+    return result[0];
   };
 
   addTransactions = async newTransactionsData => {
@@ -185,7 +189,8 @@ export class GlobalContextProvider extends React.Component {
 
           for (let plaidTransaction of plaidTransactions) {
             const { name, amount, date } = plaidTransaction;
-            // Copy the part of the plaidTransaction that we want to use for hasing in hashTransactionProperties
+            // Copy the part of the plaidTransaction that we want to use
+            // for hashing in hashTransactionProperties
             const {
               account_id,
               category_id,
@@ -294,6 +299,7 @@ export class GlobalContextProvider extends React.Component {
 
     const dummyData = transactionsData.map(t => ({
       id: t.id,
+      hash_id: t.hash_id,
       name: t.name,
       amount: t.amount,
       category: t.category,
@@ -418,9 +424,13 @@ export class GlobalContextProvider extends React.Component {
   }
 }
 
-// create the consumer as higher order component
-export const withGlobalContext = ChildComponent => props => (
-  <GlobalContext.Consumer>
-    {context => <ChildComponent {...props} global={context} />}
-  </GlobalContext.Consumer>
-);
+export const withGlobalContext = ChildComponent => {
+  ComponentWithContext = props => (
+    <GlobalContext.Consumer>
+      {context => <ChildComponent {...props} global={context} />}
+    </GlobalContext.Consumer>
+  );
+  // necessary for retaining static properties (e.g. header titles)
+  hoistNonReactStatic(ComponentWithContext, ChildComponent);
+  return ComponentWithContext;
+};

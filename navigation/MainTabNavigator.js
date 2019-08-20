@@ -11,7 +11,6 @@ import TodoScreen from "../screens/TodoScreen";
 import TransactionsScreen from "../screens/TransactionsScreen";
 import SpendingScreen from "../screens/SpendingScreen";
 import AnalyticsScreen from "../screens/AnalyticsScreen";
-import SettingsScreen from "../screens/SettingsScreen";
 
 const config = Platform.select({
   web: { headerMode: "screen" },
