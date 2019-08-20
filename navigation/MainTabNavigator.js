@@ -10,7 +10,7 @@ import TabBarIcon from "../components/TabBarIcon";
 import TodoScreen from "../screens/TodoScreen";
 import TransactionsScreen from "../screens/TransactionsScreen";
 import SpendingScreen from "../screens/SpendingScreen";
-import AnalyticsScreen from "../screens/AnalyticsScreen";
+import SettingsScreen from "../screens/SettingsScreen";
 
 const config = Platform.select({
   web: { headerMode: "screen" },
@@ -27,12 +27,7 @@ const TodoStack = createStackNavigator(
 TodoStack.navigationOptions = {
   tabBarLabel: "To Do",
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={
-        Platform.OS === "ios" ? "ios-checkbox-outline" : "md-checkbox-outline"
-      }
-    />
+    <TabBarIcon focused={focused} name={"ios-checkbox-outline"} />
   )
 };
 
@@ -45,12 +40,7 @@ const TransactionsStack = createStackNavigator(
 
 TransactionsStack.navigationOptions = {
   tabBarLabel: "Transactions",
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === "ios" ? "ios-list" : "md-list"}
-    />
-  )
+  tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="ios-list" />
 };
 
 const SpendingStack = createStackNavigator(
@@ -63,27 +53,21 @@ const SpendingStack = createStackNavigator(
 SpendingStack.navigationOptions = {
   tabBarLabel: "Spending",
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === "ios" ? "ios-wallet" : "md-wallet"}
-    />
+    <TabBarIcon focused={focused} name="ios-wallet" />
   )
 };
 
-const AnalyticsStack = createStackNavigator(
+const SettingsStack = createStackNavigator(
   {
-    Analytics: AnalyticsScreen
+    Settings: SettingsScreen
   },
   config
 );
 
-AnalyticsStack.navigationOptions = {
-  tabBarLabel: "Analytics",
+SettingsStack.navigationOptions = {
+  tabBarLabel: "Settings",
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === "ios" ? "ios-trending-up" : "md-trending-up"}
-    />
+    <TabBarIcon focused={focused} name="ios-settings" />
   )
 };
 
@@ -91,7 +75,7 @@ const tabNavigator = createBottomTabNavigator({
   TodoStack,
   TransactionsStack,
   SpendingStack,
-  AnalyticsStack
+  SettingsStack
 });
 
 export default tabNavigator;
