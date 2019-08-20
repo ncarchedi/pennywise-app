@@ -7,8 +7,8 @@ import { Notifications } from "expo";
 import * as Permissions from "expo-permissions";
 import hoistNonReactStatic from "hoist-non-react-statics";
 
-import transactionsData from "./transactions.json";
-import categoriesData from "./categories.json";
+import transactionsData from "./data/transactions.json";
+import categoriesData from "./data/categories.json";
 import { createNewTransaction } from "./utils/TransactionUtils";
 
 const GlobalContext = React.createContext({});
