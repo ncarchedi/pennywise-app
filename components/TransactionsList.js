@@ -86,16 +86,15 @@ export default function TransactionsList({
 
   return (
     <View style={styles.container}>
-      {!transactionsFinal.length ? (
-        <Text style={styles.emptyScreenText}>Nothing to see here! 🎉</Text>
-      ) : (
-        <FlatList
-          data={transactionsFinal}
-          renderItem={({ item, index }) => this.ListItem(item, index)}
-          ItemSeparatorComponent={this.ListItemSeparator}
-          keyExtractor={(item, index) => item + index}
-        />
-      )}
+      <FlatList
+        data={transactionsFinal}
+        renderItem={({ item, index }) => this.ListItem(item, index)}
+        ItemSeparatorComponent={this.ListItemSeparator}
+        keyExtractor={(item, index) => item + index}
+        ListEmptyComponent={() => (
+          <Text style={styles.emptyScreenText}>Nothing to see here! 🎉</Text>
+        )}
+      />
     </View>
   );
 }
