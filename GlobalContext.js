@@ -2,6 +2,9 @@ import React from "react";
 import { AsyncStorage } from "react-native";
 import hash from "object-hash";
 import _ from "lodash";
+import moment from "moment";
+import { Notifications } from "expo";
+import * as Permissions from "expo-permissions";
 
 import transactionsData from "./transactions.json";
 import categoriesData from "./categories.json";
@@ -23,7 +26,11 @@ export class GlobalContextProvider extends React.Component {
   state = {
     transactions: [],
     categories: [],
-    access_token: ""
+    accessToken: "",
+    notificationTime: {
+      hours: 8,
+      minutes: 0
+    }
   };
 
   componentDidMount = async () => {
@@ -33,10 +40,7 @@ export class GlobalContextProvider extends React.Component {
       );
 
       const transactions = transactionsRaw.map(t => ({
-        id: t.id,
-        name: t.name,
-        amount: t.amount,
-        category: t.category,
+        ...t,
         date: new Date(t.date)
       }));
 
@@ -46,11 +50,23 @@ export class GlobalContextProvider extends React.Component {
     }
 
     try {
-      const access_token = JSON.parse(
-        await AsyncStorage.getItem("access_token")
+      const accessToken = JSON.parse(await AsyncStorage.getItem("accessToken"));
+
+      this.setState({ accessToken });
+    } catch (error) {
+      console.log(error.message);
+    }
+
+    try {
+      let notificationTime = JSON.parse(
+        await AsyncStorage.getItem("notificationTime")
       );
 
-      this.setState({ access_token });
+      if (!notificationTime) {
+        notificationTime = this.state.notificationTime;
+      }
+
+      this.setState({ notificationTime });
     } catch (error) {
       console.log(error.message);
     }
@@ -95,13 +111,13 @@ export class GlobalContextProvider extends React.Component {
 
   setAccessToken = async accessToken => {
     try {
-      await AsyncStorage.setItem("access_token", JSON.stringify(accessToken));
+      await AsyncStorage.setItem("accessToken", JSON.stringify(accessToken));
     } catch (error) {
       console.log(error.message);
     }
 
     this.setState({
-      access_token: accessToken
+      accessToken: accessToken
     });
   };
 
@@ -134,7 +150,19 @@ export class GlobalContextProvider extends React.Component {
   };
 
   getPlaidTransactions = () => {
-    const accessToken = this.state.access_token;
+    const accessToken = this.state.accessToken;
+    let lastTransactionDate = this.getLastPlaidTransactionDate();
+
+    let startDate;
+    let endDate = moment().format("YYYY-MM-DD");
+
+    if (lastTransactionDate) {
+      startDate = moment(startDate).format("YYYY-MM-DD");
+    } else {
+      startDate = moment()
+        .subtract(3, "days")
+        .format("YYYY-MM-DD");
+    }
 
     return fetch(TRANSACTIONS_URL, {
       method: "POST",
@@ -144,7 +172,8 @@ export class GlobalContextProvider extends React.Component {
       },
       body: JSON.stringify({
         access_token: accessToken,
-        nb_days: 3
+        start_date: startDate,
+        end_date: endDate
       })
     })
       .then(response => response.json())
@@ -280,6 +309,90 @@ export class GlobalContextProvider extends React.Component {
     this.setState({ transactions: dummyData });
   };
 
+  getLastPlaidTransactionDate = () => {
+    let lastTransaction = _(this.state.transactions)
+      .filter(item => {
+        return item.hash_id != null;
+      })
+      .sortBy("date")
+      .last();
+
+    if (lastTransaction) {
+      return lastTransaction.date;
+    } else {
+      return null;
+    }
+  };
+
+  setNotificationTime = async newNotificationTime => {
+    try {
+      await AsyncStorage.setItem(
+        "notificationTime",
+        JSON.stringify(newNotificationTime)
+      );
+    } catch (error) {
+      console.log(error.message);
+    }
+
+    this.setState({ notificationTime: newNotificationTime });
+  };
+
+  /**
+   * Schedules notifications for the next 7 days, based on the notificationTime of state.
+   * Will ask permission to the user if that was not yet granted.
+   */
+  scheduleNotifications = async () => {
+    // First cancel any already scheduled notifications
+    this.cancelNotifications();
+
+    // Ask permission to send notifications if needed
+    // If permissions were not granted, the code below will just execute but not have any effect
+    const notificationStatus = await Permissions.askAsync(
+      Permissions.NOTIFICATIONS
+    );
+    console.log("notification permission status:");
+    console.log(notificationStatus);
+
+    // Calculate the time to send the next notification
+    let notificationDate = moment(new Date())
+      .hours(this.state.notificationTime.hours)
+      .minutes(this.state.notificationTime.minutes);
+
+    // Make sure this 'date' is after now
+    if (moment(new Date()).diff(notificationDate) >= 0) {
+      notificationDate.add(1, "days");
+    }
+
+    let notification = {
+      title: "Ready to check your transactions?",
+      body:
+        "Categorize any new transactions now and stay on top of your expenses.",
+      ios: {
+        sound: true,
+        _displayInForeground: true
+      }
+    };
+
+    // Schedule the next 7 notifications
+    // If the time specified above has passed already, only 6 notifications will be scheduled
+    for (let i = 0; i < 7; i += 1) {
+      const nextNotificationDate = notificationDate.add(i, "days");
+
+      const response = await Notifications.scheduleLocalNotificationAsync(
+        notification,
+        {
+          time: nextNotificationDate.toDate()
+        }
+      );
+
+      console.log(response);
+    }
+  };
+
+  cancelNotifications = async () => {
+    await Notifications.cancelAllScheduledNotificationsAsync();
+  };
+
   render() {
     return (
       <GlobalContext.Provider
@@ -293,7 +406,10 @@ export class GlobalContextProvider extends React.Component {
           loadDummyData: this.loadDummyData,
           getAccessTokenFromPublicToken: this.getAccessTokenFromPublicToken,
           getPlaidTransactions: this.getPlaidTransactions,
-          setAccessToken: this.setAccessToken
+          setAccessToken: this.setAccessToken,
+          setNotificationTime: this.setNotificationTime,
+          scheduleNotifications: this.scheduleNotifications,
+          cancelNotifications: this.cancelNotifications
         }}
       >
         {this.props.children}
