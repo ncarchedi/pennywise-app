@@ -43,8 +43,8 @@ class EditTransactionModal extends React.Component {
   };
 
   render() {
-    const { name, amount, category, date, notes } = this.state;
     const { categories } = this.props.global;
+    const { name, amount, category, date, notes } = this.state;
 
     return (
       <ScrollView showsVerticalScrollIndicator={false}>

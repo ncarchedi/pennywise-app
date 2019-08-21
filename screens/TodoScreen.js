@@ -47,9 +47,7 @@ class TodoScreen extends React.Component {
   };
 
   handleTransactionPress = transaction => {
-    this.props.navigation.navigate("EditModalTodo", {
-      transaction: transaction
-    });
+    this.props.navigation.navigate("EditModalTodo", { transaction });
   };
 
   handleRefresh = async () => {
@@ -66,6 +64,7 @@ class TodoScreen extends React.Component {
 
   handleAddNewTransaction = async () => {
     const { addTransaction } = this.props.global;
+
     this.handleTransactionPress(await addTransaction());
   };
 
