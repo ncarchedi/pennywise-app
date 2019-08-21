@@ -28,3 +28,9 @@ yarn start
 ```
 
 Link to the backend: https://github.com/BGordts/conscious-spending-backend.git
+
+## Fastlane setup
+
+Installation (https://docs.fastlane.tools/getting-started/ios/setup/)
+- Install xcode stuff `xcode-select --install`
+- Install fastlane using homebrew`brew cask install fastlane`
