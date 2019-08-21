@@ -7,8 +7,8 @@ import { Notifications } from "expo";
 import * as Permissions from "expo-permissions";
 import hoistNonReactStatic from "hoist-non-react-statics";
 
-import transactionsData from "./transactions.json";
-import categoriesData from "./categories.json";
+import transactionsData from "./data/transactions.json";
+import categoriesData from "./data/categories.json";
 import { createNewTransaction } from "./utils/TransactionUtils";
 
 const GlobalContext = React.createContext({});
@@ -235,14 +235,15 @@ export class GlobalContextProvider extends React.Component {
 
     const updatedTransactions = transactions.map(transaction => {
       if (transaction.id === attrs.id) {
-        const { name, amount, category, date } = attrs;
+        const { name, amount, category, date, notes } = attrs;
 
         const updatedTransaction = {
           ...transaction,
           name,
           amount,
           category,
-          date
+          date,
+          notes
         };
 
         // if it's a match, then return the updated transaction
@@ -356,8 +357,9 @@ export class GlobalContextProvider extends React.Component {
     const notificationStatus = await Permissions.askAsync(
       Permissions.NOTIFICATIONS
     );
-    console.log("notification permission status:");
-    console.log(notificationStatus);
+
+    // console.log("notification permission status:");
+    // console.log(notificationStatus);
 
     // Calculate the time to send the next notification
     let notificationDate = moment(new Date())
@@ -391,7 +393,7 @@ export class GlobalContextProvider extends React.Component {
         }
       );
 
-      console.log(response);
+      // console.log(response);
     }
   };
 

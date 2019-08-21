@@ -17,12 +17,13 @@ function EditTransactionModal({
   transaction,
   isVisible,
   onExitModal,
+  onCancelModal,
   onChangeTransaction,
   onDeleteTransaction,
   ...props
 }) {
   // TODO: https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html
-  const { id, name, amount, category, date } = transaction;
+  const { id, name, amount, category, date, notes } = transaction;
 
   return (
     <Modal
@@ -61,7 +62,7 @@ function EditTransactionModal({
             <TextInput
               style={styles.textInput}
               value={name}
-              placeholder="New Transaction"
+              placeholder="Name"
               onChangeText={name => onChangeTransaction("name", name)}
               ref={input => {
                 this.nameInput = input;
@@ -69,6 +70,13 @@ function EditTransactionModal({
               autoCorrect={false}
               clearButtonMode="always"
               returnKeyType="next"
+            />
+            <TextInput
+              style={styles.textInput}
+              value={notes}
+              placeholder="Notes"
+              onChangeText={notes => onChangeTransaction("notes", notes)}
+              clearButtonMode="always"
             />
             {/* <Text style={styles.inputLabel}>Category</Text> */}
             <PickerIOS
@@ -95,11 +103,17 @@ function EditTransactionModal({
             />
             <Button
               style={{ marginBottom: 0 }}
-              title="Save Changes"
+              title="Save"
               onPress={onExitModal}
             />
             <Button
-              title="Delete Transaction"
+              title="Cancel"
+              style={{ marginBottom: 0 }}
+              color="gray"
+              onPress={onCancelModal}
+            />
+            <Button
+              title="Delete"
               style={{ marginBottom: 0 }}
               color="red"
               onPress={() => onDeleteTransaction(id)}

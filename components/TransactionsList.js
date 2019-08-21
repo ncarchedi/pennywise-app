@@ -10,6 +10,7 @@ import { Ionicons } from "@expo/vector-icons";
 import _ from "lodash";
 
 import { toPrettyDate, leftJoin } from "../utils/TransactionUtils";
+import allQuotes from "../data/quotes.json";
 
 export default function TransactionsList({
   transactions,
@@ -39,7 +40,9 @@ export default function TransactionsList({
           </View>
           <View style={{ flex: 1, marginLeft: 10 }}>
             <View style={{ flexDirection: "row" }}>
-              <Text style={{ fontWeight: "bold" }}>{name || "No Name"}</Text>
+              <Text style={{ fontWeight: "bold", flex: 1, flexWrap: "wrap" }}>
+                {name || "No Name"}
+              </Text>
               <Text style={{ marginLeft: "auto" }}>
                 {Number(amount).toLocaleString("en-US", {
                   style: "currency",
@@ -80,20 +83,31 @@ export default function TransactionsList({
     .reverse()
     .value();
 
+  // get random quote for empty screen
+  const quote = allQuotes[Math.floor(Math.random() * allQuotes.length)];
+
   console.log("rendering transactions list...");
 
   return (
     <View style={styles.container}>
-      {!transactionsFinal.length ? (
-        <Text style={styles.emptyScreenText}>Nothing to see here! 🎉</Text>
-      ) : (
-        <FlatList
-          data={transactionsFinal}
-          renderItem={({ item, index }) => this.ListItem(item, index)}
-          ItemSeparatorComponent={this.ListItemSeparator}
-          keyExtractor={(item, index) => item + index}
-        />
-      )}
+      <FlatList
+        data={transactionsFinal}
+        renderItem={({ item, index }) => this.ListItem(item, index)}
+        ItemSeparatorComponent={this.ListItemSeparator}
+        keyExtractor={(item, index) => item + index}
+        ListEmptyComponent={() => (
+          <View>
+            <Text style={styles.emptyScreenEmoji}>🎉</Text>
+            <Text style={styles.emptyScreenHeader}>All done for today!</Text>
+            <View style={styles.emptyScreenQuoteBox}>
+              <Text style={styles.emptyScreenQuoteText}>{quote.text}</Text>
+              <Text style={styles.emptyScreenQuoteSource}>
+                {"-" + quote.source}
+              </Text>
+            </View>
+          </View>
+        )}
+      />
     </View>
   );
 }
@@ -117,10 +131,32 @@ const styles = StyleSheet.create({
   sectionHeaderText: {
     fontSize: 28
   },
-  emptyScreenText: {
-    height: "100%",
+  emptyScreenEmoji: {
+    fontSize: 60,
     textAlign: "center",
-    marginTop: 30,
-    fontSize: 22
+    marginTop: 30
+  },
+  emptyScreenHeader: {
+    fontSize: 22,
+    marginTop: 15,
+    textAlign: "center"
+  },
+  emptyScreenQuoteBox: {
+    backgroundColor: "#f1f1f1",
+    marginTop: 50,
+    paddingVertical: 30
+  },
+  emptyScreenQuoteText: {
+    textAlign: "center",
+    fontSize: 17,
+    marginHorizontal: 30,
+    fontStyle: "italic",
+    color: "grey"
+  },
+  emptyScreenQuoteSource: {
+    textAlign: "center",
+    fontSize: 17,
+    marginTop: 10,
+    color: "grey"
   }
 });

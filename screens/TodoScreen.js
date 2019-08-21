@@ -66,8 +66,6 @@ class TodoScreen extends React.Component {
   handleRefresh = async () => {
     const { getPlaidTransactions, scheduleNotifications } = this.props.global;
 
-    console.log("refreshing todo list");
-
     // We should probably do this somewhere else, but for now it's good enough
     // Goal: make sure people that use the app get notifications by scheduling them for the next 7 days
     scheduleNotifications();
@@ -87,6 +85,10 @@ class TodoScreen extends React.Component {
     const { selectedTransaction } = this.state;
 
     updateTransaction(selectedTransaction);
+    this.toggleModal();
+  };
+
+  handleCancelModal = () => {
     this.toggleModal();
   };
 
@@ -137,6 +139,7 @@ class TodoScreen extends React.Component {
             transaction={selectedTransaction}
             isVisible={isModalVisible}
             onExitModal={this.handleExitModal}
+            onCancelModal={this.handleCancelModal}
             onChangeTransaction={this.handleChangeTransaction}
             onDeleteTransaction={this.handleDeleteTransaction}
           />

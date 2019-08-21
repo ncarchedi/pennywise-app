@@ -53,6 +53,10 @@ class TransactionsScreen extends React.Component {
     this.toggleModal();
   };
 
+  handleCancelModal = () => {
+    this.toggleModal();
+  };
+
   render() {
     console.log("rendering transactions screen...");
 
@@ -75,6 +79,7 @@ class TransactionsScreen extends React.Component {
             transaction={selectedTransaction}
             isVisible={isModalVisible}
             onExitModal={this.handleExitModal}
+            onCancelModal={this.handleCancelModal}
             onChangeTransaction={this.handleChangeTransaction}
             onDeleteTransaction={this.handleDeleteTransaction}
           />
