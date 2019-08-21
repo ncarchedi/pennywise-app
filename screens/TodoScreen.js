@@ -30,7 +30,6 @@ class TodoScreen extends React.Component {
   };
 
   state = {
-    selectedTransaction: {},
     isPlaidLinkVisible: false,
     refreshing: false
   };
@@ -48,19 +47,9 @@ class TodoScreen extends React.Component {
   };
 
   handleTransactionPress = transaction => {
-    this.setState(
-      {
-        selectedTransaction: transaction
-      },
-      // open modal after state is set
-      () =>
-        this.props.navigation.navigate("EditModalTodo", {
-          transaction: this.state.selectedTransaction,
-          onExitModal: this.handleExitModal,
-          onChangeTransaction: this.handleChangeTransaction,
-          onDeleteTransaction: this.handleDeleteTransaction
-        })
-    );
+    this.props.navigation.navigate("EditModalTodo", {
+      transaction: transaction
+    });
   };
 
   handleRefresh = async () => {
@@ -78,28 +67,6 @@ class TodoScreen extends React.Component {
   handleAddNewTransaction = async () => {
     const { addTransaction } = this.props.global;
     this.handleTransactionPress(await addTransaction());
-  };
-
-  handleExitModal = () => {
-    const { updateTransaction } = this.props.global;
-    const { selectedTransaction } = this.state;
-
-    updateTransaction(selectedTransaction);
-    this.props.navigation.navigate("Todo");
-  };
-
-  handleChangeTransaction = (key, value) => {
-    const { selectedTransaction } = this.state;
-    const newSelectedTransaction = { ...selectedTransaction, [key]: value };
-
-    this.setState({ selectedTransaction: newSelectedTransaction });
-  };
-
-  handleDeleteTransaction = id => {
-    const { deleteTransaction } = this.props.global;
-
-    this.props.navigation.navigate("Todo");
-    deleteTransaction(id);
   };
 
   render() {

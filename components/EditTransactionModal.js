@@ -13,15 +13,38 @@ import {
 import { withGlobalContext } from "../GlobalContext";
 
 class EditTransactionModal extends React.Component {
-  render() {
-    const { navigation } = this.props;
-    const transaction = navigation.getParam("transaction");
-    const onExitModal = navigation.getParam("onExitModal");
-    const onChangeTransaction = navigation.getParam("onChangeTransaction");
-    const onDeleteTransaction = navigation.getParam("onDeleteTransaction");
+  constructor(props) {
+    super(props);
 
-    // TODO: https://reactjs.org/blog/2018/06/07/you-probably-dont-need-derived-state.html
+    const transaction = props.navigation.getParam("transaction");
     const { id, name, amount, category, date, notes } = transaction;
+
+    this.state = { id, name, amount, category, date, notes };
+  }
+
+  handleChangeTransaction = (key, value) => {
+    this.setState({ ...this.state, [key]: value });
+  };
+
+  handleSaveTransaction = () => {
+    const { updateTransaction } = this.props.global;
+    const transaction = { ...this.state };
+
+    updateTransaction(transaction);
+    this.props.navigation.goBack();
+  };
+
+  handleDeleteTransaction = () => {
+    const { deleteTransaction } = this.props.global;
+    const { id } = this.state;
+
+    this.props.navigation.goBack();
+    deleteTransaction(id);
+  };
+
+  render() {
+    const { name, amount, category, date, notes } = this.state;
+    const { categories } = this.props.global;
 
     return (
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -33,7 +56,9 @@ class EditTransactionModal extends React.Component {
                 style={styles.amountInput}
                 value={String(amount)}
                 placeholder="24.99"
-                onChangeText={amount => onChangeTransaction("amount", amount)}
+                onChangeText={amount =>
+                  this.handleChangeTransaction("amount", amount)
+                }
                 keyboardType={"numbers-and-punctuation"}
                 autoCorrect={false}
                 onSubmitEditing={() => {
@@ -49,7 +74,7 @@ class EditTransactionModal extends React.Component {
               style={styles.textInput}
               value={name}
               placeholder="Name"
-              onChangeText={name => onChangeTransaction("name", name)}
+              onChangeText={name => this.handleChangeTransaction("name", name)}
               ref={input => {
                 this.nameInput = input;
               }}
@@ -61,17 +86,19 @@ class EditTransactionModal extends React.Component {
               style={styles.textInput}
               value={notes}
               placeholder="Notes"
-              onChangeText={notes => onChangeTransaction("notes", notes)}
+              onChangeText={notes =>
+                this.handleChangeTransaction("notes", notes)
+              }
               clearButtonMode="always"
             />
             {/* <Text style={styles.inputLabel}>Category</Text> */}
-            {/* <PickerIOS
+            <PickerIOS
               selectedValue={category}
               onValueChange={category =>
-                onChangeTransaction("category", category)
+                this.handleChangeTransaction("category", category)
               }
             >
-              {props.global.categories.map(category => {
+              {categories.map(category => {
                 return (
                   <PickerIOS.Item
                     key={category.label}
@@ -80,23 +107,23 @@ class EditTransactionModal extends React.Component {
                   />
                 );
               })}
-            </PickerIOS> */}
+            </PickerIOS>
             {/* <Text style={styles.inputLabel}>Date</Text> */}
-            {/* <DatePickerIOS
+            <DatePickerIOS
               date={date}
-              onDateChange={date => onChangeTransaction("date", date)}
+              onDateChange={date => this.handleChangeTransaction("date", date)}
               mode="date"
-            /> */}
+            />
             <Button
               style={{ marginBottom: 0 }}
               title="Save"
-              onPress={onExitModal}
+              onPress={this.handleSaveTransaction}
             />
             <Button
               title="Delete"
               style={{ marginBottom: 0 }}
               color="red"
-              onPress={() => onDeleteTransaction(id)}
+              onPress={this.handleDeleteTransaction}
             />
           </View>
         </View>

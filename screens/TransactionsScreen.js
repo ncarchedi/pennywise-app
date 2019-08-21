@@ -11,46 +11,10 @@ class TransactionsScreen extends React.Component {
     title: "Transactions"
   };
 
-  state = {
-    selectedTransaction: {}
-  };
-
   handleTransactionPress = transaction => {
-    this.setState(
-      {
-        selectedTransaction: transaction
-      },
-      // open modal after state is set
-      () =>
-        this.props.navigation.navigate("EditModalTransactions", {
-          transaction: this.state.selectedTransaction,
-          onExitModal: this.handleExitModal,
-          onChangeTransaction: this.handleChangeTransaction,
-          onDeleteTransaction: this.handleDeleteTransaction
-        })
-    );
-  };
-
-  handleChangeTransaction = (key, value) => {
-    const { selectedTransaction } = this.state;
-    const newSelectedTransaction = { ...selectedTransaction, [key]: value };
-
-    this.setState({ selectedTransaction: newSelectedTransaction });
-  };
-
-  handleDeleteTransaction = id => {
-    const { deleteTransaction } = this.props.global;
-
-    this.props.navigation.navigate("Transactions");
-    deleteTransaction(id);
-  };
-
-  handleExitModal = () => {
-    const { updateTransaction } = this.props.global;
-    const { selectedTransaction } = this.state;
-
-    updateTransaction(selectedTransaction);
-    this.props.navigation.navigate("Transactions");
+    this.props.navigation.navigate("EditModalTodo", {
+      transaction: transaction
+    });
   };
 
   render() {
