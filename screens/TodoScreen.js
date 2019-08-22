@@ -8,7 +8,6 @@ import {
 } from "react-native";
 
 import TransactionsList from "../components/TransactionsList";
-import PlaidLinkModal from "../components/PlaidLinkModal";
 import { Ionicons } from "@expo/vector-icons";
 import _ from "lodash";
 
@@ -29,10 +28,7 @@ class TodoScreen extends React.Component {
     };
   };
 
-  state = {
-    isPlaidLinkVisible: false,
-    refreshing: false
-  };
+  state = { refreshing: false };
 
   componentDidMount() {
     // necessary for parameterizing the header bar button. See:
@@ -41,10 +37,6 @@ class TodoScreen extends React.Component {
       addTransaction: this.handleAddNewTransaction
     });
   }
-
-  togglePlaidLinkModal = () => {
-    this.setState({ isPlaidLinkVisible: !this.state.isPlaidLinkVisible });
-  };
 
   handleTransactionPress = transaction => {
     this.props.navigation.navigate("EditModalTodo", { transaction });
@@ -72,7 +64,7 @@ class TodoScreen extends React.Component {
     console.log("rendering todo screen...");
 
     const { transactions, categories } = this.props.global;
-    const { isPlaidLinkVisible, refreshing } = this.state;
+    const { refreshing } = this.state;
 
     return (
       <View style={styles.container}>
@@ -91,10 +83,6 @@ class TodoScreen extends React.Component {
             categories={categories}
             onTransactionPress={this.handleTransactionPress}
             categorized={false}
-          />
-          <PlaidLinkModal
-            isVisible={isPlaidLinkVisible}
-            onExitModal={this.togglePlaidLinkModal}
           />
         </ScrollView>
       </View>
