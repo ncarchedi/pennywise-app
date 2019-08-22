@@ -13,6 +13,15 @@ import {
 import { withGlobalContext } from "../GlobalContext";
 
 class EditTransactionModal extends React.Component {
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: "Edit Transaction",
+      headerRight: (
+        <Button title="Save" onPress={navigation.getParam("saveTransaction")} />
+      )
+    };
+  };
+
   constructor(props) {
     super(props);
 
@@ -20,6 +29,14 @@ class EditTransactionModal extends React.Component {
     const { id, name, amount, category, date, notes } = transaction;
 
     this.state = { id, name, amount, category, date, notes };
+  }
+
+  componentDidMount() {
+    // necessary for parameterizing the header bar button. See:
+    // https://reactnavigation.org/docs/en/header-buttons.html#adding-a-button-to-the-header
+    this.props.navigation.setParams({
+      saveTransaction: this.handleSaveTransaction
+    });
   }
 
   handleChangeTransaction = (key, value) => {
@@ -113,11 +130,6 @@ class EditTransactionModal extends React.Component {
               date={date}
               onDateChange={date => this.handleChangeTransaction("date", date)}
               mode="date"
-            />
-            <Button
-              style={{ marginBottom: 0 }}
-              title="Save"
-              onPress={this.handleSaveTransaction}
             />
             <Button
               title="Delete"
