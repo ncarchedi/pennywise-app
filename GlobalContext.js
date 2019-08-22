@@ -413,6 +413,31 @@ export class GlobalContextProvider extends React.Component {
     await Notifications.cancelAllScheduledNotificationsAsync();
   };
 
+  loginUser = async (user, password) => {
+    try {
+      const token = "fakeusertoken";
+
+      await AsyncStorage.setItem("userToken", JSON.stringify(token));
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  isUserLoggedIn = async () => {
+    try {
+      const userToken = JSON.parse(await AsyncStorage.getItem("userToken"));
+
+      if (userToken) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.log(error.message);
+      return false;
+    }
+  };
+
   render() {
     return (
       <GlobalContext.Provider
@@ -429,7 +454,9 @@ export class GlobalContextProvider extends React.Component {
           setAccessToken: this.setAccessToken,
           setNotificationTime: this.setNotificationTime,
           scheduleNotifications: this.scheduleNotifications,
-          cancelNotifications: this.cancelNotifications
+          cancelNotifications: this.cancelNotifications,
+          loginUser: this.loginUser,
+          isUserLoggedIn: this.isUserLoggedIn
         }}
       >
         {this.props.children}
