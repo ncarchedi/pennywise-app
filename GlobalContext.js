@@ -126,7 +126,7 @@ export class GlobalContextProvider extends React.Component {
   };
 
   getAccessTokenFromPublicToken = publicToken => {
-    console.log("public token");
+    console.log("public token:");
     console.log(publicToken);
 
     return fetch(ACCESS_TOKEN_URL, {
@@ -141,7 +141,7 @@ export class GlobalContextProvider extends React.Component {
     })
       .then(response => response.json())
       .then(responseJson => {
-        console.log("access token response");
+        console.log("access token response:");
         console.log(responseJson);
 
         this.setAccessToken(responseJson.access_token);
