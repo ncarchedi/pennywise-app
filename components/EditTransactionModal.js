@@ -132,8 +132,7 @@ class EditTransactionModal extends React.Component {
               mode="date"
             />
             <Button
-              title="Delete"
-              style={{ marginBottom: 0 }}
+              title="Delete Transaction"
               color="red"
               onPress={this.handleDeleteTransaction}
             />
@@ -148,11 +147,10 @@ export default withGlobalContext(EditTransactionModal);
 
 const styles = StyleSheet.create({
   modalContent: {
-    paddingTop: 40,
     flex: 1
   },
   modalBody: {
-    marginTop: 15
+    marginVertical: 15
   },
   textInput: {
     padding: 10,
