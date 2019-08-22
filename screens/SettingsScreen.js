@@ -7,11 +7,9 @@ import {
   TouchableOpacity,
   DatePickerIOS
 } from "react-native";
-
-import PlaidLinkModal from "../components/PlaidLinkModal";
-import { withGlobalContext } from "../GlobalContext";
-
 import moment from "moment";
+
+import { withGlobalContext } from "../GlobalContext";
 
 class SettingsScreen extends React.Component {
   static navigationOptions = {
@@ -20,16 +18,7 @@ class SettingsScreen extends React.Component {
 
   state = {
     isReady: false,
-    isPlaidLinkVisible: false,
     notificationTime: this.props.global.notificationTime
-  };
-
-  togglePlaidLinkModal = () => {
-    this.setState({ isPlaidLinkVisible: !this.state.isPlaidLinkVisible });
-  };
-
-  handlePlaidSyncPress = item => {
-    this.togglePlaidLinkModal();
   };
 
   setNotificationDate = newDate => {
@@ -62,10 +51,6 @@ class SettingsScreen extends React.Component {
           style={styles.container}
           contentContainerStyle={styles.contentContainer}
         >
-          <PlaidLinkModal
-            isVisible={this.state.isPlaidLinkVisible}
-            onExitModal={this.togglePlaidLinkModal}
-          />
           <View style={styles.settingsContainer}>
             <TouchableOpacity
               onPress={clearAllTransactions}
@@ -80,7 +65,7 @@ class SettingsScreen extends React.Component {
               <Text>Load Example Transactions</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={this.handlePlaidSyncPress}
+              onPress={() => this.props.navigation.navigate("PlaidModal")}
               style={{ paddingTop: 20 }}
             >
               <Text>Get Plaid Access Token</Text>
