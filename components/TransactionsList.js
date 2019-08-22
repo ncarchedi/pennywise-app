@@ -16,7 +16,8 @@ export default function TransactionsList({
   transactions,
   categories,
   onTransactionPress,
-  categorized
+  categorized,
+  statusMessage
 }) {
   ListItemSeparator = () => {
     return (
@@ -99,6 +100,9 @@ export default function TransactionsList({
           <View>
             <Text style={styles.emptyScreenEmoji}>🎉</Text>
             <Text style={styles.emptyScreenHeader}>All done for today!</Text>
+            {statusMessage ? (
+              <Text style={styles.statusMessageText}>{statusMessage}</Text>
+            ) : null}
             <View style={styles.emptyScreenQuoteBox}>
               <Text style={styles.emptyScreenQuoteText}>{quote.text}</Text>
               <Text style={styles.emptyScreenQuoteSource}>
@@ -138,6 +142,11 @@ const styles = StyleSheet.create({
   },
   emptyScreenHeader: {
     fontSize: 22,
+    marginTop: 15,
+    textAlign: "center"
+  },
+  statusMessageText: {
+    fontSize: 17,
     marginTop: 15,
     textAlign: "center"
   },
