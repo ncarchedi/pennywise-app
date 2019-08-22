@@ -4,7 +4,8 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
-  RefreshControl
+  RefreshControl,
+  Alert
 } from "react-native";
 
 import TransactionsList from "../components/TransactionsList";
@@ -28,7 +29,10 @@ class TodoScreen extends React.Component {
     };
   };
 
-  state = { refreshing: false };
+  state = {
+    refreshing: false,
+    statusMessage: null
+  };
 
   componentDidMount() {
     // necessary for parameterizing the header bar button. See:
@@ -50,8 +54,16 @@ class TodoScreen extends React.Component {
     scheduleNotifications();
 
     this.setState({ refreshing: true });
-    await getPlaidTransactions();
+    const result = await getPlaidTransactions();
     this.setState({ refreshing: false });
+
+    if (result.error) {
+      Alert.alert("Error while downloading transactions", result.message, {
+        cancelable: false
+      });
+    } else if (result.transactions.length == 0) {
+      this.setState({ statusMessage: "No new transactions available." });
+    }
   };
 
   handleAddNewTransaction = async () => {
@@ -64,7 +76,7 @@ class TodoScreen extends React.Component {
     console.log("rendering todo screen...");
 
     const { transactions, categories } = this.props.global;
-    const { refreshing } = this.state;
+    const { refreshing, statusMessage } = this.state;
 
     return (
       <View style={styles.container}>
@@ -83,6 +95,7 @@ class TodoScreen extends React.Component {
             categories={categories}
             onTransactionPress={this.handleTransactionPress}
             categorized={false}
+            statusMessage={statusMessage}
           />
         </ScrollView>
       </View>

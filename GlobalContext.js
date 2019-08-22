@@ -182,48 +182,60 @@ export class GlobalContextProvider extends React.Component {
     })
       .then(response => response.json())
       .then(responseJson => {
-        plaidTransactions = responseJson.transactions.transactions;
+        if (responseJson.error) {
+          return {
+            error: true,
+            message: responseJson.error.error_message
+          };
+        } else {
+          plaidTransactions = responseJson.transactions.transactions;
 
-        if (plaidTransactions) {
           let newTransactions = [];
 
-          for (let plaidTransaction of plaidTransactions) {
-            const { name, amount, date } = plaidTransaction;
-            // Copy the part of the plaidTransaction that we want to use
-            // for hashing in hashTransactionProperties
-            const {
-              account_id,
-              category_id,
-              pending_transaction_id,
-              transaction_id,
-              ...hashTransactionProperties
-            } = plaidTransaction;
+          if (plaidTransactions) {
+            for (let plaidTransaction of plaidTransactions) {
+              const { name, amount, date } = plaidTransaction;
+              // Copy the part of the plaidTransaction that we want to use
+              // for hashing in hashTransactionProperties
+              const {
+                account_id,
+                category_id,
+                pending_transaction_id,
+                transaction_id,
+                ...hashTransactionProperties
+              } = plaidTransaction;
 
-            let transaction = {
-              hash_id: hash(hashTransactionProperties),
-              name,
-              amount,
-              date
-            };
+              let transaction = {
+                hash_id: hash(hashTransactionProperties),
+                name,
+                amount,
+                date
+              };
 
-            newTransactions = [...newTransactions, transaction];
+              newTransactions = [...newTransactions, transaction];
+            }
+
+            // Todo: deal with the situation where we have two identical transactions, e.g. when you buy
+            // the same taco twice.
+            if (
+              _.uniqBy(newTransactions, "hash_id").length !==
+              newTransactions.length
+            ) {
+              console.log(
+                "Identical transactions detected. Todo: deal with this situation."
+              );
+            }
+
+            this.addTransactions(newTransactions);
           }
 
-          // Todo: deal with the situation where we have two identical transactions, e.g. when you buy
-          // the same taco twice.
-          if (
-            _.uniqBy(newTransactions, "hash_id").length !==
-            newTransactions.length
-          ) {
-            console.log(
-              "Identical transactions detected. Todo: deal with this situation."
-            );
-          }
+          console.log(newTransactions);
 
-          this.addTransactions(newTransactions);
+          return {
+            error: false,
+            transactions: newTransactions
+          };
         }
-
-        return responseJson;
       })
       .catch(error => {
         console.error(error);
