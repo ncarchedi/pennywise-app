@@ -9,3 +9,5 @@ npm-debug.*
 web-build/
 web-report/
 builds/
+
+.env
