@@ -8,8 +8,6 @@ import {
   Alert
 } from "react-native";
 
-import { API_KEY, ANOTHER_CONFIG } from "react-native-dotenv";
-
 import TransactionsList from "../components/TransactionsList";
 import { Ionicons } from "@expo/vector-icons";
 import _ from "lodash";
@@ -50,9 +48,6 @@ class TodoScreen extends React.Component {
 
   handleRefresh = async () => {
     const { getPlaidTransactions, scheduleNotifications } = this.props.global;
-
-    console.log("ready");
-    console.log(API_KEY);
 
     // We should probably do this somewhere else, but for now it's good enough
     // Goal: make sure people that use the app get notifications by scheduling them for the next 7 days

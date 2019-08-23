@@ -11,7 +11,20 @@ import transactionsData from "./data/transactions.json";
 import categoriesData from "./data/categories.json";
 import { createNewTransaction } from "./utils/TransactionUtils";
 
+import * as firebase from "firebase/app";
+import "firebase/auth";
+
 const GlobalContext = React.createContext({});
+
+import {
+  FIREBASE_API_KEY,
+  FIREBASE_AUTH_DOMAIN,
+  FIREBASE_DATABASE_URL,
+  FIREBASE_PROJECT_ID,
+  FIREBASE_STORAGE_BUCKET,
+  FIREBASE_MESSAGING_SENDER_ID,
+  FIREBASE_APP_ID
+} from "react-native-dotenv";
 
 const BACKEND_DEV =
   "http://localhost:5001/conscious-spending-backend/us-central1/";
@@ -73,6 +86,18 @@ export class GlobalContextProvider extends React.Component {
     }
 
     this.setState({ categories: categoriesData });
+
+    var firebaseConfig = {
+      apiKey: FIREBASE_API_KEY,
+      authDomain: FIREBASE_AUTH_DOMAIN,
+      databaseURL: FIREBASE_DATABASE_URL,
+      projectId: FIREBASE_PROJECT_ID,
+      storageBucket: FIREBASE_STORAGE_BUCKET,
+      messagingSenderId: FIREBASE_MESSAGING_SENDER_ID,
+      appId: FIREBASE_APP_ID
+    };
+
+    firebase.initializeApp(firebaseConfig);
   };
 
   addTransaction = async (transaction = {}) => {
@@ -415,19 +440,44 @@ export class GlobalContextProvider extends React.Component {
 
   loginUser = async (user, password) => {
     try {
-      const token = "fakeusertoken";
+      const userCredential = await firebase
+        .auth()
+        .signInWithEmailAndPassword(user, password);
 
-      await AsyncStorage.setItem("userToken", JSON.stringify(token));
+      await AsyncStorage.setItem(
+        "userCredential",
+        JSON.stringify(userCredential)
+      );
+
+      return {
+        success: true,
+        message: ""
+      };
     } catch (error) {
       console.log(error.message);
+
+      return {
+        success: false,
+        message: error.message
+      };
+    }
+  };
+
+  logout = async () => {
+    try {
+      await AsyncStorage.removeItem("userCredential");
+    } catch (error) {
+      console.error(error);
     }
   };
 
   isUserLoggedIn = async () => {
     try {
-      const userToken = JSON.parse(await AsyncStorage.getItem("userToken"));
+      const userCredential = JSON.parse(
+        await AsyncStorage.getItem("userCredential")
+      );
 
-      if (userToken) {
+      if (userCredential) {
         return true;
       } else {
         return false;
@@ -456,6 +506,7 @@ export class GlobalContextProvider extends React.Component {
           scheduleNotifications: this.scheduleNotifications,
           cancelNotifications: this.cancelNotifications,
           loginUser: this.loginUser,
+          logout: this.logout,
           isUserLoggedIn: this.isUserLoggedIn
         }}
       >
