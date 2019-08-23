@@ -10,8 +10,8 @@ import TodoScreen from "../screens/TodoScreen";
 import TransactionsScreen from "../screens/TransactionsScreen";
 import SpendingScreen from "../screens/SpendingScreen";
 import SettingsScreen from "../screens/SettingsScreen";
-import EditTransactionModal from "../components/EditTransactionModal";
-import PlaidLinkModal from "../components/PlaidLinkModal";
+import EditTransactionModal from "../screens/EditTransactionModal";
+import PlaidLinkModal from "../screens/PlaidLinkModal";
 
 const config = {
   web: { headerMode: "screen" },
