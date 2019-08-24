@@ -106,7 +106,7 @@ class EditTransactionModal extends React.Component {
               placeholder="Name"
               onChangeText={name => this.handleChangeTransaction("name", name)}
               autoCorrect={false}
-              clearButtonMode="always"
+              clearButtonMode="while-editing"
             />
             <TouchableOpacity
               style={styles.textInput}
@@ -128,7 +128,7 @@ class EditTransactionModal extends React.Component {
               onChangeText={notes =>
                 this.handleChangeTransaction("notes", notes)
               }
-              clearButtonMode="always"
+              clearButtonMode="while-editing"
             />
             <PickerIOS
               selectedValue={category}
