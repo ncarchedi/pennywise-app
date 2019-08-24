@@ -108,7 +108,7 @@ class EditTransactionModal extends React.Component {
                 onChangeText={amount =>
                   this.handleChangeTransaction("amount", amount)
                 }
-                keyboardType={"numbers-and-punctuation"}
+                keyboardType={"numeric"}
                 autoCorrect={false}
               />
             </View>
