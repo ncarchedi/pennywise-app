@@ -85,6 +85,14 @@ class EditTransactionModal extends React.Component {
   render() {
     const { categories } = this.props.global;
     const { navigation } = this.props;
+
+    // Which category modal will we send users to?
+    // TODO: there must be a less hacky way to do this
+    const categoryModalRouteName =
+      navigation.state.routeName === "EditModalTodo"
+        ? "CategoryModalTodo"
+        : "CategoryModalTransactions";
+
     const { name, amount, date, notes, category } = this.state.transaction;
 
     return (
@@ -114,9 +122,8 @@ class EditTransactionModal extends React.Component {
             />
             <TextInputWithIcon
               icon="ios-pricetags"
-              // TODO: need to send to the correct stack (todo or transactions)
               onPress={() =>
-                navigation.navigate("CategoryModalTodo", {
+                navigation.navigate(categoryModalRouteName, {
                   categories: categories,
                   onChangeCategory: this.handleChangeTransaction
                 })
