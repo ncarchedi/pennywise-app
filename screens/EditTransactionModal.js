@@ -31,12 +31,14 @@ class EditTransactionModal extends React.Component {
     const { id, name, amount, category, date, notes } = transaction;
 
     this.state = {
-      id,
-      name,
-      amount,
-      category,
-      date,
-      notes,
+      transaction: {
+        id,
+        name,
+        amount,
+        category,
+        date,
+        notes
+      },
       isDatePickerVisible: false
     };
   }
@@ -50,20 +52,21 @@ class EditTransactionModal extends React.Component {
   }
 
   handleChangeTransaction = (key, value) => {
-    this.setState({ ...this.state, [key]: value });
+    const { transaction } = this.state;
+    this.setState({ transaction: { ...transaction, [key]: value } });
   };
 
   handleSaveTransaction = () => {
     const { updateTransaction } = this.props.global;
-    const transaction = { ...this.state };
+    const { transaction } = this.state;
 
-    updateTransaction(transaction);
+    updateTransaction({ ...transaction });
     this.props.navigation.goBack();
   };
 
   handleDeleteTransaction = () => {
     const { deleteTransaction } = this.props.global;
-    const { id } = this.state;
+    const { id } = this.state.transaction;
 
     this.props.navigation.goBack();
     deleteTransaction(id);
@@ -81,7 +84,7 @@ class EditTransactionModal extends React.Component {
 
   render() {
     const { categories } = this.props.global;
-    const { name, amount, category, date, notes } = this.state;
+    const { name, amount, category, date, notes } = this.state.transaction;
 
     return (
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -106,6 +109,7 @@ class EditTransactionModal extends React.Component {
               placeholder="Name"
               onChangeText={name => this.handleChangeTransaction("name", name)}
               clearButtonMode="while-editing"
+              autoCorrect={false}
             />
             <TextInputWithIcon
               icon="ios-calendar"

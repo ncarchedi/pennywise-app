@@ -38,7 +38,7 @@ const TransactionsStack = createStackNavigator(
     Transactions: TransactionsScreen,
     EditModalTransactions: EditTransactionModal
   },
-  config
+  { ...config, mode: "modal" }
 );
 
 TransactionsStack.navigationOptions = {
