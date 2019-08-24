@@ -73,7 +73,7 @@ class TodoScreen extends React.Component {
   };
 
   render() {
-    console.log("rendering todo screen...");
+    // console.log("rendering todo screen...");
 
     const { transactions, categories } = this.props.global;
     const { refreshing, statusMessage } = this.state;

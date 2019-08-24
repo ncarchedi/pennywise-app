@@ -6,13 +6,13 @@ import {
   Text,
   View,
   TextInput,
-  PickerIOS,
-  TouchableOpacity
+  PickerIOS
 } from "react-native";
 import DateTimePicker from "react-native-modal-datetime-picker";
 
 import { withGlobalContext } from "../GlobalContext";
 import { toPrettyDate } from "../utils/TransactionUtils";
+import TextInputWithIcon from "../components/TextInputWithIcon";
 
 class EditTransactionModal extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -100,20 +100,19 @@ class EditTransactionModal extends React.Component {
                 autoCorrect={false}
               />
             </View>
-            <TextInput
-              style={styles.textInput}
+            <TextInputWithIcon
+              icon="ios-create"
               value={name}
               placeholder="Name"
               onChangeText={name => this.handleChangeTransaction("name", name)}
-              autoCorrect={false}
               clearButtonMode="while-editing"
             />
-            <TouchableOpacity
-              style={styles.textInput}
+            <TextInputWithIcon
+              icon="ios-calendar"
               onPress={() => this.toggleDatePicker()}
-            >
-              <Text>{toPrettyDate(date, true)}</Text>
-            </TouchableOpacity>
+              fakeTheInput={true}
+              fakeValue={<Text>{toPrettyDate(date, true)}</Text>}
+            />
             <DateTimePicker
               date={date}
               titleIOS="Transaction Date"
@@ -121,8 +120,8 @@ class EditTransactionModal extends React.Component {
               onConfirm={this.handleConfirmDate}
               onCancel={this.toggleDatePicker}
             />
-            <TextInput
-              style={styles.textInput}
+            <TextInputWithIcon
+              icon="ios-paper"
               value={notes}
               placeholder="Notes"
               onChangeText={notes =>
@@ -167,14 +166,6 @@ const styles = StyleSheet.create({
   modalBody: {
     marginVertical: 15,
     marginHorizontal: 10
-  },
-  textInput: {
-    padding: 10,
-    marginTop: 10,
-    height: 40,
-    borderColor: "#f1f1f1",
-    borderRadius: 5,
-    borderWidth: 1
   },
   dollarSign: {
     fontSize: 50,

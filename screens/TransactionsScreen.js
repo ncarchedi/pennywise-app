@@ -16,7 +16,7 @@ class TransactionsScreen extends React.Component {
   };
 
   render() {
-    console.log("rendering transactions screen...");
+    // console.log("rendering transactions screen...");
 
     const { transactions, categories } = this.props.global;
 
