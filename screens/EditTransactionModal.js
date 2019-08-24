@@ -5,12 +5,14 @@ import {
   Button,
   Text,
   View,
-  DatePickerIOS,
   TextInput,
-  PickerIOS
+  PickerIOS,
+  TouchableOpacity
 } from "react-native";
+import DateTimePicker from "react-native-modal-datetime-picker";
 
 import { withGlobalContext } from "../GlobalContext";
+import { toPrettyDate } from "../utils/TransactionUtils";
 
 class EditTransactionModal extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -28,7 +30,15 @@ class EditTransactionModal extends React.Component {
     const transaction = props.navigation.getParam("transaction");
     const { id, name, amount, category, date, notes } = transaction;
 
-    this.state = { id, name, amount, category, date, notes };
+    this.state = {
+      id,
+      name,
+      amount,
+      category,
+      date,
+      notes,
+      isDatePickerVisible: false
+    };
   }
 
   componentDidMount() {
@@ -59,6 +69,16 @@ class EditTransactionModal extends React.Component {
     deleteTransaction(id);
   };
 
+  toggleDatePicker = () => {
+    const { isDatePickerVisible } = this.state;
+    this.setState({ isDatePickerVisible: !isDatePickerVisible });
+  };
+
+  handleConfirmDate = date => {
+    this.handleChangeTransaction("date", date);
+    this.toggleDatePicker();
+  };
+
   render() {
     const { categories } = this.props.global;
     const { name, amount, category, date, notes } = this.state;
@@ -78,26 +98,28 @@ class EditTransactionModal extends React.Component {
                 }
                 keyboardType={"numbers-and-punctuation"}
                 autoCorrect={false}
-                onSubmitEditing={() => {
-                  this.nameInput.focus();
-                }}
-                blurOnSubmit={false}
-                returnKeyType="next"
-                autoFocus
               />
             </View>
-            {/* <Text style={styles.inputLabel}>Name</Text> */}
             <TextInput
               style={styles.textInput}
               value={name}
               placeholder="Name"
               onChangeText={name => this.handleChangeTransaction("name", name)}
-              ref={input => {
-                this.nameInput = input;
-              }}
               autoCorrect={false}
               clearButtonMode="always"
-              returnKeyType="next"
+            />
+            <TouchableOpacity
+              style={styles.textInput}
+              onPress={() => this.toggleDatePicker()}
+            >
+              <Text>{toPrettyDate(date, true)}</Text>
+            </TouchableOpacity>
+            <DateTimePicker
+              date={date}
+              titleIOS="Transaction Date"
+              isVisible={this.state.isDatePickerVisible}
+              onConfirm={this.handleConfirmDate}
+              onCancel={this.toggleDatePicker}
             />
             <TextInput
               style={styles.textInput}
@@ -108,7 +130,6 @@ class EditTransactionModal extends React.Component {
               }
               clearButtonMode="always"
             />
-            {/* <Text style={styles.inputLabel}>Category</Text> */}
             <PickerIOS
               selectedValue={category}
               onValueChange={category =>
@@ -125,12 +146,6 @@ class EditTransactionModal extends React.Component {
                 );
               })}
             </PickerIOS>
-            {/* <Text style={styles.inputLabel}>Date</Text> */}
-            <DatePickerIOS
-              date={date}
-              onDateChange={date => this.handleChangeTransaction("date", date)}
-              mode="date"
-            />
             <Button
               title="Delete Transaction"
               color="red"
@@ -150,7 +165,8 @@ const styles = StyleSheet.create({
     flex: 1
   },
   modalBody: {
-    marginVertical: 15
+    marginVertical: 15,
+    marginHorizontal: 10
   },
   textInput: {
     padding: 10,
@@ -167,9 +183,5 @@ const styles = StyleSheet.create({
   amountInput: {
     fontSize: 50,
     marginBottom: 10
-  },
-  inputLabel: {
-    fontWeight: "bold",
-    marginTop: 15
   }
 });
