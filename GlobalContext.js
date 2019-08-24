@@ -438,6 +438,31 @@ export class GlobalContextProvider extends React.Component {
     await Notifications.cancelAllScheduledNotificationsAsync();
   };
 
+  registerUser = async (user, password) => {
+    try {
+      const userCredential = await firebase
+        .auth()
+        .createUserWithEmailAndPassword(user, password);
+
+      await AsyncStorage.setItem(
+        "userCredential",
+        JSON.stringify(userCredential)
+      );
+
+      return {
+        success: true,
+        message: ""
+      };
+    } catch (error) {
+      console.log(error.message);
+
+      return {
+        success: false,
+        message: error.message
+      };
+    }
+  };
+
   loginUser = async (user, password) => {
     try {
       const userCredential = await firebase
@@ -505,6 +530,7 @@ export class GlobalContextProvider extends React.Component {
           setNotificationTime: this.setNotificationTime,
           scheduleNotifications: this.scheduleNotifications,
           cancelNotifications: this.cancelNotifications,
+          registerUser: this.registerUser,
           loginUser: this.loginUser,
           logout: this.logout,
           isUserLoggedIn: this.isUserLoggedIn
