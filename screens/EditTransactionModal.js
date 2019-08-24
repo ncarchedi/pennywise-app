@@ -84,7 +84,8 @@ class EditTransactionModal extends React.Component {
 
   render() {
     const { categories } = this.props.global;
-    const { name, amount, category, date, notes } = this.state.transaction;
+    const { navigation } = this.props;
+    const { name, amount, date, notes } = this.state.transaction;
 
     return (
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -133,22 +134,13 @@ class EditTransactionModal extends React.Component {
               }
               clearButtonMode="while-editing"
             />
-            <PickerIOS
-              selectedValue={category}
-              onValueChange={category =>
-                this.handleChangeTransaction("category", category)
+            <Button
+              title="Edit Category"
+              // TODO: need to send to the correct stack (todo or transactions)
+              onPress={() =>
+                navigation.navigate("CategoryModalTodo", { categories })
               }
-            >
-              {categories.map(category => {
-                return (
-                  <PickerIOS.Item
-                    key={category.label}
-                    value={category.label}
-                    label={category.label}
-                  />
-                );
-              })}
-            </PickerIOS>
+            ></Button>
             <Button
               title="Delete Transaction"
               color="red"

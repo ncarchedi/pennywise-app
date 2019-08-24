@@ -12,6 +12,7 @@ import SpendingScreen from "../screens/SpendingScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 import EditTransactionModal from "../screens/EditTransactionModal";
 import PlaidLinkModal from "../screens/PlaidLinkModal";
+import SelectCategoryModal from "../screens/SelectCategoryModal";
 
 const config = {
   web: { headerMode: "screen" },
@@ -21,7 +22,8 @@ const config = {
 const TodoStack = createStackNavigator(
   {
     Todo: TodoScreen,
-    EditModalTodo: EditTransactionModal
+    EditModalTodo: EditTransactionModal,
+    CategoryModalTodo: SelectCategoryModal
   },
   { ...config, mode: "modal" }
 );
@@ -36,7 +38,8 @@ TodoStack.navigationOptions = {
 const TransactionsStack = createStackNavigator(
   {
     Transactions: TransactionsScreen,
-    EditModalTransactions: EditTransactionModal
+    EditModalTransactions: EditTransactionModal,
+    CategoryModalTransactions: SelectCategoryModal
   },
   { ...config, mode: "modal" }
 );
