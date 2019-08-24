@@ -139,10 +139,10 @@ class EditTransactionModal extends React.Component {
             />
             <DateTimePicker
               date={date}
-              titleIOS="Transaction Date"
               isVisible={this.state.isDatePickerVisible}
               onConfirm={this.handleConfirmDate}
               onCancel={this.toggleDatePicker}
+              hideTitleContainerIOS={true}
             />
             <TextInputWithIcon
               icon="ios-paper"
