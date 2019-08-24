@@ -1,10 +1,12 @@
 import React from "react";
 import { StyleSheet, View, FlatList, Text, TextInput } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import _ from "lodash";
 
-export default SelectCategoryModal = props => {
-  const categories = props.navigation.getParam("categories");
-  console.log(categories);
+export default class SelectCategoryModal extends React.Component {
+  state = {
+    searchText: ""
+  };
 
   listItem = item => {
     const { icon, label } = item;
@@ -25,18 +27,30 @@ export default SelectCategoryModal = props => {
     );
   };
 
-  return (
-    <View style={styles.contentContainer}>
-      <TextInput style={styles.searchBar} placeholder="Search categories" />
-      <FlatList
-        data={categories}
-        renderItem={({ item }) => this.listItem(item)}
-        keyExtractor={item => item.label}
-        ItemSeparatorComponent={this.ListItemSeparator}
-      />
-    </View>
-  );
-};
+  render() {
+    const categories = this.props.navigation.getParam("categories");
+    const { searchText } = this.state;
+
+    return (
+      <View style={styles.contentContainer}>
+        <TextInput
+          style={styles.searchBar}
+          placeholder="Search categories"
+          onChangeText={text => this.setState({ searchText: text })}
+        />
+        {/* TODO: fix scroll so not hidden behind footer */}
+        <FlatList
+          data={categories.filter(c =>
+            _.includes(_.lowerCase(c.label), _.lowerCase(searchText))
+          )}
+          renderItem={({ item }) => this.listItem(item)}
+          keyExtractor={item => item.label}
+          ItemSeparatorComponent={this.ListItemSeparator}
+        />
+      </View>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   contentContainer: {
@@ -45,7 +59,8 @@ const styles = StyleSheet.create({
   searchBar: {
     height: 40,
     padding: 10,
-    marginVertical: 5,
+    marginTop: 10,
+    marginBottom: 5,
     borderColor: "#f1f1f1",
     borderRadius: 5,
     borderWidth: 1
