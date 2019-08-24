@@ -53,6 +53,7 @@ export default class SelectCategoryModal extends React.Component {
           style={styles.searchBar}
           placeholder="Search categories"
           onChangeText={text => this.setState({ searchText: text })}
+          autoFocus={true}
         />
         {/* TODO: fix scroll so not hidden behind footer */}
         <FlatList
