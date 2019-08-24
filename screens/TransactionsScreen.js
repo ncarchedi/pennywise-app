@@ -12,7 +12,7 @@ class TransactionsScreen extends React.Component {
   };
 
   handleTransactionPress = transaction => {
-    this.props.navigation.navigate("EditModalTodo", { transaction });
+    this.props.navigation.navigate("EditModalTransactions", { transaction });
   };
 
   render() {
