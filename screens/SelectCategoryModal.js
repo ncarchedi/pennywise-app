@@ -15,14 +15,18 @@ export default class SelectCategoryModal extends React.Component {
     searchText: ""
   };
 
+  handleChangeCategory = label => {
+    const onChangeCategory = this.props.navigation.getParam("onChangeCategory");
+
+    onChangeCategory("category", label);
+    this.props.navigation.goBack();
+  };
+
   listItem = item => {
     const { icon, label } = item;
-    const handleChangeCategory = this.props.navigation.getParam(
-      "handleChangeCategory"
-    );
 
     return (
-      <TouchableOpacity onPress={() => handleChangeCategory("category", label)}>
+      <TouchableOpacity onPress={() => this.handleChangeCategory(label)}>
         <View style={styles.itemContainer}>
           <View style={styles.iconContainer}>
             <Ionicons name={icon} size={25} style={{ alignSelf: "center" }} />

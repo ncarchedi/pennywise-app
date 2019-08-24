@@ -85,7 +85,7 @@ class EditTransactionModal extends React.Component {
   render() {
     const { categories } = this.props.global;
     const { navigation } = this.props;
-    const { name, amount, date, notes } = this.state.transaction;
+    const { name, amount, date, notes, category } = this.state.transaction;
 
     return (
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -113,6 +113,18 @@ class EditTransactionModal extends React.Component {
               autoCorrect={false}
             />
             <TextInputWithIcon
+              icon="ios-pricetags"
+              // TODO: need to send to the correct stack (todo or transactions)
+              onPress={() =>
+                navigation.navigate("CategoryModalTodo", {
+                  categories: categories,
+                  onChangeCategory: this.handleChangeTransaction
+                })
+              }
+              fakeTheInput={true}
+              fakeValue={<Text>{category}</Text>}
+            />
+            <TextInputWithIcon
               icon="ios-calendar"
               onPress={() => this.toggleDatePicker()}
               fakeTheInput={true}
@@ -134,21 +146,13 @@ class EditTransactionModal extends React.Component {
               }
               clearButtonMode="while-editing"
             />
-            <Button
-              title="Edit Category"
-              // TODO: need to send to the correct stack (todo or transactions)
-              onPress={() =>
-                navigation.navigate("CategoryModalTodo", {
-                  categories: categories,
-                  handleChangeCategory: this.handleChangeTransaction
-                })
-              }
-            ></Button>
-            <Button
-              title="Delete Transaction"
-              color="red"
-              onPress={this.handleDeleteTransaction}
-            />
+            <View style={{ marginTop: 10 }}>
+              <Button
+                title="Delete Transaction"
+                color="red"
+                onPress={this.handleDeleteTransaction}
+              />
+            </View>
           </View>
         </View>
       </ScrollView>
