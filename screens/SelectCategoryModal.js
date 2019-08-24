@@ -1,5 +1,12 @@
 import React from "react";
-import { StyleSheet, View, FlatList, Text, TextInput } from "react-native";
+import {
+  StyleSheet,
+  View,
+  FlatList,
+  Text,
+  TextInput,
+  TouchableOpacity
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import _ from "lodash";
 
@@ -10,14 +17,19 @@ export default class SelectCategoryModal extends React.Component {
 
   listItem = item => {
     const { icon, label } = item;
+    const handleChangeCategory = this.props.navigation.getParam(
+      "handleChangeCategory"
+    );
 
     return (
-      <View style={styles.itemContainer}>
-        <View style={styles.iconContainer}>
-          <Ionicons name={icon} size={25} style={{ alignSelf: "center" }} />
+      <TouchableOpacity onPress={() => handleChangeCategory("category", label)}>
+        <View style={styles.itemContainer}>
+          <View style={styles.iconContainer}>
+            <Ionicons name={icon} size={25} style={{ alignSelf: "center" }} />
+          </View>
+          <Text style={styles.nameText}>{label}</Text>
         </View>
-        <Text style={styles.nameText}>{label}</Text>
-      </View>
+      </TouchableOpacity>
     );
   };
 

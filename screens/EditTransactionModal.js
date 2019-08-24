@@ -138,7 +138,10 @@ class EditTransactionModal extends React.Component {
               title="Edit Category"
               // TODO: need to send to the correct stack (todo or transactions)
               onPress={() =>
-                navigation.navigate("CategoryModalTodo", { categories })
+                navigation.navigate("CategoryModalTodo", {
+                  categories: categories,
+                  handleChangeCategory: this.handleChangeTransaction
+                })
               }
             ></Button>
             <Button
