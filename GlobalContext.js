@@ -11,28 +11,48 @@ import transactionsData from "./data/transactions.json";
 import categoriesData from "./data/categories.json";
 import { createNewTransaction } from "./utils/TransactionUtils";
 
+import * as firebase from "firebase/app";
+import "firebase/auth";
+import "firebase/functions";
+
 const GlobalContext = React.createContext({});
 
-const BACKEND_DEV =
-  "http://localhost:5001/conscious-spending-backend/us-central1/";
-const BACKEND_PROD =
-  "https://us-central1-conscious-spending-backend.cloudfunctions.net/";
-
-const BACKEND_URL = BACKEND_PROD;
-
-const ACCESS_TOKEN_URL = BACKEND_URL + "getAccessTokenFromPublicToken";
-const TRANSACTIONS_URL = BACKEND_URL + "getPlaidTransactions";
+import {
+  FIREBASE_API_KEY,
+  FIREBASE_AUTH_DOMAIN,
+  FIREBASE_DATABASE_URL,
+  FIREBASE_PROJECT_ID,
+  FIREBASE_STORAGE_BUCKET,
+  FIREBASE_MESSAGING_SENDER_ID,
+  FIREBASE_APP_ID
+} from "react-native-dotenv";
 
 export class GlobalContextProvider extends React.Component {
   state = {
     transactions: [],
     categories: [],
-    accessToken: "",
     notificationTime: {
       hours: 8,
       minutes: 0
     }
   };
+
+  constructor() {
+    super();
+
+    var firebaseConfig = {
+      apiKey: FIREBASE_API_KEY,
+      authDomain: FIREBASE_AUTH_DOMAIN,
+      databaseURL: FIREBASE_DATABASE_URL,
+      projectId: FIREBASE_PROJECT_ID,
+      storageBucket: FIREBASE_STORAGE_BUCKET,
+      messagingSenderId: FIREBASE_MESSAGING_SENDER_ID,
+      appId: FIREBASE_APP_ID
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    firebase.functions();
+  }
 
   componentDidMount = async () => {
     try {
@@ -46,14 +66,6 @@ export class GlobalContextProvider extends React.Component {
       }));
 
       this.setState({ transactions });
-    } catch (error) {
-      console.log(error.message);
-    }
-
-    try {
-      const accessToken = JSON.parse(await AsyncStorage.getItem("accessToken"));
-
-      this.setState({ accessToken });
     } catch (error) {
       console.log(error.message);
     }
@@ -113,48 +125,21 @@ export class GlobalContextProvider extends React.Component {
     return newTransactions;
   };
 
-  setAccessToken = async accessToken => {
+  getAccessTokenFromPublicToken = async publicToken => {
     try {
-      await AsyncStorage.setItem("accessToken", JSON.stringify(accessToken));
-    } catch (error) {
-      console.log(error.message);
-    }
+      const getAccessTokenFromPublicToken_v2 = firebase
+        .functions()
+        .httpsCallable("getAccessTokenFromPublicToken_v2");
 
-    this.setState({
-      accessToken: accessToken
-    });
-  };
-
-  getAccessTokenFromPublicToken = publicToken => {
-    console.log("public token:");
-    console.log(publicToken);
-
-    return fetch(ACCESS_TOKEN_URL, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
+      let result = await getAccessTokenFromPublicToken_v2({
         public_token: publicToken
-      })
-    })
-      .then(response => response.json())
-      .then(responseJson => {
-        console.log("access token response:");
-        console.log(responseJson);
-
-        this.setAccessToken(responseJson.access_token);
-
-        return responseJson;
-      })
-      .catch(error => {
-        console.error(error);
       });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  getPlaidTransactions = () => {
-    const accessToken = this.state.accessToken;
+  getPlaidTransactions = async () => {
     let lastTransactionDate = this.getLastPlaidTransactionDate();
 
     let startDate;
@@ -168,78 +153,75 @@ export class GlobalContextProvider extends React.Component {
         .format("YYYY-MM-DD");
     }
 
-    return fetch(TRANSACTIONS_URL, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        access_token: accessToken,
+    try {
+      const getPlaidTransactions_v2 = firebase
+        .functions()
+        .httpsCallable("getPlaidTransactions_v2");
+
+      let result = await getPlaidTransactions_v2({
         start_date: startDate,
         end_date: endDate
-      })
-    })
-      .then(response => response.json())
-      .then(responseJson => {
-        if (responseJson.error) {
-          return {
-            error: true,
-            message: responseJson.error.error_message
-          };
-        } else {
-          plaidTransactions = responseJson.transactions.transactions;
+      });
 
-          let newTransactions = [];
+      if (result.data.error) {
+        return {
+          error: true,
+          message: result.data.error
+        };
+      } else {
+        plaidTransactions = result.data.transactions.transactions;
 
-          if (plaidTransactions) {
-            for (let plaidTransaction of plaidTransactions) {
-              const { name, amount, date } = plaidTransaction;
-              // Copy the part of the plaidTransaction that we want to use
-              // for hashing in hashTransactionProperties
-              const {
-                account_id,
-                category_id,
-                pending_transaction_id,
-                transaction_id,
-                ...hashTransactionProperties
-              } = plaidTransaction;
+        let newTransactions = [];
 
-              let transaction = {
-                hash_id: hash(hashTransactionProperties),
-                name,
-                amount,
-                date
-              };
+        if (plaidTransactions) {
+          for (let plaidTransaction of plaidTransactions) {
+            const { name, amount, date } = plaidTransaction;
+            // Copy the part of the plaidTransaction that we want to use
+            // for hashing in hashTransactionProperties
+            const {
+              account_id,
+              category_id,
+              pending_transaction_id,
+              transaction_id,
+              ...hashTransactionProperties
+            } = plaidTransaction;
 
-              newTransactions = [...newTransactions, transaction];
-            }
+            let transaction = {
+              hash_id: hash(hashTransactionProperties),
+              name,
+              amount,
+              date
+            };
 
-            // Todo: deal with the situation where we have two identical transactions, e.g. when you buy
-            // the same taco twice.
-            if (
-              _.uniqBy(newTransactions, "hash_id").length !==
-              newTransactions.length
-            ) {
-              console.log(
-                "Identical transactions detected. Todo: deal with this situation."
-              );
-            }
-
-            this.addTransactions(newTransactions);
+            newTransactions = [...newTransactions, transaction];
           }
 
-          // console.log(newTransactions);
+          // Todo: deal with the situation where we have two identical transactions, e.g. when you buy
+          // the same taco twice.
+          if (
+            _.uniqBy(newTransactions, "hash_id").length !==
+            newTransactions.length
+          ) {
+            console.log(
+              "Identical transactions detected. Todo: deal with this situation."
+            );
+          }
 
-          return {
-            error: false,
-            transactions: newTransactions
-          };
+          this.addTransactions(newTransactions);
         }
-      })
-      .catch(error => {
-        console.error(error);
-      });
+
+        return {
+          error: false,
+          transactions: newTransactions
+        };
+      }
+    } catch (error) {
+      console.error(error);
+      return {
+        error: true,
+        message: error
+      };
+    }
   };
 
   updateTransaction = async attrs => {
@@ -413,6 +395,76 @@ export class GlobalContextProvider extends React.Component {
     await Notifications.cancelAllScheduledNotificationsAsync();
   };
 
+  registerUser = async (user, password) => {
+    try {
+      const userCredential = await firebase
+        .auth()
+        .createUserWithEmailAndPassword(user, password);
+
+      return {
+        success: true,
+        message: ""
+      };
+    } catch (error) {
+      console.log(error.message);
+
+      return {
+        success: false,
+        message: error.message
+      };
+    }
+  };
+
+  loginUser = async (user, password) => {
+    try {
+      const userCredential = await firebase
+        .auth()
+        .signInWithEmailAndPassword(user, password);
+
+      return {
+        success: true,
+        message: ""
+      };
+    } catch (error) {
+      console.log(error.message);
+
+      return {
+        success: false,
+        message: error.message
+      };
+    }
+  };
+
+  logout = async () => {
+    try {
+      await firebase.auth().signOut();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  isUserLoggedIn = async () => {
+    try {
+      let current_user = await this.getCurrentUser();
+      return current_user ? true : false;
+    } catch (error) {
+      console.log(error.message);
+      return false;
+    }
+  };
+
+  // Get the current user, and wait for it if it was
+  // not initilaized yet by firebase.
+  // https://github.com/firebase/firebase-js-sdk/issues/462
+  getCurrentUser = () => {
+    return new Promise((resolve, reject) => {
+      const unsubscribe = firebase.auth().onAuthStateChanged(user => {
+        unsubscribe();
+        resolve(user);
+      }, reject);
+    });
+  };
+
   render() {
     return (
       <GlobalContext.Provider
@@ -426,10 +478,13 @@ export class GlobalContextProvider extends React.Component {
           loadDummyData: this.loadDummyData,
           getAccessTokenFromPublicToken: this.getAccessTokenFromPublicToken,
           getPlaidTransactions: this.getPlaidTransactions,
-          setAccessToken: this.setAccessToken,
           setNotificationTime: this.setNotificationTime,
           scheduleNotifications: this.scheduleNotifications,
-          cancelNotifications: this.cancelNotifications
+          cancelNotifications: this.cancelNotifications,
+          registerUser: this.registerUser,
+          loginUser: this.loginUser,
+          logout: this.logout,
+          isUserLoggedIn: this.isUserLoggedIn
         }}
       >
         {this.props.children}

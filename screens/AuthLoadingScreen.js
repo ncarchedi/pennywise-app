@@ -1,0 +1,46 @@
+import React from "react";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  DatePickerIOS,
+  Button
+} from "react-native";
+
+import { withGlobalContext } from "../GlobalContext";
+
+class AuthLoadingScreen extends React.Component {
+  constructor() {
+    super();
+  }
+
+  // Fetch the token from storage then navigate to our appropriate place
+  componentDidMount = async () => {
+    const userToken = await this.props.global.isUserLoggedIn();
+
+    // This will switch to the App screen or Auth screen and this loading
+    // screen will be unmounted and thrown away.
+    this.props.navigation.navigate(userToken ? "Main" : "Auth");
+  };
+
+  // Render any loading content that you like here
+  render() {
+    return (
+      <View style={styles.container}>
+        <Text>Loading</Text>
+      </View>
+    );
+  }
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center"
+  }
+});
+
+export default withGlobalContext(AuthLoadingScreen);

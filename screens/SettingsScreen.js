@@ -37,8 +37,13 @@ class SettingsScreen extends React.Component {
     await this.props.global.scheduleNotifications();
   };
 
+  handleLogout = async () => {
+    await this.props.global.logout();
+    this.props.navigation.navigate("AuthLoading");
+  };
+
   render() {
-    const { clearAllTransactions, loadDummyData } = this.props.global;
+    const { clearAllTransactions, loadDummyData, logout } = this.props.global;
 
     const notificationDate = moment(new Date())
       .hours(this.state.notificationTime.hours)
@@ -83,6 +88,12 @@ class SettingsScreen extends React.Component {
                 <Text>Schedule Notifications</Text>
               </TouchableOpacity>
             </View>
+            <TouchableOpacity
+              onPress={this.handleLogout}
+              style={{ paddingTop: 20 }}
+            >
+              <Text>Logout</Text>
+            </TouchableOpacity>
           </View>
         </ScrollView>
       </View>
