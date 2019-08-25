@@ -171,8 +171,6 @@ export class GlobalContextProvider extends React.Component {
       } else {
         plaidTransactions = result.data.transactions.transactions;
 
-        console.log(plaidTransactions);
-
         let newTransactions = [];
 
         if (plaidTransactions) {
@@ -181,10 +179,8 @@ export class GlobalContextProvider extends React.Component {
 
             // Don't include pending transactions
             if (pending) {
-              console.log("pending...");
               continue;
             } else {
-              console.log("not pending");
               // Copy the part of the plaidTransaction that we want to use
               // for hashing in hashTransactionProperties
               const {
@@ -197,6 +193,7 @@ export class GlobalContextProvider extends React.Component {
 
               let transaction = {
                 hash_id: hash(hashTransactionProperties),
+                source: "plaid",
                 name,
                 amount,
                 date
@@ -305,6 +302,7 @@ export class GlobalContextProvider extends React.Component {
     const dummyData = transactionsData.map(t => ({
       id: t.id,
       hash_id: t.hash_id,
+      source: t.source,
       name: t.name,
       amount: t.amount,
       category: t.category,

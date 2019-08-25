@@ -5,6 +5,7 @@ export const createNewTransaction = (attrs = {}) => {
   const transaction = {
     id: uuidv4(),
     hash_id: attrs.hash_id || uuidv4(),
+    source: attrs.source || "manual",
     name: attrs.name || "",
     amount: attrs.amount || "",
     category: attrs.category || "No Category",
