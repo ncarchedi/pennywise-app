@@ -37,6 +37,23 @@ export class GlobalContextProvider extends React.Component {
     }
   };
 
+  constructor() {
+    super();
+
+    var firebaseConfig = {
+      apiKey: FIREBASE_API_KEY,
+      authDomain: FIREBASE_AUTH_DOMAIN,
+      databaseURL: FIREBASE_DATABASE_URL,
+      projectId: FIREBASE_PROJECT_ID,
+      storageBucket: FIREBASE_STORAGE_BUCKET,
+      messagingSenderId: FIREBASE_MESSAGING_SENDER_ID,
+      appId: FIREBASE_APP_ID
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    firebase.functions();
+  }
+
   componentDidMount = async () => {
     try {
       const transactionsRaw = JSON.parse(
@@ -68,20 +85,6 @@ export class GlobalContextProvider extends React.Component {
     }
 
     this.setState({ categories: categoriesData });
-
-    var firebaseConfig = {
-      apiKey: FIREBASE_API_KEY,
-      authDomain: FIREBASE_AUTH_DOMAIN,
-      databaseURL: FIREBASE_DATABASE_URL,
-      projectId: FIREBASE_PROJECT_ID,
-      storageBucket: FIREBASE_STORAGE_BUCKET,
-      messagingSenderId: FIREBASE_MESSAGING_SENDER_ID,
-      appId: FIREBASE_APP_ID
-    };
-
-    firebase.initializeApp(firebaseConfig);
-
-    let functions = firebase.functions();
   };
 
   addTransaction = async (transaction = {}) => {
@@ -160,12 +163,10 @@ export class GlobalContextProvider extends React.Component {
         end_date: endDate
       });
 
-      console.log(result);
-
-      if (result.error) {
+      if (result.data.error) {
         return {
           error: true,
-          message: result.error
+          message: result.data.error
         };
       } else {
         plaidTransactions = result.data.transactions.transactions;
@@ -402,11 +403,6 @@ export class GlobalContextProvider extends React.Component {
         .auth()
         .createUserWithEmailAndPassword(user, password);
 
-      await AsyncStorage.setItem(
-        "userCredential",
-        JSON.stringify(userCredential)
-      );
-
       return {
         success: true,
         message: ""
@@ -427,11 +423,6 @@ export class GlobalContextProvider extends React.Component {
         .auth()
         .signInWithEmailAndPassword(user, password);
 
-      await AsyncStorage.setItem(
-        "userCredential",
-        JSON.stringify(userCredential)
-      );
-
       return {
         success: true,
         message: ""
@@ -448,7 +439,7 @@ export class GlobalContextProvider extends React.Component {
 
   logout = async () => {
     try {
-      await AsyncStorage.removeItem("userCredential");
+      await firebase.auth().signOut();
     } catch (error) {
       console.error(error);
     }
@@ -456,19 +447,24 @@ export class GlobalContextProvider extends React.Component {
 
   isUserLoggedIn = async () => {
     try {
-      const userCredential = JSON.parse(
-        await AsyncStorage.getItem("userCredential")
-      );
-
-      if (userCredential) {
-        return true;
-      } else {
-        return false;
-      }
+      let current_user = await this.getCurrentUser();
+      return current_user ? true : false;
     } catch (error) {
       console.log(error.message);
       return false;
     }
+  };
+
+  // Get the current user, and wait for it if it was
+  // not initilaized yet by firebase.
+  // https://github.com/firebase/firebase-js-sdk/issues/462
+  getCurrentUser = () => {
+    return new Promise((resolve, reject) => {
+      const unsubscribe = firebase.auth().onAuthStateChanged(user => {
+        unsubscribe();
+        resolve(user);
+      }, reject);
+    });
   };
 
   render() {
