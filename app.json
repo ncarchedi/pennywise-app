@@ -19,7 +19,10 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "bundleIdentifier": "com.dayonelabs.conscious-spending",
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSFaceIDUsageDescription": "We use FaceID to secure access to the app."
+      }
     }
   }
 }

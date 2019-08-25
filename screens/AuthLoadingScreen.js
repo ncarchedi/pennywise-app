@@ -9,6 +9,8 @@ import {
   Button
 } from "react-native";
 
+import * as LocalAuthentication from "expo-local-authentication";
+
 import { withGlobalContext } from "../GlobalContext";
 
 class AuthLoadingScreen extends React.Component {
@@ -18,11 +20,21 @@ class AuthLoadingScreen extends React.Component {
 
   // Fetch the token from storage then navigate to our appropriate place
   componentDidMount = async () => {
-    const userToken = await this.props.global.isUserLoggedIn();
+    const isLoggedIn = await this.props.global.isUserLoggedIn();
+
+    if (isLoggedIn) {
+      const hasTouchID = await LocalAuthentication.hasHardwareAsync();
+
+      if (hasTouchID) {
+        const touchIDResult = await LocalAuthentication.authenticateAsync();
+
+        console.log(touchIDResult);
+      }
+    }
 
     // This will switch to the App screen or Auth screen and this loading
     // screen will be unmounted and thrown away.
-    this.props.navigation.navigate(userToken ? "Main" : "Auth");
+    this.props.navigation.navigate(isLoggedIn ? "Main" : "Auth");
   };
 
   // Render any loading content that you like here
