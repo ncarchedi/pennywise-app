@@ -87,7 +87,7 @@ export default function TransactionsList({
   // get random quote for empty screen
   const quote = allQuotes[Math.floor(Math.random() * allQuotes.length)];
 
-  console.log("rendering transactions list...");
+  // console.log("rendering transactions list...");
 
   return (
     <View style={styles.container}>

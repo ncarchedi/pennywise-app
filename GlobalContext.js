@@ -229,7 +229,7 @@ export class GlobalContextProvider extends React.Component {
             this.addTransactions(newTransactions);
           }
 
-          console.log(newTransactions);
+          // console.log(newTransactions);
 
           return {
             error: false,
