@@ -13,6 +13,7 @@ import { createNewTransaction } from "./utils/TransactionUtils";
 
 import * as firebase from "firebase/app";
 import "firebase/auth";
+import "firebase/functions";
 
 const GlobalContext = React.createContext({});
 
@@ -26,21 +27,10 @@ import {
   FIREBASE_APP_ID
 } from "react-native-dotenv";
 
-const BACKEND_DEV =
-  "http://localhost:5001/conscious-spending-backend/us-central1/";
-const BACKEND_PROD =
-  "https://us-central1-conscious-spending-backend.cloudfunctions.net/";
-
-const BACKEND_URL = BACKEND_PROD;
-
-const ACCESS_TOKEN_URL = BACKEND_URL + "getAccessTokenFromPublicToken";
-const TRANSACTIONS_URL = BACKEND_URL + "getPlaidTransactions";
-
 export class GlobalContextProvider extends React.Component {
   state = {
     transactions: [],
     categories: [],
-    accessToken: "",
     notificationTime: {
       hours: 8,
       minutes: 0
@@ -59,14 +49,6 @@ export class GlobalContextProvider extends React.Component {
       }));
 
       this.setState({ transactions });
-    } catch (error) {
-      console.log(error.message);
-    }
-
-    try {
-      const accessToken = JSON.parse(await AsyncStorage.getItem("accessToken"));
-
-      this.setState({ accessToken });
     } catch (error) {
       console.log(error.message);
     }
@@ -98,6 +80,8 @@ export class GlobalContextProvider extends React.Component {
     };
 
     firebase.initializeApp(firebaseConfig);
+
+    let functions = firebase.functions();
   };
 
   addTransaction = async (transaction = {}) => {
@@ -138,48 +122,21 @@ export class GlobalContextProvider extends React.Component {
     return newTransactions;
   };
 
-  setAccessToken = async accessToken => {
+  getAccessTokenFromPublicToken = async publicToken => {
     try {
-      await AsyncStorage.setItem("accessToken", JSON.stringify(accessToken));
-    } catch (error) {
-      console.log(error.message);
-    }
+      const getAccessTokenFromPublicToken_v2 = firebase
+        .functions()
+        .httpsCallable("getAccessTokenFromPublicToken_v2");
 
-    this.setState({
-      accessToken: accessToken
-    });
-  };
-
-  getAccessTokenFromPublicToken = publicToken => {
-    console.log("public token:");
-    console.log(publicToken);
-
-    return fetch(ACCESS_TOKEN_URL, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
+      let result = await getAccessTokenFromPublicToken_v2({
         public_token: publicToken
-      })
-    })
-      .then(response => response.json())
-      .then(responseJson => {
-        console.log("access token response:");
-        console.log(responseJson);
-
-        this.setAccessToken(responseJson.access_token);
-
-        return responseJson;
-      })
-      .catch(error => {
-        console.error(error);
       });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  getPlaidTransactions = () => {
-    const accessToken = this.state.accessToken;
+  getPlaidTransactions = async () => {
     let lastTransactionDate = this.getLastPlaidTransactionDate();
 
     let startDate;
@@ -193,78 +150,79 @@ export class GlobalContextProvider extends React.Component {
         .format("YYYY-MM-DD");
     }
 
-    return fetch(TRANSACTIONS_URL, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        access_token: accessToken,
+    try {
+      const getPlaidTransactions_v2 = firebase
+        .functions()
+        .httpsCallable("getPlaidTransactions_v2");
+
+      let result = await getPlaidTransactions_v2({
         start_date: startDate,
         end_date: endDate
-      })
-    })
-      .then(response => response.json())
-      .then(responseJson => {
-        if (responseJson.error) {
-          return {
-            error: true,
-            message: responseJson.error.error_message
-          };
-        } else {
-          plaidTransactions = responseJson.transactions.transactions;
+      });
 
-          let newTransactions = [];
+      console.log(result);
 
-          if (plaidTransactions) {
-            for (let plaidTransaction of plaidTransactions) {
-              const { name, amount, date } = plaidTransaction;
-              // Copy the part of the plaidTransaction that we want to use
-              // for hashing in hashTransactionProperties
-              const {
-                account_id,
-                category_id,
-                pending_transaction_id,
-                transaction_id,
-                ...hashTransactionProperties
-              } = plaidTransaction;
+      if (result.error) {
+        return {
+          error: true,
+          message: result.error
+        };
+      } else {
+        plaidTransactions = result.data.transactions.transactions;
 
-              let transaction = {
-                hash_id: hash(hashTransactionProperties),
-                name,
-                amount,
-                date
-              };
+        let newTransactions = [];
 
-              newTransactions = [...newTransactions, transaction];
-            }
+        if (plaidTransactions) {
+          for (let plaidTransaction of plaidTransactions) {
+            const { name, amount, date } = plaidTransaction;
+            // Copy the part of the plaidTransaction that we want to use
+            // for hashing in hashTransactionProperties
+            const {
+              account_id,
+              category_id,
+              pending_transaction_id,
+              transaction_id,
+              ...hashTransactionProperties
+            } = plaidTransaction;
 
-            // Todo: deal with the situation where we have two identical transactions, e.g. when you buy
-            // the same taco twice.
-            if (
-              _.uniqBy(newTransactions, "hash_id").length !==
-              newTransactions.length
-            ) {
-              console.log(
-                "Identical transactions detected. Todo: deal with this situation."
-              );
-            }
+            let transaction = {
+              hash_id: hash(hashTransactionProperties),
+              name,
+              amount,
+              date
+            };
 
-            this.addTransactions(newTransactions);
+            newTransactions = [...newTransactions, transaction];
           }
 
-          console.log(newTransactions);
+          // Todo: deal with the situation where we have two identical transactions, e.g. when you buy
+          // the same taco twice.
+          if (
+            _.uniqBy(newTransactions, "hash_id").length !==
+            newTransactions.length
+          ) {
+            console.log(
+              "Identical transactions detected. Todo: deal with this situation."
+            );
+          }
 
-          return {
-            error: false,
-            transactions: newTransactions
-          };
+          this.addTransactions(newTransactions);
         }
-      })
-      .catch(error => {
-        console.error(error);
-      });
+
+        console.log(newTransactions);
+
+        return {
+          error: false,
+          transactions: newTransactions
+        };
+      }
+    } catch (error) {
+      console.error(error);
+      return {
+        error: true,
+        message: error
+      };
+    }
   };
 
   updateTransaction = async attrs => {
@@ -526,7 +484,6 @@ export class GlobalContextProvider extends React.Component {
           loadDummyData: this.loadDummyData,
           getAccessTokenFromPublicToken: this.getAccessTokenFromPublicToken,
           getPlaidTransactions: this.getPlaidTransactions,
-          setAccessToken: this.setAccessToken,
           setNotificationTime: this.setNotificationTime,
           scheduleNotifications: this.scheduleNotifications,
           cancelNotifications: this.cancelNotifications,

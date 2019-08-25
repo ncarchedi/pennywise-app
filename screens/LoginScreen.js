@@ -34,6 +34,7 @@ class LoginScreen extends React.Component {
             value={this.state.emailText}
             placeholder="Email"
             autoCompleteType="email"
+            autoCapitalize="none"
           />
           <TextInput
             style={styles.textField}
