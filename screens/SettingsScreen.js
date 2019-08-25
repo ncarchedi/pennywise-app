@@ -85,7 +85,7 @@ class SettingsScreen extends React.Component {
                 onPress={this.handleScheduleNotifications}
                 style={{ paddingVertical: 20, alignSelf: "center" }}
               >
-                <Text>Schedule notifications</Text>
+                <Text>Schedule Notifications</Text>
               </TouchableOpacity>
             </View>
             <TouchableOpacity

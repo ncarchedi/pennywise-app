@@ -61,7 +61,7 @@ class TodoScreen extends React.Component {
       Alert.alert("Error while downloading transactions", result.message, {
         cancelable: false
       });
-    } else if (result.transactions.length == 0) {
+    } else if (result.transactions.length === 0) {
       this.setState({ statusMessage: "No new transactions available." });
     }
   };
@@ -73,7 +73,7 @@ class TodoScreen extends React.Component {
   };
 
   render() {
-    console.log("rendering todo screen...");
+    // console.log("rendering todo screen...");
 
     const { transactions, categories } = this.props.global;
     const { refreshing, statusMessage } = this.state;

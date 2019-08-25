@@ -14,9 +14,12 @@ export const createNewTransaction = (attrs = {}) => {
   return transaction;
 };
 
-export const toPrettyDate = date => {
+export const toPrettyDate = (date, withDay) => {
   // if date is a string, convert to a date
   if (typeof date == "string") date = new Date(date);
+
+  // should we include the day?
+  if (withDay) return date.toString().substr(0, 15);
 
   // else, just return the existing string
   return date.toISOString().slice(0, 10);
