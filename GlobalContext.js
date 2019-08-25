@@ -171,29 +171,39 @@ export class GlobalContextProvider extends React.Component {
       } else {
         plaidTransactions = result.data.transactions.transactions;
 
+        console.log(plaidTransactions);
+
         let newTransactions = [];
 
         if (plaidTransactions) {
           for (let plaidTransaction of plaidTransactions) {
-            const { name, amount, date } = plaidTransaction;
-            // Copy the part of the plaidTransaction that we want to use
-            // for hashing in hashTransactionProperties
-            const {
-              account_id,
-              category_id,
-              pending_transaction_id,
-              transaction_id,
-              ...hashTransactionProperties
-            } = plaidTransaction;
+            const { name, amount, date, pending } = plaidTransaction;
 
-            let transaction = {
-              hash_id: hash(hashTransactionProperties),
-              name,
-              amount,
-              date
-            };
+            // Don't include pending transactions
+            if (pending) {
+              console.log("pending...");
+              continue;
+            } else {
+              console.log("not pending");
+              // Copy the part of the plaidTransaction that we want to use
+              // for hashing in hashTransactionProperties
+              const {
+                account_id,
+                category_id,
+                pending_transaction_id,
+                transaction_id,
+                ...hashTransactionProperties
+              } = plaidTransaction;
 
-            newTransactions = [...newTransactions, transaction];
+              let transaction = {
+                hash_id: hash(hashTransactionProperties),
+                name,
+                amount,
+                date
+              };
+
+              newTransactions = [...newTransactions, transaction];
+            }
           }
 
           // Todo: deal with the situation where we have two identical transactions, e.g. when you buy
