@@ -61,7 +61,7 @@ class RegistrationScreen extends React.Component {
     if (!response.success) {
       Alert.alert("Registration error", response.message);
     } else {
-      this.props.navigation.navigate("Main");
+      this.props.navigation.navigate("Onboarding");
     }
   };
 }
