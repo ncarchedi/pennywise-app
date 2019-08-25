@@ -9,7 +9,11 @@ import hoistNonReactStatic from "hoist-non-react-statics";
 
 import transactionsData from "./data/transactions.json";
 import categoriesData from "./data/categories.json";
-import { createNewTransaction } from "./utils/TransactionUtils";
+import {
+  createNewTransaction,
+  calculateHashForPlaidTransaction,
+  handleDuplicateHashTransactionsFromPlaid
+} from "./utils/TransactionUtils";
 
 import * as firebase from "firebase/app";
 import "firebase/auth";
@@ -181,18 +185,8 @@ export class GlobalContextProvider extends React.Component {
             if (pending) {
               continue;
             } else {
-              // Copy the part of the plaidTransaction that we want to use
-              // for hashing in hashTransactionProperties
-              const {
-                account_id,
-                category_id,
-                pending_transaction_id,
-                transaction_id,
-                ...hashTransactionProperties
-              } = plaidTransaction;
-
               let transaction = {
-                hash_id: hash(hashTransactionProperties),
+                hash_id: calculateHashForPlaidTransaction(plaidTransaction),
                 source: "plaid",
                 name,
                 amount,
@@ -203,16 +197,11 @@ export class GlobalContextProvider extends React.Component {
             }
           }
 
-          // Todo: deal with the situation where we have two identical transactions, e.g. when you buy
-          // the same taco twice.
-          if (
-            _.uniqBy(newTransactions, "hash_id").length !==
-            newTransactions.length
-          ) {
-            console.log(
-              "Identical transactions detected. Todo: deal with this situation."
-            );
-          }
+          // If the plaid output contains multiple transactions that are identical,
+          // update their hashes to be different
+          newTransactions = handleDuplicateHashTransactionsFromPlaid(
+            newTransactions
+          );
 
           this.addTransactions(newTransactions);
         }
