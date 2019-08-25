@@ -146,7 +146,7 @@ export class GlobalContextProvider extends React.Component {
     let endDate = moment().format("YYYY-MM-DD");
 
     if (lastTransactionDate) {
-      startDate = moment(startDate).format("YYYY-MM-DD");
+      startDate = moment(lastTransactionDate).format("YYYY-MM-DD");
     } else {
       startDate = moment()
         .subtract(3, "days")
@@ -321,7 +321,7 @@ export class GlobalContextProvider extends React.Component {
   getLastPlaidTransactionDate = () => {
     let lastTransaction = _(this.state.transactions)
       .filter(item => {
-        return item.hash_id != null;
+        return item.source === "plaid";
       })
       .sortBy("date")
       .last();
