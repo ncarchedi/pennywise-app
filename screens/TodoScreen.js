@@ -40,6 +40,9 @@ class TodoScreen extends React.Component {
     this.props.navigation.setParams({
       addTransaction: this.handleAddNewTransaction
     });
+
+    // When the Todoscreen is shown for the first time in a session, refresh
+    this.handleRefresh();
   }
 
   handleTransactionPress = transaction => {
@@ -73,8 +76,6 @@ class TodoScreen extends React.Component {
   };
 
   render() {
-    // console.log("rendering todo screen...");
-
     const { transactions, categories } = this.props.global;
     const { refreshing, statusMessage } = this.state;
 
