@@ -9,7 +9,11 @@ import hoistNonReactStatic from "hoist-non-react-statics";
 
 import transactionsData from "./data/transactions.json";
 import categoriesData from "./data/categories.json";
-import { createNewTransaction } from "./utils/TransactionUtils";
+import {
+  createNewTransaction,
+  calculateHashForPlaidTransaction,
+  handleDuplicateHashTransactionsFromPlaid
+} from "./utils/TransactionUtils";
 
 import * as firebase from "firebase/app";
 import "firebase/auth";
@@ -146,7 +150,7 @@ export class GlobalContextProvider extends React.Component {
     let endDate = moment().format("YYYY-MM-DD");
 
     if (lastTransactionDate) {
-      startDate = moment(startDate).format("YYYY-MM-DD");
+      startDate = moment(lastTransactionDate).format("YYYY-MM-DD");
     } else {
       startDate = moment()
         .subtract(3, "days")
@@ -175,37 +179,29 @@ export class GlobalContextProvider extends React.Component {
 
         if (plaidTransactions) {
           for (let plaidTransaction of plaidTransactions) {
-            const { name, amount, date } = plaidTransaction;
-            // Copy the part of the plaidTransaction that we want to use
-            // for hashing in hashTransactionProperties
-            const {
-              account_id,
-              category_id,
-              pending_transaction_id,
-              transaction_id,
-              ...hashTransactionProperties
-            } = plaidTransaction;
+            const { name, amount, date, pending } = plaidTransaction;
 
-            let transaction = {
-              hash_id: hash(hashTransactionProperties),
-              name,
-              amount,
-              date
-            };
+            // Don't include pending transactions
+            if (pending) {
+              continue;
+            } else {
+              let transaction = {
+                hash_id: calculateHashForPlaidTransaction(plaidTransaction),
+                source: "plaid",
+                name,
+                amount,
+                date
+              };
 
-            newTransactions = [...newTransactions, transaction];
+              newTransactions = [...newTransactions, transaction];
+            }
           }
 
-          // Todo: deal with the situation where we have two identical transactions, e.g. when you buy
-          // the same taco twice.
-          if (
-            _.uniqBy(newTransactions, "hash_id").length !==
-            newTransactions.length
-          ) {
-            console.log(
-              "Identical transactions detected. Todo: deal with this situation."
-            );
-          }
+          // If the plaid output contains multiple transactions that are identical,
+          // update their hashes to be different
+          newTransactions = handleDuplicateHashTransactionsFromPlaid(
+            newTransactions
+          );
 
           this.addTransactions(newTransactions);
         }
@@ -295,6 +291,7 @@ export class GlobalContextProvider extends React.Component {
     const dummyData = transactionsData.map(t => ({
       id: t.id,
       hash_id: t.hash_id,
+      source: t.source,
       name: t.name,
       amount: t.amount,
       category: t.category,
@@ -313,7 +310,7 @@ export class GlobalContextProvider extends React.Component {
   getLastPlaidTransactionDate = () => {
     let lastTransaction = _(this.state.transactions)
       .filter(item => {
-        return item.hash_id != null;
+        return item.source === "plaid";
       })
       .sortBy("date")
       .last();

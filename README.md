@@ -27,4 +27,10 @@ git checkout dev
 yarn start
 ```
 
+Run tests
+
+```
+yarn test
+```
+
 Link to the backend: https://github.com/BGordts/conscious-spending-backend.git
