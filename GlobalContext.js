@@ -181,8 +181,8 @@ export class GlobalContextProvider extends React.Component {
           for (let plaidTransaction of plaidTransactions) {
             const { name, amount, date, pending } = plaidTransaction;
 
-            // Don't include pending transactions
-            if (pending) {
+            // Don't include pending transactions or income
+            if (pending || amount < 0) {
               continue;
             } else {
               let transaction = {
