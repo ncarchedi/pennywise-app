@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  DatePickerIOS,
-  Button
-} from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 import { withGlobalContext } from "../GlobalContext";
 

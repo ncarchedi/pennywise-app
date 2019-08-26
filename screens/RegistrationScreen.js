@@ -1,11 +1,8 @@
 import React from "react";
 import {
-  ScrollView,
   StyleSheet,
   Text,
   View,
-  TouchableOpacity,
-  DatePickerIOS,
   Button,
   TextInput,
   KeyboardAvoidingView,

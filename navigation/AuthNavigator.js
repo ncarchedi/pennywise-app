@@ -1,9 +1,5 @@
-import React from "react";
 import { Platform } from "react-native";
-import {
-  createStackNavigator,
-  createBottomTabNavigator
-} from "react-navigation";
+import { createStackNavigator } from "react-navigation";
 
 import LoginScreen from "../screens/LoginScreen";
 import RegistrationScreen from "../screens/RegistrationScreen";
@@ -14,10 +10,13 @@ const config = Platform.select({
   default: {}
 });
 
-const AuthStack = createStackNavigator({
-  Welcome: WelcomeScreen,
-  Register: RegistrationScreen,
-  Login: LoginScreen
-});
+const AuthStack = createStackNavigator(
+  {
+    Welcome: WelcomeScreen,
+    Register: RegistrationScreen,
+    Login: LoginScreen
+  },
+  config
+);
 
 export default AuthStack;

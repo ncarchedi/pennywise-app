@@ -1,6 +1,5 @@
 import React from "react";
 import { AsyncStorage } from "react-native";
-import hash from "object-hash";
 import _ from "lodash";
 import moment from "moment";
 import { Notifications } from "expo";
