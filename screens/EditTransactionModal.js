@@ -5,8 +5,7 @@ import {
   Button,
   Text,
   View,
-  TextInput,
-  PickerIOS
+  TextInput
 } from "react-native";
 import DateTimePicker from "react-native-modal-datetime-picker";
 
