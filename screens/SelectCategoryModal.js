@@ -63,6 +63,18 @@ export default class SelectCategoryModal extends React.Component {
           renderItem={({ item }) => this.listItem(item)}
           keyExtractor={item => item.label}
           ItemSeparatorComponent={this.ListItemSeparator}
+          ListEmptyComponent={() => (
+            <Text
+              style={{
+                fontStyle: "italic",
+                color: "grey",
+                marginTop: 10,
+                textAlign: "center"
+              }}
+            >
+              No matching categories found
+            </Text>
+          )}
         />
       </View>
     );

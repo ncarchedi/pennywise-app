@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View, ActivityIndicator } from "react-native";
 
 import { withGlobalContext } from "../GlobalContext";
 
@@ -25,7 +25,7 @@ class AuthLoadingScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Loading</Text>
+        <ActivityIndicator size="large" color="grey" />
       </View>
     );
   }
