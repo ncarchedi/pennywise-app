@@ -1,9 +1,5 @@
-import React from "react";
 import { Platform } from "react-native";
-import {
-  createStackNavigator,
-  createBottomTabNavigator
-} from "react-navigation";
+import { createStackNavigator } from "react-navigation";
 
 import OnboardingWelcomeScreen from "../screens/onboarding/OnboardingWelcomeScreen";
 import OnboardingSelectBankScreen from "../screens/onboarding/OnboardingSelectBankScreen";
@@ -15,11 +11,14 @@ const config = Platform.select({
   default: {}
 });
 
-const OnboardingStack = createStackNavigator({
-  OnboardingWelcome: OnboardingWelcomeScreen,
-  OnboardingSelectBank: OnboardingSelectBankScreen,
-  PlaidLink: PlaidLinkScreen,
-  OnboardingCompleted: OnboardingCompletedScreen
-});
+const OnboardingStack = createStackNavigator(
+  {
+    OnboardingWelcome: OnboardingWelcomeScreen,
+    OnboardingSelectBank: OnboardingSelectBankScreen,
+    PlaidLink: PlaidLinkScreen,
+    OnboardingCompleted: OnboardingCompletedScreen
+  },
+  config
+);
 
 export default OnboardingStack;

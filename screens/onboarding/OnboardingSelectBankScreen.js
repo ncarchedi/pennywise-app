@@ -1,16 +1,10 @@
 import React from "react";
 import {
-  ScrollView,
   SafeAreaView,
   StyleSheet,
   Text,
   View,
-  TouchableOpacity,
-  DatePickerIOS,
-  Button,
-  TextInput,
-  KeyboardAvoidingView,
-  Alert
+  TouchableOpacity
 } from "react-native";
 
 import { withGlobalContext } from "../../GlobalContext";
