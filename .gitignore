@@ -11,3 +11,4 @@ web-report/
 builds/
 TODO
 .env
+.DS_Store
