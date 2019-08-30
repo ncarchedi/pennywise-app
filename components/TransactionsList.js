@@ -6,7 +6,7 @@ import {
   View,
   TouchableOpacity
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import _ from "lodash";
 
 import { toPrettyDate, leftJoin } from "../utils/TransactionUtils";

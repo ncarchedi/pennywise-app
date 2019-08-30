@@ -5,11 +5,11 @@ import {
   View,
   TouchableOpacity,
   RefreshControl,
-  Alert
+  Alert,
+  Text
 } from "react-native";
-
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import TransactionsList from "../components/TransactionsList";
-import { Ionicons } from "@expo/vector-icons";
 import _ from "lodash";
 
 import { withGlobalContext } from "../GlobalContext";

@@ -1,25 +1,4 @@
 {
-  "expo": {
-    "name": "Conscious Spending",
-    "slug": "conscious-spending",
-    "privacy": "public",
-    "sdkVersion": "33.0.0",
-    "platforms": ["ios"],
-    "version": "1.0.5",
-    "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "splash": {
-      "image": "./assets/images/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "assetBundlePatterns": ["**/*"],
-    "ios": {
-      "bundleIdentifier": "com.dayonelabs.conscious-spending",
-      "supportsTablet": true
-    }
-  }
+  "displayName": "ConsciousSpending",
+  "name": "ConsciousSpending"
 }

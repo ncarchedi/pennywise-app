@@ -2,8 +2,6 @@ import React from "react";
 import { AsyncStorage } from "react-native";
 import _ from "lodash";
 import moment from "moment";
-import { Notifications } from "expo";
-import * as Permissions from "expo-permissions";
 import hoistNonReactStatic from "hoist-non-react-statics";
 
 import transactionsData from "./data/transactions.json";
@@ -339,56 +337,56 @@ export class GlobalContextProvider extends React.Component {
    * Will ask permission to the user if that was not yet granted.
    */
   scheduleNotifications = async () => {
-    // First cancel any already scheduled notifications
-    this.cancelNotifications();
+    // // First cancel any already scheduled notifications
+    // this.cancelNotifications();
 
-    // Ask permission to send notifications if needed
-    // If permissions were not granted, the code below will just execute but not have any effect
-    const notificationStatus = await Permissions.askAsync(
-      Permissions.NOTIFICATIONS
-    );
+    // // Ask permission to send notifications if needed
+    // // If permissions were not granted, the code below will just execute but not have any effect
+    // const notificationStatus = await Permissions.askAsync(
+    //   Permissions.NOTIFICATIONS
+    // );
 
-    // console.log("notification permission status:");
-    // console.log(notificationStatus);
+    // // console.log("notification permission status:");
+    // // console.log(notificationStatus);
 
-    // Calculate the time to send the next notification
-    let notificationDate = moment(new Date())
-      .hours(this.state.notificationTime.hours)
-      .minutes(this.state.notificationTime.minutes);
+    // // Calculate the time to send the next notification
+    // let notificationDate = moment(new Date())
+    //   .hours(this.state.notificationTime.hours)
+    //   .minutes(this.state.notificationTime.minutes);
 
-    // Make sure this 'date' is after now
-    if (moment(new Date()).diff(notificationDate) >= 0) {
-      notificationDate.add(1, "days");
-    }
+    // // Make sure this 'date' is after now
+    // if (moment(new Date()).diff(notificationDate) >= 0) {
+    //   notificationDate.add(1, "days");
+    // }
 
-    let notification = {
-      title: "Ready to check your transactions?",
-      body:
-        "Categorize any new transactions now and stay on top of your expenses.",
-      ios: {
-        sound: true,
-        _displayInForeground: true
-      }
-    };
+    // let notification = {
+    //   title: "Ready to check your transactions?",
+    //   body:
+    //     "Categorize any new transactions now and stay on top of your expenses.",
+    //   ios: {
+    //     sound: true,
+    //     _displayInForeground: true
+    //   }
+    // };
 
-    // Schedule the next 7 notifications
-    // If the time specified above has passed already, only 6 notifications will be scheduled
-    for (let i = 0; i < 7; i += 1) {
-      const nextNotificationDate = notificationDate.add(i, "days");
+    // // Schedule the next 7 notifications
+    // // If the time specified above has passed already, only 6 notifications will be scheduled
+    // for (let i = 0; i < 7; i += 1) {
+    //   const nextNotificationDate = notificationDate.add(i, "days");
 
-      const response = await Notifications.scheduleLocalNotificationAsync(
-        notification,
-        {
-          time: nextNotificationDate.toDate()
-        }
-      );
+    //   const response = await Notifications.scheduleLocalNotificationAsync(
+    //     notification,
+    //     {
+    //       time: nextNotificationDate.toDate()
+    //     }
+    //   );
 
-      // console.log(response);
-    }
+    //   // console.log(response);
+    // }
   };
 
   cancelNotifications = async () => {
-    await Notifications.cancelAllScheduledNotificationsAsync();
+    // await Notifications.cancelAllScheduledNotificationsAsync();
   };
 
   registerUser = async (user, password) => {

@@ -1,6 +1,6 @@
 import React from "react";
 import { ScrollView, StyleSheet, Text, View, FlatList } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import _ from "lodash";
 
 import { withGlobalContext } from "../GlobalContext";

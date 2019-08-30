@@ -12,3 +12,4 @@ builds/
 TODO
 .env
 .DS_Store
+ios/build/
