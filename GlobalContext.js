@@ -109,7 +109,7 @@ export class GlobalContextProvider extends React.Component {
     // array to pick in case of duplicates.
     let updatedTransactionsList = _.uniqBy(
       _.concat(transactions, newTransactions),
-      "hash_id"
+      "id"
     );
 
     try {
@@ -185,7 +185,7 @@ export class GlobalContextProvider extends React.Component {
               continue;
             } else {
               let transaction = {
-                hash_id: calculateHashForPlaidTransaction(plaidTransaction),
+                id: calculateHashForPlaidTransaction(plaidTransaction),
                 source: "plaid",
                 name,
                 amount,
@@ -289,7 +289,6 @@ export class GlobalContextProvider extends React.Component {
 
     const dummyData = transactionsData.map(t => ({
       id: t.id,
-      hash_id: t.hash_id,
       source: t.source,
       name: t.name,
       amount: t.amount,
