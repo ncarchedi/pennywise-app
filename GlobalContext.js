@@ -452,13 +452,15 @@ export class GlobalContextProvider extends React.Component {
   // Get the current user, and wait for it if it was
   // not initilaized yet by firebase.
   // https://github.com/firebase/firebase-js-sdk/issues/462
-  getCurrentUser = () => {
-    return new Promise((resolve, reject) => {
+  getCurrentUser = async () => {
+    const user = new Promise((resolve, reject) => {
       const unsubscribe = firebase.auth().onAuthStateChanged(user => {
         unsubscribe();
         resolve(user);
       }, reject);
     });
+
+    return user;
   };
 
   render() {
