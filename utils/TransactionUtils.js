@@ -4,8 +4,7 @@ import hash from "object-hash";
 
 export const createNewTransaction = (attrs = {}) => {
   const transaction = {
-    id: uuidv4(),
-    hash_id: attrs.hash_id || uuidv4(),
+    id: attrs.id || uuidv4(),
     source: attrs.source || "manual",
     name: attrs.name || "",
     amount: attrs.amount || "",
@@ -67,8 +66,9 @@ export const calculateHashForPlaidTransaction = plaidTransaction => {
 };
 
 /**
- * When you make the exact same expense twice, the hash_ids for those expenses will be the same. This happens
- * for example when you buy a taco, pay for it, and then buy the exact same taco again on the same day.
+ * When you make the exact same expense twice, the ids (based on the hash) for those expenses
+ * will be the same. This happens for example when you buy a taco, pay for it,
+ * and then buy the exact same taco again on the same day.
  *
  * This function will change the hash of 'duplicates' so they are all retained.
  *
@@ -79,10 +79,10 @@ export const handleDuplicateHashTransactionsFromPlaid = newTransactions => {
   let updatedTransactions = newTransactions;
 
   // Check if multiple transactions have the same hash
-  if (_.uniqBy(newTransactions, "hash_id").length !== newTransactions.length) {
+  if (_.uniqBy(newTransactions, "id").length !== newTransactions.length) {
     // For all duplicate hashes, get the number of duplicates
     let duplicateHashes = _(newTransactions)
-      .countBy("hash_id")
+      .countBy("id")
       .pickBy(hash_count => {
         return hash_count > 1;
       })
@@ -91,20 +91,20 @@ export const handleDuplicateHashTransactionsFromPlaid = newTransactions => {
     // Append a unique number to each hash that has duplicates
     updatedTransactions = _(newTransactions)
       .map(item => {
-        const hash_dubplicate_count = duplicateHashes[item.hash_id];
+        const hash_dubplicate_count = duplicateHashes[item.id];
 
         if (hash_dubplicate_count) {
-          const newHashId = item.hash_id + "+" + hash_dubplicate_count;
+          const newId = item.id + "+" + hash_dubplicate_count;
 
           if (hash_dubplicate_count <= 2) {
-            delete duplicateHashes[item.hash_id];
+            delete duplicateHashes[item.id];
           } else {
-            duplicateHashes[item.hash_id] = hash_dubplicate_count - 1;
+            duplicateHashes[item.id] = hash_dubplicate_count - 1;
           }
 
           return {
             ...item,
-            hash_id: newHashId
+            id: newId
           };
         } else {
           return item;
