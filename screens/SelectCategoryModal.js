@@ -2,6 +2,7 @@ import React from "react";
 import {
   StyleSheet,
   View,
+  ScrollView,
   FlatList,
   Text,
   TextInput,
@@ -60,7 +61,12 @@ export default class SelectCategoryModal extends React.Component {
     const { searchText } = this.state;
 
     return (
-      <View style={styles.contentContainer}>
+      <ScrollView
+        style={styles.contentContainer}
+        keyboardShouldPersistTaps="always"
+        keyboardDismissMode="on-drag"
+        showsVerticalScrollIndicator={false}
+      >
         <TextInput
           style={styles.searchBar}
           placeholder="Search categories"
@@ -83,8 +89,9 @@ export default class SelectCategoryModal extends React.Component {
               </Text>
             </TouchableOpacity>
           )}
+          keyboardShouldPersistTaps="always"
         />
-      </View>
+      </ScrollView>
     );
   }
 }

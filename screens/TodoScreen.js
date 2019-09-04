@@ -84,6 +84,9 @@ class TodoScreen extends React.Component {
         <ScrollView
           style={styles.container}
           contentContainerStyle={styles.contentContainer}
+          keyboardShouldPersistTaps="always"
+          keyboardDismissMode="on-drag"
+          showsVerticalScrollIndicator={false}
           refreshControl={
             <RefreshControl
               refreshing={refreshing}

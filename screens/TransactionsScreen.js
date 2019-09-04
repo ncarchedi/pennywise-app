@@ -25,6 +25,9 @@ class TransactionsScreen extends React.Component {
         <ScrollView
           style={styles.container}
           contentContainerStyle={styles.contentContainer}
+          keyboardShouldPersistTaps="always"
+          keyboardDismissMode="on-drag"
+          showsVerticalScrollIndicator={false}
         >
           <TransactionsList
             transactions={transactions}
