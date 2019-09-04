@@ -321,6 +321,27 @@ export class GlobalContextProvider extends React.Component {
     }
   };
 
+  addCategory = async newCategory => {
+    const { categories } = this.state;
+
+    const updatedCategoriesList = [...categories, newCategory];
+
+    try {
+      await AsyncStorage.setItem(
+        "categories",
+        JSON.stringify(updatedCategoriesList)
+      );
+    } catch (error) {
+      console.log(error.message);
+    }
+
+    this.setState({
+      categories: updatedCategoriesList
+    });
+
+    return newCategory;
+  };
+
   setNotificationTime = async newNotificationTime => {
     try {
       await AsyncStorage.setItem(
@@ -474,6 +495,7 @@ export class GlobalContextProvider extends React.Component {
           loadDummyData: this.loadDummyData,
           getAccessTokenFromPublicToken: this.getAccessTokenFromPublicToken,
           getPlaidTransactions: this.getPlaidTransactions,
+          addCategory: this.addCategory,
           setNotificationTime: this.setNotificationTime,
           scheduleNotifications: this.scheduleNotifications,
           cancelNotifications: this.cancelNotifications,

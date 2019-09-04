@@ -22,6 +22,18 @@ export default class SelectCategoryModal extends React.Component {
     this.props.navigation.goBack();
   };
 
+  handleAddCategory = async () => {
+    const onAddCategory = this.props.navigation.getParam("onAddCategory");
+    const { searchText } = this.state;
+
+    const newCategory = await onAddCategory({
+      // TODO: allow user to pick icon?
+      icon: "ios-card",
+      label: searchText
+    });
+    this.handleChangeCategory(newCategory.label);
+  };
+
   listItem = item => {
     const { icon, label } = item;
 
@@ -54,6 +66,7 @@ export default class SelectCategoryModal extends React.Component {
           placeholder="Search categories"
           onChangeText={text => this.setState({ searchText: text })}
           autoFocus={true}
+          autoCorrect={false}
         />
         {/* TODO: fix scroll so not hidden behind footer */}
         <FlatList
@@ -64,16 +77,11 @@ export default class SelectCategoryModal extends React.Component {
           keyExtractor={item => item.label}
           ItemSeparatorComponent={this.ListItemSeparator}
           ListEmptyComponent={() => (
-            <Text
-              style={{
-                fontStyle: "italic",
-                color: "grey",
-                marginTop: 10,
-                textAlign: "center"
-              }}
-            >
-              No matching categories found
-            </Text>
+            <TouchableOpacity onPress={this.handleAddCategory}>
+              <Text style={{ marginTop: 10, fontStyle: "italic" }}>
+                {`+ Create a new category called ${searchText}`}
+              </Text>
+            </TouchableOpacity>
           )}
         />
       </View>
