@@ -2919,6 +2919,13 @@ domexception@^1.0.1:
   dependencies:
     webidl-conversions "^4.0.2"
 
+dooboolab-welcome@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/dooboolab-welcome/-/dooboolab-welcome-1.1.0.tgz#4a0aa9d2cbc4e2b1008bf7683bc056b41caa3d0d"
+  integrity sha512-K9TKEeefzDXZiUyLZG+bIr8cy9UoYIfFMseowp/o3czVl7TfkVm3gQpeB85w+TO8xeqzWHiIcEelZbBgt5WUwQ==
+  dependencies:
+    chalk "^2.4.1"
+
 dotenv@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-2.0.0.tgz#bd759c357aaa70365e01c96b7b0bec08a6e0d949"
@@ -6161,6 +6168,18 @@ react-native-gesture-handler@^1.4.1:
     hoist-non-react-statics "^2.3.1"
     invariant "^2.2.4"
     prop-types "^15.7.2"
+
+react-native-iap@^3.4.2:
+  version "3.4.2"
+  resolved "https://registry.yarnpkg.com/react-native-iap/-/react-native-iap-3.4.2.tgz#109a7df2357846b1ff9baf7c17dba01c15d6f8c2"
+  integrity sha512-obIH6TkKXeV0W3nhLW6UaOinGjq0nsDv1sEQu7gdUUhOIJWH9wB10DCBSlhoUU1Vjo90R5zrRWrA2ii9kJA7cA==
+  dependencies:
+    dooboolab-welcome "^1.1.0"
+
+react-native-in-app-utils@^6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-in-app-utils/-/react-native-in-app-utils-6.0.1.tgz#e8469804d7ceb8ad2b368dc2cc9b824c98ca387a"
+  integrity sha512-DHWgQTR+SSmVy+eLEXFJNOfsdvfHmU6y5k91W34x+pt4y/q2wo5++2RQZD/KDpHm89LYKDN1XKCojHFM6//xWQ==
 
 react-native-modal-datetime-picker@^7.5.0:
   version "7.5.0"

@@ -8,7 +8,7 @@ import {
   Alert,
   Text
 } from "react-native";
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Ionicons from "react-native-vector-icons/Ionicons";
 import TransactionsList from "../components/TransactionsList";
 import _ from "lodash";
 

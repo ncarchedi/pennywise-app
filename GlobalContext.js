@@ -339,26 +339,21 @@ export class GlobalContextProvider extends React.Component {
   scheduleNotifications = async () => {
     // // First cancel any already scheduled notifications
     // this.cancelNotifications();
-
     // // Ask permission to send notifications if needed
     // // If permissions were not granted, the code below will just execute but not have any effect
     // const notificationStatus = await Permissions.askAsync(
     //   Permissions.NOTIFICATIONS
     // );
-
     // // console.log("notification permission status:");
     // // console.log(notificationStatus);
-
     // // Calculate the time to send the next notification
     // let notificationDate = moment(new Date())
     //   .hours(this.state.notificationTime.hours)
     //   .minutes(this.state.notificationTime.minutes);
-
     // // Make sure this 'date' is after now
     // if (moment(new Date()).diff(notificationDate) >= 0) {
     //   notificationDate.add(1, "days");
     // }
-
     // let notification = {
     //   title: "Ready to check your transactions?",
     //   body:
@@ -368,19 +363,16 @@ export class GlobalContextProvider extends React.Component {
     //     _displayInForeground: true
     //   }
     // };
-
     // // Schedule the next 7 notifications
     // // If the time specified above has passed already, only 6 notifications will be scheduled
     // for (let i = 0; i < 7; i += 1) {
     //   const nextNotificationDate = notificationDate.add(i, "days");
-
     //   const response = await Notifications.scheduleLocalNotificationAsync(
     //     notification,
     //     {
     //       time: nextNotificationDate.toDate()
     //     }
     //   );
-
     //   // console.log(response);
     // }
   };

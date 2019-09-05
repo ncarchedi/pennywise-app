@@ -9,12 +9,25 @@ import {
 } from "react-native";
 import moment from "moment";
 
+// import RNIap, {
+//   Product,
+//   ProductPurchase,
+//   acknowledgePurchaseAndroid,
+//   purchaseUpdatedListener,
+//   purchaseErrorListener,
+//   PurchaseError
+// } from "react-native-iap";
+import { NativeModules } from "react-native";
+const { InAppUtils } = NativeModules;
+
 import { withGlobalContext } from "../GlobalContext";
 
 class SettingsScreen extends React.Component {
   static navigationOptions = {
     title: "Settings"
   };
+
+  itemSubs = ["monthly_subscription"];
 
   state = {
     isReady: false,
@@ -40,6 +53,29 @@ class SettingsScreen extends React.Component {
   handleLogout = async () => {
     await this.props.global.logout();
     this.props.navigation.navigate("AuthLoading");
+  };
+
+  componentDidMount = async () => {
+    console.log("kut");
+    try {
+      // const result = await RNIap.initConnection();
+      // console.log(result);
+      // const products = await RNIap.getSubscriptions(this.itemSubs);
+      // console.log(products);
+
+      InAppUtils.loadProducts(
+        [
+          "monthly_subscription",
+          "com.conscious_spending.monthly_subscription_2"
+        ],
+        (error, products) => {
+          console.log(products);
+          //update store here.
+        }
+      );
+    } catch (err) {
+      console.warn(err); // standardized err.code and err.message available
+    }
   };
 
   render() {
