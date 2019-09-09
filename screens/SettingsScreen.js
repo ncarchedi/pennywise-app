@@ -17,7 +17,6 @@ class SettingsScreen extends React.Component {
   };
 
   state = {
-    isReady: false,
     notificationTime: this.props.global.notificationTime
   };
 
@@ -91,6 +90,13 @@ class SettingsScreen extends React.Component {
                 <Text>Schedule Notifications</Text>
               </TouchableOpacity>
             </View>
+            <TouchableOpacity
+              onPress={() =>
+                this.props.navigation.navigate("OnboardingWelcome")
+              }
+            >
+              <Text>Go To Onboarding</Text>
+            </TouchableOpacity>
             <TouchableOpacity
               onPress={this.handleLogout}
               style={{ paddingTop: 20 }}
