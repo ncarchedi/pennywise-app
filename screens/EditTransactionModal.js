@@ -95,7 +95,11 @@ class EditTransactionModal extends React.Component {
     const { name, amount, date, notes, category } = this.state.transaction;
 
     return (
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        keyboardShouldPersistTaps="always"
+        keyboardDismissMode="on-drag"
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.modalContent}>
           <View style={styles.modalBody}>
             <View style={{ flexDirection: "row", alignSelf: "center" }}>
