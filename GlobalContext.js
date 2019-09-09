@@ -6,8 +6,8 @@ import { Notifications } from "expo";
 import * as Permissions from "expo-permissions";
 import hoistNonReactStatic from "hoist-non-react-statics";
 
-import transactionsData from "./data/transactions.json";
-import categoriesData from "./data/categories.json";
+import defaultTransactions from "./data/transactions.json";
+import defaultCategories from "./data/categories.json";
 import {
   createNewTransaction,
   calculateHashForPlaidTransaction,
@@ -74,6 +74,18 @@ export class GlobalContextProvider extends React.Component {
     }
 
     try {
+      const savedCategories = JSON.parse(
+        await AsyncStorage.getItem("categories")
+      );
+
+      // if savedCategories is null, then use default categories
+      const categories = savedCategories ? savedCategories : defaultCategories;
+      this.setState({ categories });
+    } catch (error) {
+      console.log(error.message);
+    }
+
+    try {
       let notificationTime = JSON.parse(
         await AsyncStorage.getItem("notificationTime")
       );
@@ -86,8 +98,6 @@ export class GlobalContextProvider extends React.Component {
     } catch (error) {
       console.log(error.message);
     }
-
-    this.setState({ categories: categoriesData });
   };
 
   addTransaction = async (transaction = {}) => {
@@ -287,7 +297,7 @@ export class GlobalContextProvider extends React.Component {
   loadDummyData = async () => {
     console.log("loading dummy data...");
 
-    const dummyData = transactionsData.map(t => ({
+    const dummyData = defaultTransactions.map(t => ({
       id: t.id,
       source: t.source,
       name: t.name,
