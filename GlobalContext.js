@@ -129,14 +129,23 @@ export class GlobalContextProvider extends React.Component {
   };
 
   getAccessTokenFromPublicToken = async publicToken => {
+    console.log(publicToken);
     try {
-      const getAccessTokenFromPublicToken_v2 = firebase
+      const getAccessTokenFromPublicToken = firebase
         .functions()
-        .httpsCallable("getAccessTokenFromPublicToken_v2");
+        .httpsCallable("getAccessTokenFromPublicToken_v3");
 
-      let result = await getAccessTokenFromPublicToken_v2({
+      let result = await getAccessTokenFromPublicToken({
         public_token: publicToken
       });
+
+      await this.addInstitutionAccount(
+        result.data.item_id,
+        result.data.institution_name,
+        result.data.account_names
+      );
+
+      console.log(result);
     } catch (error) {
       console.log(error);
     }
@@ -462,6 +471,40 @@ export class GlobalContextProvider extends React.Component {
     return user;
   };
 
+  addInstitutionAccount = async (itemId, institutionName, accounts) => {
+    try {
+      let currentInstitutionAccounts = await this.getInstitutionAccounts();
+
+      if (!currentInstitutionAccounts) {
+        currentInstitutionAccounts = [];
+      }
+
+      console.log("bla");
+      console.log(currentInstitutionAccounts);
+
+      currentInstitutionAccounts.push({
+        itemId,
+        institutionName,
+        accounts
+      });
+
+      await AsyncStorage.setItem(
+        "institutionAccounts",
+        JSON.stringify(currentInstitutionAccounts)
+      );
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  getInstitutionAccounts = async () => {
+    try {
+      return JSON.parse(await AsyncStorage.getItem("institutionAccounts"));
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
   render() {
     return (
       <GlobalContext.Provider
@@ -481,7 +524,8 @@ export class GlobalContextProvider extends React.Component {
           registerUser: this.registerUser,
           loginUser: this.loginUser,
           logout: this.logout,
-          isUserLoggedIn: this.isUserLoggedIn
+          isUserLoggedIn: this.isUserLoggedIn,
+          getInstitutionAccounts: this.getInstitutionAccounts
         }}
       >
         {this.props.children}

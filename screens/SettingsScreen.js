@@ -89,6 +89,12 @@ class SettingsScreen extends React.Component {
               </TouchableOpacity>
             </View>
             <TouchableOpacity
+              onPress={() => this.props.navigation.navigate("LinkedAccounts")}
+              style={{ paddingVertical: 20, alignSelf: "center" }}
+            >
+              <Text>Linked Bank Accounts</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
               onPress={this.handleLogout}
               style={{ paddingTop: 20 }}
             >
