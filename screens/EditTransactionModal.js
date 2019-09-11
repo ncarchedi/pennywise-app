@@ -82,7 +82,7 @@ class EditTransactionModal extends React.Component {
   };
 
   render() {
-    const { categories } = this.props.global;
+    const { categories, addCategory } = this.props.global;
     const { navigation } = this.props;
 
     // Which category modal will we send users to?
@@ -95,7 +95,11 @@ class EditTransactionModal extends React.Component {
     const { name, amount, date, notes, category } = this.state.transaction;
 
     return (
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        keyboardShouldPersistTaps="always"
+        keyboardDismissMode="on-drag"
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.modalContent}>
           <View style={styles.modalBody}>
             <View style={{ flexDirection: "row", alignSelf: "center" }}>
@@ -124,6 +128,7 @@ class EditTransactionModal extends React.Component {
               onPress={() =>
                 navigation.navigate(categoryModalRouteName, {
                   categories: categories,
+                  onAddCategory: addCategory,
                   onChangeCategory: this.handleChangeTransaction
                 })
               }

@@ -17,7 +17,6 @@ class SettingsScreen extends React.Component {
   };
 
   state = {
-    isReady: false,
     notificationTime: this.props.global.notificationTime
   };
 
@@ -55,6 +54,9 @@ class SettingsScreen extends React.Component {
         <ScrollView
           style={styles.container}
           contentContainerStyle={styles.contentContainer}
+          keyboardShouldPersistTaps="always"
+          keyboardDismissMode="on-drag"
+          showsVerticalScrollIndicator={false}
         >
           <View style={styles.settingsContainer}>
             <TouchableOpacity
@@ -88,6 +90,13 @@ class SettingsScreen extends React.Component {
                 <Text>Schedule Notifications</Text>
               </TouchableOpacity>
             </View>
+            <TouchableOpacity
+              onPress={() =>
+                this.props.navigation.navigate("OnboardingWelcome")
+              }
+            >
+              <Text>Go To Onboarding</Text>
+            </TouchableOpacity>
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate("LinkedAccounts")}
               style={{ paddingVertical: 20, alignSelf: "center" }}

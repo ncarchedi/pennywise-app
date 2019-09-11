@@ -2,6 +2,7 @@ import React from "react";
 import {
   StyleSheet,
   View,
+  ScrollView,
   FlatList,
   Text,
   TextInput,
@@ -20,6 +21,18 @@ export default class SelectCategoryModal extends React.Component {
 
     onChangeCategory("category", label);
     this.props.navigation.goBack();
+  };
+
+  handleAddCategory = async () => {
+    const onAddCategory = this.props.navigation.getParam("onAddCategory");
+    const { searchText } = this.state;
+
+    const newCategory = await onAddCategory({
+      // TODO: allow user to pick icon?
+      icon: "ios-card",
+      label: searchText
+    });
+    this.handleChangeCategory(newCategory.label);
   };
 
   listItem = item => {
@@ -48,12 +61,18 @@ export default class SelectCategoryModal extends React.Component {
     const { searchText } = this.state;
 
     return (
-      <View style={styles.contentContainer}>
+      <ScrollView
+        style={styles.contentContainer}
+        keyboardShouldPersistTaps="always"
+        keyboardDismissMode="on-drag"
+        showsVerticalScrollIndicator={false}
+      >
         <TextInput
           style={styles.searchBar}
           placeholder="Search categories"
           onChangeText={text => this.setState({ searchText: text })}
           autoFocus={true}
+          autoCorrect={false}
         />
         {/* TODO: fix scroll so not hidden behind footer */}
         <FlatList
@@ -64,19 +83,15 @@ export default class SelectCategoryModal extends React.Component {
           keyExtractor={item => item.label}
           ItemSeparatorComponent={this.ListItemSeparator}
           ListEmptyComponent={() => (
-            <Text
-              style={{
-                fontStyle: "italic",
-                color: "grey",
-                marginTop: 10,
-                textAlign: "center"
-              }}
-            >
-              No matching categories found
-            </Text>
+            <TouchableOpacity onPress={this.handleAddCategory}>
+              <Text style={{ marginTop: 10, fontStyle: "italic" }}>
+                {`+ Create a new category called ${searchText}`}
+              </Text>
+            </TouchableOpacity>
           )}
+          keyboardShouldPersistTaps="always"
         />
-      </View>
+      </ScrollView>
     );
   }
 }
