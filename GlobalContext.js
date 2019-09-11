@@ -105,8 +105,6 @@ export class GlobalContextProvider extends React.Component {
     );
 
     // Only add transactions we don't have already
-    // Reason for not using 'unionBy' is that you can't control with that method from which
-    // array to pick in case of duplicates.
     let updatedTransactionsList = _.uniqBy(
       _.concat(transactions, newTransactions),
       "id"
@@ -166,11 +164,11 @@ export class GlobalContextProvider extends React.Component {
     }
 
     try {
-      const getPlaidTransactions_v2 = firebase
+      const getPlaidTransactions = firebase
         .functions()
-        .httpsCallable("getPlaidTransactions_v2");
+        .httpsCallable("getPlaidTransactions_v3");
 
-      let result = await getPlaidTransactions_v2({
+      let result = await getPlaidTransactions({
         start_date: startDate,
         end_date: endDate
       });
@@ -181,38 +179,45 @@ export class GlobalContextProvider extends React.Component {
           message: result.data.error
         };
       } else {
-        plaidTransactions = result.data.transactions.transactions;
+        let itemTransactions = result.data.transactions;
 
         let newTransactions = [];
 
-        if (plaidTransactions) {
-          for (let plaidTransaction of plaidTransactions) {
-            const { name, amount, date, pending } = plaidTransaction;
+        for (const nextItemTransaction of itemTransactions) {
+          const itemId = nextItemTransaction.item.item_id;
+          const plaidTransactions = nextItemTransaction.transactions;
 
-            // Don't include pending transactions or income
-            if (pending || amount < 0) {
-              continue;
-            } else {
-              let transaction = {
-                id: calculateHashForPlaidTransaction(plaidTransaction),
-                source: "plaid",
-                name,
-                amount,
-                date
-              };
+          // Todo: load the bank name
 
-              newTransactions = [...newTransactions, transaction];
+          if (plaidTransactions) {
+            for (let plaidTransaction of plaidTransactions) {
+              const { name, amount, date, pending } = plaidTransaction;
+
+              // Don't include pending transactions or income
+              if (pending || amount < 0) {
+                continue;
+              } else {
+                let transaction = {
+                  id: calculateHashForPlaidTransaction(plaidTransaction),
+                  source: "plaid",
+                  name,
+                  amount,
+                  date
+                };
+
+                newTransactions = [...newTransactions, transaction];
+              }
             }
           }
-
-          // If the plaid output contains multiple transactions that are identical,
-          // update their hashes to be different
-          newTransactions = handleDuplicateHashTransactionsFromPlaid(
-            newTransactions
-          );
-
-          this.addTransactions(newTransactions);
         }
+
+        // If the plaid output contains multiple transactions that are identical,
+        // update their hashes to be different
+        newTransactions = handleDuplicateHashTransactionsFromPlaid(
+          newTransactions
+        );
+
+        this.addTransactions(newTransactions);
 
         return {
           error: false,

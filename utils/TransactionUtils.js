@@ -62,7 +62,11 @@ export const calculateHashForPlaidTransaction = plaidTransaction => {
     payment_meta: plaidTransaction.payment_meta
   };
 
-  return hash(plaidTransaction);
+  return hash(hashableProperties, {
+    unorderedArrays: true,
+    unorderedSets: true,
+    unorderedObjects: true
+  });
 };
 
 /**
