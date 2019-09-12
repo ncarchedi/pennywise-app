@@ -9,7 +9,9 @@ export const createNewTransaction = (attrs = {}) => {
     name: attrs.name || "",
     amount: attrs.amount || "",
     category: attrs.category || "No Category",
-    date: attrs.date ? new Date(attrs.date) : new Date()
+    date: attrs.date ? new Date(attrs.date) : new Date(),
+    institution: attrs.institution || "",
+    account: attrs.account || ""
   };
 
   return transaction;

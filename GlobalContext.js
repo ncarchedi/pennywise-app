@@ -150,7 +150,7 @@ export class GlobalContextProvider extends React.Component {
       await this.addInstitutionAccount(
         result.data.item_id,
         result.data.institution_name,
-        result.data.account_names
+        result.data.account_details
       );
 
       console.log(result);
@@ -191,17 +191,25 @@ export class GlobalContextProvider extends React.Component {
       } else {
         let itemTransactions = result.data.transactions;
 
+        const institutions = await this.getInstitutionAccounts();
+        const itemIdToNameMap = _.reduce(institutions, (acc, item) => {
+          return {...acc, [item.itemId]: item.institutionName}
+        }, {});
+
+        const accounts = _.flatten(institutions.map(item => item.accounts));
+        const accountIdToNameMap = _.reduce(accounts, (acc, item) => {
+          return {...acc, [item.accountId]: item.name}
+        }, {});
+
         let newTransactions = [];
 
         for (const nextItemTransaction of itemTransactions) {
           const itemId = nextItemTransaction.item.item_id;
           const plaidTransactions = nextItemTransaction.transactions;
 
-          // Todo: load the bank name
-
           if (plaidTransactions) {
             for (let plaidTransaction of plaidTransactions) {
-              const { name, amount, date, pending } = plaidTransaction;
+              const { name, amount, date, pending, account_id } = plaidTransaction;
 
               // Don't include pending transactions or income
               if (pending || amount < 0) {
@@ -212,7 +220,9 @@ export class GlobalContextProvider extends React.Component {
                   source: "plaid",
                   name,
                   amount,
-                  date
+                  date,
+                  account: accountIdToNameMap[account_id],
+                  institution: itemIdToNameMap[itemId]
                 };
 
                 newTransactions = [...newTransactions, transaction];
@@ -306,6 +316,16 @@ export class GlobalContextProvider extends React.Component {
     }
 
     this.setState({ transactions: [] });
+  };
+
+  clearAllAccounts = async () => {
+    console.log("clearing all accounts...");
+
+    try {
+      await AsyncStorage.removeItem("institutionAccounts");
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   loadDummyData = async () => {
@@ -551,6 +571,7 @@ export class GlobalContextProvider extends React.Component {
           updateTransaction: this.updateTransaction,
           deleteTransaction: this.deleteTransaction,
           clearAllTransactions: this.clearAllTransactions,
+          clearAllAccounts: this.clearAllAccounts,
           loadDummyData: this.loadDummyData,
           getAccessTokenFromPublicToken: this.getAccessTokenFromPublicToken,
           getPlaidTransactions: this.getPlaidTransactions,
