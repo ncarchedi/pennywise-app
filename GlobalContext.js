@@ -17,6 +17,7 @@ import {
 import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/functions";
+import "firebase/firestore";
 
 const GlobalContext = React.createContext({});
 
@@ -37,7 +38,8 @@ export class GlobalContextProvider extends React.Component {
     notificationTime: {
       hours: 8,
       minutes: 0
-    }
+    },
+    institutionAccounts: []
   };
 
   constructor() {
@@ -100,7 +102,7 @@ export class GlobalContextProvider extends React.Component {
     }
 
     try {
-      const institutionAccounts = await this.getInstitutionAccounts();
+      const institutionAccounts = await this.retrieveInstitutionAccounts();
 
       this.setState({ institutionAccounts });
     } catch (error) {
@@ -145,7 +147,6 @@ export class GlobalContextProvider extends React.Component {
   };
 
   getAccessTokenFromPublicToken = async publicToken => {
-    console.log(publicToken);
     try {
       const getAccessTokenFromPublicToken = firebase
         .functions()
@@ -160,8 +161,6 @@ export class GlobalContextProvider extends React.Component {
         result.data.institution_name,
         result.data.account_details
       );
-
-      console.log(result);
     } catch (error) {
       console.log(error);
     }
@@ -199,7 +198,11 @@ export class GlobalContextProvider extends React.Component {
       } else {
         let itemTransactions = result.data.transactions;
 
-        const institutions = await this.getInstitutionAccounts();
+        const institutions = this.state.institutionAccounts;
+
+        console.log("hey");
+        console.log(institutions);
+
         const itemIdToNameMap = _.reduce(
           institutions,
           (acc, item) => {
@@ -222,6 +225,9 @@ export class GlobalContextProvider extends React.Component {
         for (const nextItemTransaction of itemTransactions) {
           const itemId = nextItemTransaction.item.item_id;
           const plaidTransactions = nextItemTransaction.transactions;
+
+          console.log("item id");
+          console.log(itemId);
 
           if (plaidTransactions) {
             for (let plaidTransaction of plaidTransactions) {
@@ -348,6 +354,8 @@ export class GlobalContextProvider extends React.Component {
     } catch (error) {
       console.log(error.message);
     }
+
+    this.setState({ institutionAccounts: [] });
   };
 
   loadDummyData = async () => {
@@ -551,16 +559,9 @@ export class GlobalContextProvider extends React.Component {
 
   addInstitutionAccount = async (itemId, institutionName, accounts) => {
     try {
-      let currentInstitutionAccounts = await this.getInstitutionAccounts();
+      let institutionAccounts = this.state.institutionAccounts;
 
-      if (!currentInstitutionAccounts) {
-        currentInstitutionAccounts = [];
-      }
-
-      console.log("bla");
-      console.log(currentInstitutionAccounts);
-
-      currentInstitutionAccounts.push({
+      institutionAccounts.push({
         itemId,
         institutionName,
         accounts
@@ -568,20 +569,61 @@ export class GlobalContextProvider extends React.Component {
 
       await AsyncStorage.setItem(
         "institutionAccounts",
-        JSON.stringify(currentInstitutionAccounts)
+        JSON.stringify(institutionAccounts)
       );
 
-      this.setState({ currentInstitutionAccounts });
+      this.setState({ institutionAccounts });
     } catch (error) {
       console.log(error.message);
     }
   };
 
-  getInstitutionAccounts = async () => {
+  retrieveInstitutionAccounts = async () => {
     try {
-      return JSON.parse(await AsyncStorage.getItem("institutionAccounts"));
+      let institutionAccounts = JSON.parse(
+        await AsyncStorage.getItem("institutionAccounts")
+      );
+
+      if (!institutionAccounts) {
+        institutionAccounts = [];
+      }
+
+      return institutionAccounts;
     } catch (error) {
       console.error(error.message);
+    }
+  };
+
+  removeInstitutionAccount = async itemId => {
+    try {
+      // Update the firestore first
+      const current_user = await this.getCurrentUser();
+
+      const ref = await firebase
+        .firestore()
+        .collection("user_data")
+        .doc(current_user.uid);
+
+      const removeItem = await ref.update({
+        ["plaid_items." + itemId]: firebase.firestore.FieldValue.delete()
+      });
+
+      // Update the local state
+      const updatedInstitutionAccounts = _.filter(
+        this.state.institutionAccounts,
+        item => {
+          return item.itemId !== itemId;
+        }
+      );
+
+      await AsyncStorage.setItem(
+        "institutionAccounts",
+        JSON.stringify(updatedInstitutionAccounts)
+      );
+
+      this.setState({ institutionAccounts: updatedInstitutionAccounts });
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -607,7 +649,7 @@ export class GlobalContextProvider extends React.Component {
           loginUser: this.loginUser,
           logout: this.logout,
           isUserLoggedIn: this.isUserLoggedIn,
-          getInstitutionAccounts: this.getInstitutionAccounts
+          removeInstitutionAccount: this.removeInstitutionAccount
         }}
       >
         {this.props.children}

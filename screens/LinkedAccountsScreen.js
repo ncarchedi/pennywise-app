@@ -28,22 +28,26 @@ class LinkedAccountsScreen extends React.Component {
     };
   };
 
+  onRemovePressed = async itemId => {
+    await this.props.global.removeInstitutionAccount(itemId);
+  };
+
   render() {
     const institutionAccounts = this.props.global.institutionAccounts;
 
-    console.log("hay");
-    console.log(institutionAccounts);
-
-    if (!institutionAccounts) {
+    if (!institutionAccounts || institutionAccounts.length === 0) {
       return (
         <View style={styles.container}>
-          <Text>No bank accounts linked yet</Text>
+          <Text style={styles.emptyAccountsText}>
+            No bank accounts linked yet
+          </Text>
         </View>
       );
     } else {
       const sectionListData = institutionAccounts.map(item => {
         return {
           title: item.institutionName,
+          itemId: item.itemId,
           data: item.accounts.map(account => account.name)
         };
       });
@@ -56,8 +60,17 @@ class LinkedAccountsScreen extends React.Component {
                 {item}
               </Text>
             )}
-            renderSectionHeader={({ section: { title } }) => (
-              <Text style={styles.sectionTextStyle}>{title}</Text>
+            renderSectionHeader={({ section: { title, itemId } }) => (
+              <View style={styles.sectionHeaderContainer}>
+                <Text style={styles.sectionTextStyle}>{title}</Text>
+                <TouchableOpacity onPress={() => this.onRemovePressed(itemId)}>
+                  <Ionicons
+                    name="ios-remove-circle-outline"
+                    size={20}
+                    color={"red"}
+                  />
+                </TouchableOpacity>
+              </View>
             )}
             sections={sectionListData}
             keyExtractor={(item, index) => item + index}
@@ -75,9 +88,17 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff"
   },
-  sectionTextStyle: {
-    fontWeight: "bold",
+  emptyAccountsText: {
     margin: 10
+  },
+  sectionHeaderContainer: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    margin: 10
+  },
+  sectionTextStyle: {
+    fontWeight: "bold"
   },
   listItemTextStyle: {
     marginHorizontal: 20,

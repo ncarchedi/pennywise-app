@@ -42,7 +42,12 @@ class SettingsScreen extends React.Component {
   };
 
   render() {
-    const { clearAllTransactions, clearAllAccounts, loadDummyData, logout } = this.props.global;
+    const {
+      clearAllTransactions,
+      clearAllAccounts,
+      loadDummyData,
+      logout
+    } = this.props.global;
 
     const notificationDate = moment(new Date())
       .hours(this.state.notificationTime.hours)
@@ -76,12 +81,6 @@ class SettingsScreen extends React.Component {
               style={{ paddingTop: 20 }}
             >
               <Text>Load Example Transactions</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate("PlaidModal")}
-              style={{ paddingTop: 20 }}
-            >
-              <Text>Get Plaid Access Token</Text>
             </TouchableOpacity>
             <View style={styles.notificationContainer}>
               <DatePickerIOS
