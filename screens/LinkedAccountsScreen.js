@@ -9,26 +9,30 @@ import {
   SectionList
 } from "react-native";
 import moment from "moment";
+import { Ionicons } from "@expo/vector-icons";
 
 import { withGlobalContext } from "../GlobalContext";
 
 class LinkedAccountsScreen extends React.Component {
-  static navigationOptions = {
-    title: "Linked Accounts"
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: "Linked bank accounts",
+      headerRight: (
+        <TouchableOpacity
+          onPress={() => navigation.navigate("PlaidModal")}
+          style={{ marginRight: 20 }}
+        >
+          <Ionicons name="ios-add" size={40} />
+        </TouchableOpacity>
+      )
+    };
   };
-
-  state = {
-    institutionAccounts: []
-  };
-
-  async componentDidMount() {
-    this.setState({
-      institutionAccounts: await this.props.global.getInstitutionAccounts()
-    });
-  }
 
   render() {
-    const institutionAccounts = this.state.institutionAccounts;
+    const institutionAccounts = this.props.global.institutionAccounts;
+
+    console.log("hay");
+    console.log(institutionAccounts);
 
     if (!institutionAccounts) {
       return (

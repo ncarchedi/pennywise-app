@@ -4,11 +4,11 @@ import PlaidAuthenticator from "react-native-plaid-link";
 import { withGlobalContext } from "../GlobalContext";
 
 class PlaidLinkScreen extends React.Component {
-  onMessage = data => {
+  onMessage = async data => {
     const { getAccessTokenFromPublicToken } = this.props.global;
 
     if (data.action.includes("connected")) {
-      getAccessTokenFromPublicToken(data.metadata.public_token);
+      await getAccessTokenFromPublicToken(data.metadata.public_token);
       this.setState({ data });
       this.onFinish();
     } else if (data.action.includes("plaid_link-undefined::exit")) {

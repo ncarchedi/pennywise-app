@@ -98,6 +98,14 @@ export class GlobalContextProvider extends React.Component {
     } catch (error) {
       console.log(error.message);
     }
+
+    try {
+      const institutionAccounts = await this.getInstitutionAccounts();
+
+      this.setState({ institutionAccounts });
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   addTransaction = async (transaction = {}) => {
@@ -192,14 +200,22 @@ export class GlobalContextProvider extends React.Component {
         let itemTransactions = result.data.transactions;
 
         const institutions = await this.getInstitutionAccounts();
-        const itemIdToNameMap = _.reduce(institutions, (acc, item) => {
-          return {...acc, [item.itemId]: item.institutionName}
-        }, {});
+        const itemIdToNameMap = _.reduce(
+          institutions,
+          (acc, item) => {
+            return { ...acc, [item.itemId]: item.institutionName };
+          },
+          {}
+        );
 
         const accounts = _.flatten(institutions.map(item => item.accounts));
-        const accountIdToNameMap = _.reduce(accounts, (acc, item) => {
-          return {...acc, [item.accountId]: item.name}
-        }, {});
+        const accountIdToNameMap = _.reduce(
+          accounts,
+          (acc, item) => {
+            return { ...acc, [item.accountId]: item.name };
+          },
+          {}
+        );
 
         let newTransactions = [];
 
@@ -209,7 +225,13 @@ export class GlobalContextProvider extends React.Component {
 
           if (plaidTransactions) {
             for (let plaidTransaction of plaidTransactions) {
-              const { name, amount, date, pending, account_id } = plaidTransaction;
+              const {
+                name,
+                amount,
+                date,
+                pending,
+                account_id
+              } = plaidTransaction;
 
               // Don't include pending transactions or income
               if (pending || amount < 0) {
@@ -548,6 +570,8 @@ export class GlobalContextProvider extends React.Component {
         "institutionAccounts",
         JSON.stringify(currentInstitutionAccounts)
       );
+
+      this.setState({ currentInstitutionAccounts });
     } catch (error) {
       console.log(error.message);
     }
