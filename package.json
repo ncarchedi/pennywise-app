@@ -33,7 +33,8 @@
     "react-native-plaid-link": "^1.3.8",
     "react-native-web": "^0.11.4",
     "react-navigation": "^3.11.0",
-    "uuid": "^3.3.2"
+    "uuid": "^3.3.2",
+    "victory-native": "^33.0.0"
   },
   "devDependencies": {
     "babel-preset-expo": "^5.1.0",

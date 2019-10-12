@@ -2,6 +2,13 @@ import React from "react";
 import { ScrollView, StyleSheet, Text, View, FlatList } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import _ from "lodash";
+import {
+  VictoryBar,
+  VictoryChart,
+  VictoryTheme,
+  VictoryLegend,
+  VictoryGroup
+} from "victory-native";
 
 import { withGlobalContext } from "../GlobalContext";
 
@@ -107,9 +114,50 @@ class SpendingScreen extends React.Component {
       _.keyBy(categories, "label")
     );
 
+    console.log(amountByCategory);
+
     return (
       <View style={styles.container}>
-        <ScrollView
+        <View style={styles.chartContainer}>
+          <VictoryChart
+            theme={VictoryTheme.material}
+            padding={{ top: 50, bottom: 30, left: 60, right: 30 }}
+          >
+            <VictoryLegend
+              x={100}
+              y={15}
+              orientation="horizontal"
+              data={[
+                { name: "This Month", symbol: { fill: "tomato" } },
+                { name: "Last Month", symbol: { fill: "brown" } }
+              ]}
+            />
+            <VictoryGroup
+              horizontal
+              offset={20}
+              style={{ data: { width: 15 } }}
+              colorScale={["brown", "tomato"]}
+            >
+              <VictoryBar
+                data={[
+                  { x: "Fun", y: 150 },
+                  { x: "Fitness", y: 550 },
+                  { x: "Food", y: 500 },
+                  { x: "Rent", y: 1200 }
+                ]}
+              />
+              <VictoryBar
+                data={[
+                  { x: "Fun", y: 350 },
+                  { x: "Fitness", y: 350 },
+                  { x: "Food", y: 650 },
+                  { x: "Rent", y: 1200 }
+                ]}
+              />
+            </VictoryGroup>
+          </VictoryChart>
+        </View>
+        {/* <ScrollView
           style={styles.container}
           contentContainerStyle={styles.contentContainer}
           keyboardShouldPersistTaps="always"
@@ -125,7 +173,7 @@ class SpendingScreen extends React.Component {
               keyExtractor={(item, index) => item + index}
             />
           </View>
-        </ScrollView>
+        </ScrollView> */}
       </View>
     );
   }
@@ -137,6 +185,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff"
+  },
+  chartContainer: {
+    justifyContent: "center",
+    alignItems: "center"
   },
   contentContainer: {
     marginHorizontal: 10
