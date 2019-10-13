@@ -627,6 +627,11 @@ export class GlobalContextProvider extends React.Component {
     }
   };
 
+  // Todo: this should be removed in production as it should never be needed
+  clearAsyncStorage = async () => {
+    await AsyncStorage.clear();
+  };
+
   render() {
     return (
       <GlobalContext.Provider
@@ -649,7 +654,8 @@ export class GlobalContextProvider extends React.Component {
           loginUser: this.loginUser,
           logout: this.logout,
           isUserLoggedIn: this.isUserLoggedIn,
-          removeInstitutionAccount: this.removeInstitutionAccount
+          removeInstitutionAccount: this.removeInstitutionAccount,
+          clearAsyncStorage: this.clearAsyncStorage
         }}
       >
         {this.props.children}

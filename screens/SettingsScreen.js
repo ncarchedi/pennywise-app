@@ -46,7 +46,8 @@ class SettingsScreen extends React.Component {
       clearAllTransactions,
       clearAllAccounts,
       loadDummyData,
-      logout
+      logout,
+      clearAsyncStorage
     } = this.props.global;
 
     const notificationDate = moment(new Date())
@@ -75,6 +76,12 @@ class SettingsScreen extends React.Component {
               style={{ paddingTop: 20 }}
             >
               <Text>Clear All Accounts</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={clearAsyncStorage}
+              style={{ paddingTop: 20 }}
+            >
+              <Text>Clear All Async Storage</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={loadDummyData}
