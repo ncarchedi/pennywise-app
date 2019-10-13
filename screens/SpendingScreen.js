@@ -9,6 +9,8 @@ import {
   VictoryGroup
 } from "victory-native";
 
+import moment from "moment";
+
 import { withGlobalContext } from "../GlobalContext";
 
 class SpendingScreen extends React.Component {
@@ -19,21 +21,26 @@ class SpendingScreen extends React.Component {
   render() {
     const { transactions } = this.props.global;
 
-    // TODO: make months unique by year (e.g. 2019-01 !== 2018-01)
-    today = new Date();
-    thisMonth = today.getMonth();
-    lastMonth = today.getMonth() - 1;
+    const firstDayPreviousMonth = moment()
+      .subtract(1, "months")
+      .startOf("month");
+
+    const lastDayThisMonth = moment().endOf("month");
 
     const spendingByMonth = _(transactions)
       .map(t => ({
         month: t.date.getMonth(),
         ...t
       }))
-      .filter(
-        t =>
-          [thisMonth, lastMonth].includes(t.month) &&
+      .filter(t => {
+        const momentDate = moment(t.date);
+
+        return (
+          firstDayPreviousMonth.isSameOrBefore(momentDate) &&
+          lastDayThisMonth.isSameOrAfter(momentDate) &&
           t.category !== "No Category"
-      )
+        );
+      })
       .groupBy("month")
       .map((month, monthName) =>
         _(month)
