@@ -64,8 +64,24 @@ export class GlobalContextProvider extends React.Component {
   }
 
   componentDidMount = async () => {
+    // To remove
+    console.log("all async storage stuff");
+    AsyncStorage.getAllKeys().then(keyArray => {
+      AsyncStorage.multiGet(keyArray).then(keyValArray => {
+        let myStorage: any = {};
+        for (let keyVal of keyValArray) {
+          myStorage[keyVal[0]] = keyVal[1];
+        }
+
+        console.log("CURRENT STORAGE: ", myStorage);
+      });
+    });
+
     if (await this.isUserLoggedIn()) {
       const uid = (await this.getCurrentUser()).uid;
+
+      console.log("uid");
+      console.log(uid);
 
       try {
         const transactionsRaw = await loadItem(uid, "transactions");
