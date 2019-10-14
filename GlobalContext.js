@@ -14,6 +14,12 @@ import {
   handleDuplicateHashTransactionsFromPlaid
 } from "./utils/TransactionUtils";
 
+import {
+  saveItem,
+  loadItem,
+  migrateStorageToLatestVersion
+} from "./utils/StorageUtils";
+
 import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/functions";
@@ -58,45 +64,63 @@ export class GlobalContextProvider extends React.Component {
   }
 
   componentDidMount = async () => {
-    try {
-      const transactionsRaw = JSON.parse(
-        await AsyncStorage.getItem("transactions")
-      );
+    if (this.isUserLoggedIn()) {
+      const uid = this.getCurrentUser().uid;
 
-      const transactions = transactionsRaw.map(t => ({
-        ...t,
-        date: new Date(t.date)
-      }));
+      // await AsyncStorage.removeItem("storageVersion");
 
-      this.setState({ transactions });
-    } catch (error) {
-      console.log(error.message);
-    }
+      await migrateStorageToLatestVersion(uid);
 
-    try {
-      const savedCategories = JSON.parse(
-        await AsyncStorage.getItem("categories")
-      );
+      try {
+        const transactionsRaw = await loadItem(
+          this.getCurrentUser().uid,
+          "transactions"
+        );
 
-      // if savedCategories is null, then use default categories
-      const categories = savedCategories ? savedCategories : defaultCategories;
-      this.setState({ categories });
-    } catch (error) {
-      console.log(error.message);
-    }
+        const transactions = transactionsRaw.map(t => ({
+          ...t,
+          date: new Date(t.date)
+        }));
 
-    try {
-      let notificationTime = JSON.parse(
-        await AsyncStorage.getItem("notificationTime")
-      );
-
-      if (!notificationTime) {
-        notificationTime = this.state.notificationTime;
+        this.setState({ transactions });
+      } catch (error) {
+        console.log(error.message);
       }
 
-      this.setState({ notificationTime });
-    } catch (error) {
-      console.log(error.message);
+      try {
+        const savedCategories = await loadItem(
+          this.getCurrentUser().uid,
+          "categories"
+        );
+
+        // if savedCategories is null, then use default categories
+        const categories = savedCategories
+          ? savedCategories
+          : defaultCategories;
+        this.setState({ categories });
+      } catch (error) {
+        console.log(error.message);
+      }
+
+      try {
+        let notificationTime = await loadItem(
+          this.getCurrentUser().uid,
+          "notificationTime"
+        );
+
+        if (!notificationTime) {
+          notificationTime = this.state.notificationTime;
+        }
+
+        this.setState({ notificationTime });
+      } catch (error) {
+        console.log(error.message);
+      }
+
+      console.log("hey hey");
+      console.log(this.state.transactions);
+      console.log(this.state.categories);
+      console.log(this.state.notificationTime);
     }
   };
 
@@ -122,14 +146,11 @@ export class GlobalContextProvider extends React.Component {
       "id"
     );
 
-    try {
-      await AsyncStorage.setItem(
-        "transactions",
-        JSON.stringify(updatedTransactionsList)
-      );
-    } catch (error) {
-      console.log(error.message);
-    }
+    await saveItem(
+      this.getCurrentUser().uid,
+      "transactions",
+      updatedTransactionsList
+    );
 
     this.setState({
       transactions: updatedTransactionsList
@@ -253,14 +274,11 @@ export class GlobalContextProvider extends React.Component {
       return transaction;
     });
 
-    try {
-      await AsyncStorage.setItem(
-        "transactions",
-        JSON.stringify(updatedTransactions)
-      );
-    } catch (error) {
-      console.log(error.message);
-    }
+    await saveItem(
+      this.getCurrentUser().uid,
+      "transactions",
+      updatedTransactions
+    );
 
     this.setState({ transactions: updatedTransactions });
   };
@@ -270,14 +288,11 @@ export class GlobalContextProvider extends React.Component {
 
     const updatedTransactions = transactions.filter(t => t.id !== id);
 
-    try {
-      await AsyncStorage.setItem(
-        "transactions",
-        JSON.stringify(updatedTransactions)
-      );
-    } catch (error) {
-      console.log(error.message);
-    }
+    await saveItem(
+      this.getCurrentUser().uid,
+      "transactions",
+      updatedTransactions
+    );
 
     this.setState({ transactions: updatedTransactions });
   };
@@ -306,11 +321,7 @@ export class GlobalContextProvider extends React.Component {
       date: new Date(t.date)
     }));
 
-    try {
-      await AsyncStorage.setItem("transactions", JSON.stringify(dummyData));
-    } catch (error) {
-      console.log(error.message);
-    }
+    await saveItem(this.getCurrentUser().uid, "transactions", dummyData);
 
     this.setState({ transactions: dummyData });
   };
@@ -335,14 +346,11 @@ export class GlobalContextProvider extends React.Component {
 
     const updatedCategoriesList = [...categories, newCategory];
 
-    try {
-      await AsyncStorage.setItem(
-        "categories",
-        JSON.stringify(updatedCategoriesList)
-      );
-    } catch (error) {
-      console.log(error.message);
-    }
+    await saveItem(
+      this.getCurrentUser().uid,
+      "categories",
+      updatedCategoriesList
+    );
 
     this.setState({
       categories: updatedCategoriesList
@@ -352,14 +360,11 @@ export class GlobalContextProvider extends React.Component {
   };
 
   setNotificationTime = async newNotificationTime => {
-    try {
-      await AsyncStorage.setItem(
-        "notificationTime",
-        JSON.stringify(newNotificationTime)
-      );
-    } catch (error) {
-      console.log(error.message);
-    }
+    await saveItem(
+      this.getCurrentUser().uid,
+      "notificationTime",
+      newNotificationTime
+    );
 
     this.setState({ notificationTime: newNotificationTime });
   };
@@ -472,6 +477,7 @@ export class GlobalContextProvider extends React.Component {
   isUserLoggedIn = async () => {
     try {
       let current_user = await this.getCurrentUser();
+
       return current_user ? true : false;
     } catch (error) {
       console.log(error.message);
