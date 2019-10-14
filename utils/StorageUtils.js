@@ -24,28 +24,28 @@ const constructSotrageLocation = (uid, itemName) => {
   return uid + "_" + itemName;
 };
 
-export const migrateStorageToLatestVersion = async uid => {
-  // Load the storage version of the saved data
-  const savedStorageVersion = await AsyncStorage.getItem("storageVersion");
+// export const migrateStorageToLatestVersion = async uid => {
+//   // Load the storage version of the saved data
+//   const savedStorageVersion = await AsyncStorage.getItem("storageVersion");
 
-  if (!savedStorageVersion) {
-    // Equals 'V1', e.g. before we saved data
-    await saveItem(
-      uid,
-      "transactions",
-      JSON.parse(await AsyncStorage.getItem("transactions"))
-    );
-    await saveItem(
-      uid,
-      "categories",
-      JSON.parse(await AsyncStorage.getItem("categories"))
-    );
-    await saveItem(
-      uid,
-      "notificationTime",
-      JSON.parse(await AsyncStorage.getItem("notificationTime"))
-    );
+//   if (!savedStorageVersion) {
+//     // Equals 'V1', e.g. before we saved data
+//     await saveItem(
+//       uid,
+//       "transactions",
+//       JSON.parse(await AsyncStorage.getItem("transactions"))
+//     );
+//     await saveItem(
+//       uid,
+//       "categories",
+//       JSON.parse(await AsyncStorage.getItem("categories"))
+//     );
+//     await saveItem(
+//       uid,
+//       "notificationTime",
+//       JSON.parse(await AsyncStorage.getItem("notificationTime"))
+//     );
 
-    await AsyncStorage.setItem("storageVersion", "2");
-  }
-};
+//     await AsyncStorage.setItem("storageVersion", "2");
+//   }
+// };

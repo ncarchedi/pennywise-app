@@ -64,18 +64,11 @@ export class GlobalContextProvider extends React.Component {
   }
 
   componentDidMount = async () => {
-    if (this.isUserLoggedIn()) {
-      const uid = this.getCurrentUser().uid;
-
-      // await AsyncStorage.removeItem("storageVersion");
-
-      await migrateStorageToLatestVersion(uid);
+    if (await this.isUserLoggedIn()) {
+      const uid = (await this.getCurrentUser()).uid;
 
       try {
-        const transactionsRaw = await loadItem(
-          this.getCurrentUser().uid,
-          "transactions"
-        );
+        const transactionsRaw = await loadItem(uid, "transactions");
 
         const transactions = transactionsRaw.map(t => ({
           ...t,
@@ -88,10 +81,7 @@ export class GlobalContextProvider extends React.Component {
       }
 
       try {
-        const savedCategories = await loadItem(
-          this.getCurrentUser().uid,
-          "categories"
-        );
+        const savedCategories = await loadItem(uid, "categories");
 
         // if savedCategories is null, then use default categories
         const categories = savedCategories
@@ -103,10 +93,7 @@ export class GlobalContextProvider extends React.Component {
       }
 
       try {
-        let notificationTime = await loadItem(
-          this.getCurrentUser().uid,
-          "notificationTime"
-        );
+        let notificationTime = await loadItem(uid, "notificationTime");
 
         if (!notificationTime) {
           notificationTime = this.state.notificationTime;
@@ -147,7 +134,7 @@ export class GlobalContextProvider extends React.Component {
     );
 
     await saveItem(
-      this.getCurrentUser().uid,
+      (await this.getCurrentUser()).uid,
       "transactions",
       updatedTransactionsList
     );
@@ -242,7 +229,6 @@ export class GlobalContextProvider extends React.Component {
         };
       }
     } catch (error) {
-      console.error(error);
       return {
         error: true,
         message: error
@@ -275,7 +261,7 @@ export class GlobalContextProvider extends React.Component {
     });
 
     await saveItem(
-      this.getCurrentUser().uid,
+      (await this.getCurrentUser()).uid,
       "transactions",
       updatedTransactions
     );
@@ -289,7 +275,7 @@ export class GlobalContextProvider extends React.Component {
     const updatedTransactions = transactions.filter(t => t.id !== id);
 
     await saveItem(
-      this.getCurrentUser().uid,
+      (await this.getCurrentUser()).uid,
       "transactions",
       updatedTransactions
     );
@@ -321,7 +307,11 @@ export class GlobalContextProvider extends React.Component {
       date: new Date(t.date)
     }));
 
-    await saveItem(this.getCurrentUser().uid, "transactions", dummyData);
+    await saveItem(
+      (await this.getCurrentUser()).uid,
+      "transactions",
+      dummyData
+    );
 
     this.setState({ transactions: dummyData });
   };
@@ -347,7 +337,7 @@ export class GlobalContextProvider extends React.Component {
     const updatedCategoriesList = [...categories, newCategory];
 
     await saveItem(
-      this.getCurrentUser().uid,
+      (await this.getCurrentUser()).uid,
       "categories",
       updatedCategoriesList
     );
@@ -361,7 +351,7 @@ export class GlobalContextProvider extends React.Component {
 
   setNotificationTime = async newNotificationTime => {
     await saveItem(
-      this.getCurrentUser().uid,
+      (await this.getCurrentUser()).uid,
       "notificationTime",
       newNotificationTime
     );
