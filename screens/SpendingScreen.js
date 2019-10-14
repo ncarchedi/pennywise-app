@@ -23,7 +23,7 @@ class SpendingScreen extends React.Component {
   }
 
   render() {
-    const { transactions } = this.props.global;
+    const transactions = this.props.global.listTransactions();
 
     // const firstDayPreviousMonth = moment()
     //   .subtract(1, "months")

@@ -162,7 +162,7 @@ export class GlobalContextProvider extends React.Component {
       startDate = moment.utc(lastTransactionDate).format("YYYY-MM-DD");
     } else {
       startDate = moment()
-        .subtract(3, "days")
+        .subtract(5, "days")
         .format("YYYY-MM-DD");
     }
 
@@ -229,6 +229,12 @@ export class GlobalContextProvider extends React.Component {
     }
   };
 
+  listTransactions = () => {
+    return this.state.transactions.filter(
+      transaction => !transaction.isRemoved
+    );
+  };
+
   updateTransaction = async attrs => {
     const { transactions } = this.state;
 
@@ -268,7 +274,16 @@ export class GlobalContextProvider extends React.Component {
   deleteTransaction = async id => {
     const { transactions } = this.state;
 
-    const updatedTransactions = transactions.filter(t => t.id !== id);
+    const updatedTransactions = transactions.map(transaction => {
+      if (transaction.id === id) {
+        return {
+          ...transaction,
+          isRemoved: true
+        };
+      } else {
+        return transaction;
+      }
+    });
 
     try {
       await AsyncStorage.setItem(
@@ -499,6 +514,7 @@ export class GlobalContextProvider extends React.Component {
         value={{
           ...this.state,
           // Every function to update the state should be listed here:
+          listTransactions: this.listTransactions,
           addTransaction: this.addTransaction,
           updateTransaction: this.updateTransaction,
           deleteTransaction: this.deleteTransaction,
