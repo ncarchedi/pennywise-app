@@ -18,61 +18,79 @@ class SpendingScreen extends React.Component {
     title: "Spending"
   };
 
+  monthIdentifier(date) {
+    return moment(date).format("YYYY-MM");
+  }
+
   render() {
     const { transactions } = this.props.global;
 
-    const firstDayPreviousMonth = moment()
-      .subtract(1, "months")
-      .startOf("month");
+    // const firstDayPreviousMonth = moment()
+    //   .subtract(1, "months")
+    //   .startOf("month");
 
-    const lastDayThisMonth = moment().endOf("month");
+    // const lastDayThisMonth = moment().endOf("month");
 
     const spendingByMonth = _(transactions)
       .map(t => ({
-        month: t.date.getMonth(),
+        monthIdentifier: this.monthIdentifier(t.date),
         ...t
       }))
+      // Filter out transactions without category
       .filter(t => {
-        const momentDate = moment(t.date);
+        return t.category !== "No Category";
+      })
+      // // Filter out transactions that are not in the past 2 months
+      // .filter(t => {
+      //   const momentDate = moment(t.date);
 
+      //   return (
+      //     firstDayPreviousMonth.isSameOrBefore(momentDate) &&
+      //     lastDayThisMonth.isSameOrAfter(momentDate)
+      //   );
+      // })
+      .groupBy("monthIdentifier")
+      .map((month, monthIdentifier) => {
+        return {
+          monthIdentifier,
+          categories: _(month)
+            .groupBy("category")
+            .map((category, categoryName) => ({
+              category: categoryName,
+              amountSpent: _(category).sumBy("amount")
+            }))
+        };
+      });
+
+    const spendingThisMonth = spendingByMonth
+      .filter(item => {
+        return item.monthIdentifier === this.monthIdentifier(new Date());
+      })
+      .value();
+
+    const spendingLastMonth = spendingByMonth
+      .filter(item => {
         return (
-          firstDayPreviousMonth.isSameOrBefore(momentDate) &&
-          lastDayThisMonth.isSameOrAfter(momentDate) &&
-          t.category !== "No Category"
+          item.monthIdentifier ===
+          this.monthIdentifier(moment().subtract(1, "months"))
         );
       })
-      .groupBy("month")
-      .map((month, monthName) =>
-        _(month)
-          .groupBy("category")
-          .map((category, categoryName) => ({
-            category: categoryName,
-            amountSpent: _(category).sumBy("amount")
-          }))
-      )
       .value();
+
+    const spendingPerCategoryThisMonth =
+      spendingThisMonth[0] && spendingThisMonth[0].categories
+        ? spendingThisMonth[0].categories
+        : [];
+    const spendingPerCategoryLastMonth =
+      spendingLastMonth[0] && spendingLastMonth[0].categories
+        ? spendingLastMonth[0].categories
+        : [];
 
     // TODO: make sure months are ordered correctly
     const actualData = {
-      thisMonth: spendingByMonth[1],
-      lastMonth: spendingByMonth[0]
+      thisMonth: spendingPerCategoryThisMonth,
+      lastMonth: spendingPerCategoryLastMonth
     };
-
-    // // demo data - to be deleted once real data is working
-    // const demoData = {
-    //   thisMonth: [
-    //     { category: "Fun", amountSpent: 150 },
-    //     { category: "Fitness", amountSpent: 550 },
-    //     { category: "Food", amountSpent: 500 },
-    //     { category: "Rent", amountSpent: 1200 }
-    //   ],
-    //   lastMonth: [
-    //     { category: "Bars", amountSpent: 350 },
-    //     { category: "Fitness", amountSpent: 30.9 },
-    //     { category: "Food", amountSpent: 650 },
-    //     { category: "Rent", amountSpent: 2000 }
-    //   ]
-    // };
 
     const plotData = JSON.parse(JSON.stringify(actualData));
 
