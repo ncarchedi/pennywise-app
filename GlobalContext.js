@@ -37,7 +37,7 @@ import {
 } from "react-native-dotenv";
 
 export class GlobalContextProvider extends React.Component {
-  state = {
+  cleanState = {
     transactions: [],
     categories: [],
     notificationTime: {
@@ -45,6 +45,8 @@ export class GlobalContextProvider extends React.Component {
       minutes: 0
     }
   };
+
+  state = this.cleanState;
 
   constructor() {
     super();
@@ -64,24 +66,12 @@ export class GlobalContextProvider extends React.Component {
   }
 
   componentDidMount = async () => {
-    // To remove
-    console.log("all async storage stuff");
-    AsyncStorage.getAllKeys().then(keyArray => {
-      AsyncStorage.multiGet(keyArray).then(keyValArray => {
-        let myStorage: any = {};
-        for (let keyVal of keyValArray) {
-          myStorage[keyVal[0]] = keyVal[1];
-        }
+    await this.loadStateFromStorage();
+  };
 
-        console.log("CURRENT STORAGE: ", myStorage);
-      });
-    });
-
+  loadStateFromStorage = async () => {
     if (await this.isUserLoggedIn()) {
       const uid = (await this.getCurrentUser()).uid;
-
-      console.log("uid");
-      console.log(uid);
 
       try {
         const transactionsRaw = await loadItem(uid, "transactions");
@@ -119,12 +109,11 @@ export class GlobalContextProvider extends React.Component {
       } catch (error) {
         console.log(error.message);
       }
-
-      console.log("hey hey");
-      console.log(this.state.transactions);
-      console.log(this.state.categories);
-      console.log(this.state.notificationTime);
     }
+  };
+
+  initState = async () => {
+    this.setState(this.cleanState);
   };
 
   addTransaction = async (transaction = {}) => {
@@ -438,6 +427,8 @@ export class GlobalContextProvider extends React.Component {
         .auth()
         .createUserWithEmailAndPassword(user, password);
 
+      await this.loadStateFromStorage();
+
       return {
         success: true,
         message: ""
@@ -458,6 +449,8 @@ export class GlobalContextProvider extends React.Component {
         .auth()
         .signInWithEmailAndPassword(user, password);
 
+      await this.loadStateFromStorage();
+
       return {
         success: true,
         message: ""
@@ -475,6 +468,9 @@ export class GlobalContextProvider extends React.Component {
   logout = async () => {
     try {
       await firebase.auth().signOut();
+
+      // Clear the state
+      this.initState();
     } catch (error) {
       console.error(error);
     }
@@ -505,6 +501,11 @@ export class GlobalContextProvider extends React.Component {
     return user;
   };
 
+  // Todo: this should be removed in production as it should never be needed
+  clearAsyncStorage = async () => {
+    await AsyncStorage.clear();
+  };
+
   render() {
     return (
       <GlobalContext.Provider
@@ -525,7 +526,8 @@ export class GlobalContextProvider extends React.Component {
           registerUser: this.registerUser,
           loginUser: this.loginUser,
           logout: this.logout,
-          isUserLoggedIn: this.isUserLoggedIn
+          isUserLoggedIn: this.isUserLoggedIn,
+          clearAsyncStorage: this.clearAsyncStorage
         }}
       >
         {this.props.children}
