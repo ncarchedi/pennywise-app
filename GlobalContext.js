@@ -162,7 +162,7 @@ export class GlobalContextProvider extends React.Component {
       startDate = moment.utc(lastTransactionDate).format("YYYY-MM-DD");
     } else {
       startDate = moment()
-        .subtract(3, "days")
+        .subtract(5, "days")
         .format("YYYY-MM-DD");
     }
 

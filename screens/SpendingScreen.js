@@ -6,7 +6,9 @@ import {
   VictoryChart,
   VictoryTheme,
   VictoryLegend,
-  VictoryGroup
+  VictoryGroup,
+  VictoryAxis,
+  VictoryLabel
 } from "victory-native";
 
 import moment from "moment";
@@ -59,6 +61,7 @@ class SpendingScreen extends React.Component {
               category: categoryName,
               amountSpent: _(category).sumBy("amount")
             }))
+            .value()
         };
       });
 
@@ -94,6 +97,20 @@ class SpendingScreen extends React.Component {
 
     const plotData = JSON.parse(JSON.stringify(actualData));
 
+    const nbCategories = Math.max(
+      spendingPerCategoryThisMonth.length,
+      spendingPerCategoryLastMonth.length
+    );
+
+    // These calculations are not exact. E.g. I'm not sure how many pixels
+    // 'overhead' should be. It's just to adjust the height
+    // more or less with the nb of categories.
+    const nbPixelsOverhead = 100;
+    const nbPixelsPerCategory = 30;
+    const nbPixelsSpacing = 15;
+    const height =
+      nbPixelsOverhead + nbCategories * (nbPixelsPerCategory + nbPixelsSpacing);
+
     return (
       <View style={styles.container}>
         <View style={styles.chartContainer}>
@@ -101,7 +118,8 @@ class SpendingScreen extends React.Component {
             theme={VictoryTheme.material}
             // TODO: make sure long category names don't get cutoff
             // https://formidable.com/open-source/victory/docs/faq/#my-axis-labels-are-cut-off-how-can-i-fix-them
-            padding={{ top: 50, bottom: 30, left: 100, right: 20 }}
+            padding={{ top: 50, bottom: 30, left: 100, right: 40 }}
+            height={height}
           >
             <VictoryLegend
               x={100}
@@ -114,7 +132,7 @@ class SpendingScreen extends React.Component {
             />
             <VictoryGroup
               horizontal
-              offset={20}
+              offset={15}
               style={{
                 data: { width: 15 }
               }}
@@ -124,14 +142,26 @@ class SpendingScreen extends React.Component {
                 data={plotData.lastMonth}
                 x="category"
                 y="amountSpent"
+                labels={({ datum }) => {
+                  return "$" + Math.round(datum.amountSpent);
+                }}
+                labelComponent={<VictoryLabel dx={5} />}
               />
 
               <VictoryBar
                 data={plotData.thisMonth}
                 x="category"
                 y="amountSpent"
+                labels={({ datum }) => {
+                  return "$" + Math.round(datum.amountSpent);
+                }}
+                labelComponent={<VictoryLabel dx={5} />}
               />
             </VictoryGroup>
+            {/* The vertical axis */}
+            <VictoryAxis />
+            {/* The horizontal axis */}
+            <VictoryAxis dependentAxis tickFormat={x => `$${x}`} />
           </VictoryChart>
         </View>
       </View>
@@ -147,7 +177,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff"
   },
   chartContainer: {
-    justifyContent: "center",
-    alignItems: "center"
+    flex: 1
+    // backgroundColor: "green"
+    // justifyContent: "center",
+    // alignItems: "center"
   }
 });
