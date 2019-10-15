@@ -76,8 +76,9 @@ class TodoScreen extends React.Component {
   };
 
   render() {
-    const { transactions, categories } = this.props.global;
+    const { categories } = this.props.global;
     const { refreshing, statusMessage } = this.state;
+    const transactions = this.props.global.listTransactions();
 
     return (
       <View style={styles.container}>

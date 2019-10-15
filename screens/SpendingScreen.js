@@ -1,7 +1,17 @@
 import React from "react";
-import { ScrollView, StyleSheet, Text, View, FlatList } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { StyleSheet, View } from "react-native";
 import _ from "lodash";
+import {
+  VictoryBar,
+  VictoryChart,
+  VictoryTheme,
+  VictoryLegend,
+  VictoryGroup,
+  VictoryAxis,
+  VictoryLabel
+} from "victory-native";
+
+import moment from "moment";
 
 import { withGlobalContext } from "../GlobalContext";
 
@@ -10,122 +20,150 @@ class SpendingScreen extends React.Component {
     title: "Spending"
   };
 
-  ListItemSeparator = () => {
-    return (
-      <View style={{ height: 1, width: "100%", backgroundColor: "#f1f1f1" }} />
-    );
-  };
-
-  listItem = (item, index) => {
-    const { amountThisMonth, amountLastMonth, category, icon } = item;
-
-    return (
-      <View style={styles.categoryContainer}>
-        <View style={styles.categoryNameContainer}>
-          <View
-            style={{
-              alignSelf: "center",
-              width: 25
-            }}
-          >
-            <Ionicons name={icon} size={25} style={{ alignSelf: "center" }} />
-          </View>
-          <Text style={styles.nameText}>{category}</Text>
-        </View>
-        <View style={styles.categorySpendingContainer}>
-          <View style={styles.categorySpendingItemContainer}>
-            <Text>
-              {Number(amountLastMonth).toLocaleString("en-US", {
-                style: "currency",
-                currency: "USD"
-              })}
-            </Text>
-          </View>
-          <View style={styles.categorySpendingItemContainer}>
-            <Text>
-              {Number(amountThisMonth).toLocaleString("en-US", {
-                style: "currency",
-                currency: "USD"
-              })}
-            </Text>
-          </View>
-        </View>
-      </View>
-    );
-  };
-
-  listHeader = () => {
-    return (
-      <View style={styles.categoryContainer}>
-        <View style={styles.categoryNameContainer}>
-          <Text style={styles.headerText}>Category</Text>
-        </View>
-        <View style={styles.categorySpendingContainer}>
-          <View style={styles.categorySpendingItemContainer}>
-            <Text style={styles.headerText}>Last Month</Text>
-          </View>
-          <View style={styles.categorySpendingItemContainer}>
-            <Text style={styles.headerText}>This Month</Text>
-          </View>
-        </View>
-      </View>
-    );
-  };
+  monthIdentifier(date) {
+    return moment(date).format("YYYY-MM");
+  }
 
   render() {
-    const { transactions, categories } = this.props.global;
+    const transactions = this.props.global.listTransactions();
 
-    // compute amount spent by category for this and last month
-    today = new Date();
+    // const firstDayPreviousMonth = moment()
+    //   .subtract(1, "months")
+    //   .startOf("month");
 
-    const amountByCategory = _(transactions)
-      .groupBy("category")
-      .map((group, name) => ({
-        category: name,
-        amountThisMonth: _(group)
-          .filter(t => t.date.getMonth() === today.getMonth())
-          .sumBy("amount"),
-        amountLastMonth: _(group)
-          .filter(t => t.date.getMonth() === today.getMonth() - 1)
-          .sumBy("amount")
+    // const lastDayThisMonth = moment().endOf("month");
+
+    const spendingByMonth = _(transactions)
+      .map(t => ({
+        monthIdentifier: this.monthIdentifier(t.date),
+        ...t
       }))
-      .filter(t => t.category !== "No Category")
-      .sortBy("category")
+      // Filter out transactions without category
+      .filter(t => {
+        return t.category !== "No Category";
+      })
+      // // Filter out transactions that are not in the past 2 months
+      // .filter(t => {
+      //   const momentDate = moment(t.date);
+
+      //   return (
+      //     firstDayPreviousMonth.isSameOrBefore(momentDate) &&
+      //     lastDayThisMonth.isSameOrAfter(momentDate)
+      //   );
+      // })
+      .groupBy("monthIdentifier")
+      .map((month, monthIdentifier) => {
+        return {
+          monthIdentifier,
+          categories: _(month)
+            .groupBy("category")
+            .map((category, categoryName) => ({
+              category: categoryName,
+              amountSpent: _(category).sumBy("amount")
+            }))
+            .value()
+        };
+      });
+
+    const spendingThisMonth = spendingByMonth
+      .filter(item => {
+        return item.monthIdentifier === this.monthIdentifier(new Date());
+      })
       .value();
 
-    if (!amountByCategory || !amountByCategory.length) {
-      return (
-        <View style={styles.container}>
-          <Text style={styles.emptyScreenText}>Add some transactions! 💰</Text>
-        </View>
-      );
-    }
+    const spendingLastMonth = spendingByMonth
+      .filter(item => {
+        return (
+          item.monthIdentifier ===
+          this.monthIdentifier(moment().subtract(1, "months"))
+        );
+      })
+      .value();
 
-    // merge icons with amounts by category
-    _.merge(
-      _.keyBy(amountByCategory, "category"),
-      _.keyBy(categories, "label")
+    const spendingPerCategoryThisMonth =
+      spendingThisMonth[0] && spendingThisMonth[0].categories
+        ? spendingThisMonth[0].categories
+        : [];
+    const spendingPerCategoryLastMonth =
+      spendingLastMonth[0] && spendingLastMonth[0].categories
+        ? spendingLastMonth[0].categories
+        : [];
+
+    // TODO: make sure months are ordered correctly
+    const actualData = {
+      thisMonth: spendingPerCategoryThisMonth,
+      lastMonth: spendingPerCategoryLastMonth
+    };
+
+    const plotData = JSON.parse(JSON.stringify(actualData));
+
+    const nbCategories = Math.max(
+      spendingPerCategoryThisMonth.length,
+      spendingPerCategoryLastMonth.length
     );
+
+    // These calculations are not exact. E.g. I'm not sure how many pixels
+    // 'overhead' should be. It's just to adjust the height
+    // more or less with the nb of categories.
+    const nbPixelsOverhead = 100;
+    const nbPixelsPerCategory = 30;
+    const nbPixelsSpacing = 15;
+    const height =
+      nbPixelsOverhead + nbCategories * (nbPixelsPerCategory + nbPixelsSpacing);
 
     return (
       <View style={styles.container}>
-        <ScrollView
-          style={styles.container}
-          contentContainerStyle={styles.contentContainer}
-          keyboardShouldPersistTaps="always"
-          keyboardDismissMode="on-drag"
-          showsVerticalScrollIndicator={false}
-        >
-          <View style={styles.spendingContainer}>
-            <FlatList
-              data={amountByCategory}
-              renderItem={({ item, index }) => this.listItem(item, index)}
-              ListHeaderComponent={() => this.listHeader()}
-              ItemSeparatorComponent={this.ListItemSeparator}
-              keyExtractor={(item, index) => item + index}
+        <View style={styles.chartContainer}>
+          <VictoryChart
+            theme={VictoryTheme.material}
+            // TODO: make sure long category names don't get cutoff
+            // https://formidable.com/open-source/victory/docs/faq/#my-axis-labels-are-cut-off-how-can-i-fix-them
+            padding={{ top: 50, bottom: 30, left: 100, right: 40 }}
+            height={height}
+          >
+            <VictoryLegend
+              x={100}
+              y={15}
+              orientation="horizontal"
+              data={[
+                { name: "This Month", symbol: { fill: "tomato" } },
+                { name: "Last Month", symbol: { fill: "brown" } }
+              ]}
             />
-          </View>
-        </ScrollView>
+            <VictoryGroup
+              horizontal
+              offset={15}
+              style={{
+                data: { width: 15 }
+              }}
+              colorScale={["brown", "tomato"]}
+            >
+              <VictoryBar
+                data={plotData.lastMonth}
+                x="category"
+                y="amountSpent"
+                labels={({ datum }) => {
+                  return "$" + Math.round(datum.amountSpent);
+                }}
+                labelComponent={<VictoryLabel dx={5} />}
+              />
+
+              <VictoryBar
+                data={plotData.thisMonth}
+                x="category"
+                y="amountSpent"
+                labels={({ datum }) => {
+                  return "$" + Math.round(datum.amountSpent);
+                }}
+                labelComponent={<VictoryLabel dx={5} />}
+              />
+            </VictoryGroup>
+            {/* The vertical axis */}
+            <VictoryAxis />
+            {/* The horizontal axis */}
+            <VictoryAxis dependentAxis tickFormat={x => `$${x}`} />
+          </VictoryChart>
+        </View>
       </View>
     );
   }
@@ -138,41 +176,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff"
   },
-  contentContainer: {
-    marginHorizontal: 10
-  },
-  spendingContainer: {
+  chartContainer: {
+    flex: 1
+    // backgroundColor: "green"
+    // justifyContent: "center",
     // alignItems: "center"
-  },
-  categoryContainer: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-between"
-  },
-  nameText: {
-    marginHorizontal: 10,
-    alignSelf: "center"
-  },
-  categoryNameContainer: {
-    flexDirection: "row",
-    marginVertical: 10
-  },
-  categorySpendingContainer: {
-    flexDirection: "row-reverse"
-  },
-  categorySpendingItemContainer: {
-    minWidth: 85,
-    marginVertical: 12,
-    flexDirection: "row-reverse",
-    alignSelf: "center"
-  },
-  headerText: {
-    fontWeight: "bold"
-  },
-  emptyScreenText: {
-    height: "100%",
-    textAlign: "center",
-    marginTop: 30,
-    fontSize: 22
   }
 });

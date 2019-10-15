@@ -18,7 +18,8 @@ class TransactionsScreen extends React.Component {
   render() {
     // console.log("rendering transactions screen...");
 
-    const { transactions, categories } = this.props.global;
+    const { categories } = this.props.global;
+    const transactions = this.props.global.listTransactions();
 
     return (
       <View style={styles.container}>
