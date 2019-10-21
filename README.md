@@ -19,14 +19,6 @@ cd pennywise-app
 yarn start
 ```
 
-Run the development version:
-
-```
-cd pennywise-app
-git checkout dev
-yarn start
-```
-
 Run tests:
 
 ```
