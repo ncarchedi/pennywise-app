@@ -33,7 +33,8 @@ import {
   FIREBASE_PROJECT_ID,
   FIREBASE_STORAGE_BUCKET,
   FIREBASE_MESSAGING_SENDER_ID,
-  FIREBASE_APP_ID
+  FIREBASE_APP_ID,
+  ENVIRONMENT
 } from "react-native-dotenv";
 
 export class GlobalContextProvider extends React.Component {
@@ -153,11 +154,12 @@ export class GlobalContextProvider extends React.Component {
 
   getAccessTokenFromPublicToken = async publicToken => {
     try {
-      const getAccessTokenFromPublicToken_v2 = firebase
+      const getAccessTokenFromPublicToken_v2_2 = firebase
         .functions()
-        .httpsCallable("getAccessTokenFromPublicToken_v2");
+        .httpsCallable("getAccessTokenFromPublicToken_v2_2");
 
-      let result = await getAccessTokenFromPublicToken_v2({
+      let result = await getAccessTokenFromPublicToken_v2_2({
+        env: ENVIRONMENT,
         public_token: publicToken
       });
     } catch (error) {
@@ -180,11 +182,12 @@ export class GlobalContextProvider extends React.Component {
     }
 
     try {
-      const getPlaidTransactions_v2 = firebase
+      const getPlaidTransactions_v2_2 = firebase
         .functions()
-        .httpsCallable("getPlaidTransactions_v2");
+        .httpsCallable("getPlaidTransactions_v2_2");
 
-      let result = await getPlaidTransactions_v2({
+      let result = await getPlaidTransactions_v2_2({
+        env: ENVIRONMENT,
         start_date: startDate,
         end_date: endDate
       });
@@ -521,6 +524,10 @@ export class GlobalContextProvider extends React.Component {
     await AsyncStorage.clear();
   };
 
+  getEnvironment = () => {
+    return ENVIRONMENT;
+  };
+
   render() {
     return (
       <GlobalContext.Provider
@@ -543,7 +550,8 @@ export class GlobalContextProvider extends React.Component {
           loginUser: this.loginUser,
           logout: this.logout,
           isUserLoggedIn: this.isUserLoggedIn,
-          clearAsyncStorage: this.clearAsyncStorage
+          clearAsyncStorage: this.clearAsyncStorage,
+          getEnvironment: this.getEnvironment
         }}
       >
         {this.props.children}
