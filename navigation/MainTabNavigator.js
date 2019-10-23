@@ -13,6 +13,7 @@ import SettingsScreen from "../screens/SettingsScreen";
 import EditTransactionModal from "../screens/EditTransactionModal";
 import PlaidLinkScreen from "../screens/PlaidLinkScreen";
 import SelectCategoryModal from "../screens/SelectCategoryModal";
+import LinkedAccountsScreen from "../screens/LinkedAccountsScreen";
 
 const config = {
   web: { headerMode: "screen" },
@@ -66,7 +67,8 @@ SpendingStack.navigationOptions = {
 const SettingsStack = createStackNavigator(
   {
     Settings: SettingsScreen,
-    PlaidModal: PlaidLinkScreen
+    PlaidModal: PlaidLinkScreen,
+    LinkedAccounts: LinkedAccountsScreen
   },
   { ...config, mode: "modal" }
 );

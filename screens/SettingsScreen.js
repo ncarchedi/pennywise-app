@@ -44,6 +44,7 @@ class SettingsScreen extends React.Component {
   render() {
     const {
       clearAllTransactions,
+      clearAllAccounts,
       loadDummyData,
       logout,
       clearAsyncStorage
@@ -71,6 +72,12 @@ class SettingsScreen extends React.Component {
               <Text>Clear All Transactions</Text>
             </TouchableOpacity>
             <TouchableOpacity
+              onPress={loadDummyData}
+              style={{ paddingTop: 20 }}
+            >
+              <Text>Clear All Accounts</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
               onPress={clearAsyncStorage}
               style={{ paddingTop: 20 }}
             >
@@ -81,12 +88,6 @@ class SettingsScreen extends React.Component {
               style={{ paddingTop: 20 }}
             >
               <Text>Load Example Transactions</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate("PlaidModal")}
-              style={{ paddingTop: 20 }}
-            >
-              <Text>Get Plaid Access Token</Text>
             </TouchableOpacity>
             <View style={styles.notificationContainer}>
               <DatePickerIOS
@@ -107,6 +108,12 @@ class SettingsScreen extends React.Component {
               }
             >
               <Text>Go To Onboarding</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate("LinkedAccounts")}
+              style={{ paddingVertical: 20, alignSelf: "center" }}
+            >
+              <Text>Linked Bank Accounts</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={this.handleLogout}

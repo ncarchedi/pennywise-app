@@ -23,6 +23,7 @@ import {
 import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/functions";
+import "firebase/firestore";
 
 const GlobalContext = React.createContext({});
 
@@ -44,7 +45,8 @@ export class GlobalContextProvider extends React.Component {
     notificationTime: {
       hours: 8,
       minutes: 0
-    }
+    },
+    institutionAccounts: []
   };
 
   state = this.cleanState;
@@ -111,6 +113,14 @@ export class GlobalContextProvider extends React.Component {
         console.log(error.message);
       }
     }
+
+    try {
+      const institutionAccounts = await this.retrieveInstitutionAccounts();
+
+      this.setState({ institutionAccounts });
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   initState = async () => {
@@ -132,8 +142,6 @@ export class GlobalContextProvider extends React.Component {
     );
 
     // Only add transactions we don't have already
-    // Reason for not using 'unionBy' is that you can't control with that method from which
-    // array to pick in case of duplicates.
     let updatedTransactionsList = _.uniqBy(
       _.concat(transactions, newTransactions),
       "id"
@@ -153,17 +161,24 @@ export class GlobalContextProvider extends React.Component {
   };
 
   getAccessTokenFromPublicToken = async publicToken => {
-    try {
-      const getAccessTokenFromPublicToken_v2_2 = firebase
-        .functions()
-        .httpsCallable("getAccessTokenFromPublicToken_v2_2");
+    const getAccessTokenFromPublicToken = firebase
+      .functions()
+      .httpsCallable("getAccessTokenFromPublicToken_v4");
 
-      let result = await getAccessTokenFromPublicToken_v2_2({
-        env: ENVIRONMENT,
-        public_token: publicToken
-      });
-    } catch (error) {
-      console.log(error);
+    let result = await getAccessTokenFromPublicToken({
+      env: ENVIRONMENT,
+      public_token: publicToken
+    });
+
+    if (result.data.error) {
+      console.log(result);
+      throw result.data.error.error_message;
+    } else {
+      await this.addInstitutionAccount(
+        result.data.item_id,
+        result.data.institution_name,
+        result.data.account_details
+      );
     }
   };
 
@@ -182,54 +197,90 @@ export class GlobalContextProvider extends React.Component {
     }
 
     try {
-      const getPlaidTransactions_v2_2 = firebase
+      const getPlaidTransactions = firebase
         .functions()
-        .httpsCallable("getPlaidTransactions_v2_2");
+        .httpsCallable("getPlaidTransactions_v4");
 
-      let result = await getPlaidTransactions_v2_2({
+      let result = await getPlaidTransactions({
         env: ENVIRONMENT,
         start_date: startDate,
         end_date: endDate
       });
 
       if (result.data.error) {
+        console.log(result.data.error);
         return {
           error: true,
           message: result.data.error
         };
       } else {
-        plaidTransactions = result.data.transactions.transactions;
+        let itemTransactions = result.data.transactions;
+
+        const institutions = this.state.institutionAccounts;
+
+        const itemIdToNameMap = _.reduce(
+          institutions,
+          (acc, item) => {
+            return { ...acc, [item.itemId]: item.institutionName };
+          },
+          {}
+        );
+
+        const accounts = _.flatten(institutions.map(item => item.accounts));
+        const accountIdToNameMap = _.reduce(
+          accounts,
+          (acc, item) => {
+            return { ...acc, [item.accountId]: item.name };
+          },
+          {}
+        );
 
         let newTransactions = [];
 
-        if (plaidTransactions) {
-          for (let plaidTransaction of plaidTransactions) {
-            const { name, amount, date, pending } = plaidTransaction;
+        for (const nextItemTransaction of itemTransactions) {
+          const itemId = nextItemTransaction.item.item_id;
+          const plaidTransactions = nextItemTransaction.transactions;
 
-            // Don't include pending transactions or income
-            if (pending || amount < 0) {
-              continue;
-            } else {
-              let transaction = {
-                id: calculateHashForPlaidTransaction(plaidTransaction),
-                source: "plaid",
+          console.log("item id");
+          console.log(itemId);
+
+          if (plaidTransactions) {
+            for (let plaidTransaction of plaidTransactions) {
+              const {
                 name,
                 amount,
-                date
-              };
+                date,
+                pending,
+                account_id
+              } = plaidTransaction;
 
-              newTransactions = [...newTransactions, transaction];
+              // Don't include pending transactions or income
+              if (pending || amount < 0) {
+                continue;
+              } else {
+                let transaction = {
+                  id: calculateHashForPlaidTransaction(plaidTransaction),
+                  source: "plaid",
+                  name,
+                  amount,
+                  date,
+                  account: accountIdToNameMap[account_id],
+                  institution: itemIdToNameMap[itemId]
+                };
+
+                newTransactions = [...newTransactions, transaction];
+              }
             }
           }
-
-          // If the plaid output contains multiple transactions that are identical,
-          // update their hashes to be different
-          newTransactions = handleDuplicateHashTransactionsFromPlaid(
-            newTransactions
-          );
-
-          this.addTransactions(newTransactions);
         }
+
+        // If the plaid output contains multiple transactions that are identical,
+        // update their hashes to be different
+        newTransactions = handleDuplicateHashTransactionsFromPlaid(
+          newTransactions
+        );
+
+        this.addTransactions(newTransactions);
 
         return {
           error: false,
@@ -237,6 +288,7 @@ export class GlobalContextProvider extends React.Component {
         };
       }
     } catch (error) {
+      console.log(error);
       return {
         error: true,
         message: error
@@ -316,6 +368,18 @@ export class GlobalContextProvider extends React.Component {
     }
 
     this.setState({ transactions: [] });
+  };
+
+  clearAllAccounts = async () => {
+    console.log("clearing all accounts...");
+
+    try {
+      await AsyncStorage.removeItem("institutionAccounts");
+    } catch (error) {
+      console.log(error.message);
+    }
+
+    this.setState({ institutionAccounts: [] });
   };
 
   loadDummyData = async () => {
@@ -519,6 +583,76 @@ export class GlobalContextProvider extends React.Component {
     return user;
   };
 
+  addInstitutionAccount = async (itemId, institutionName, accounts) => {
+    try {
+      let institutionAccounts = this.state.institutionAccounts;
+
+      institutionAccounts.push({
+        itemId,
+        institutionName,
+        accounts
+      });
+
+      await AsyncStorage.setItem(
+        "institutionAccounts",
+        JSON.stringify(institutionAccounts)
+      );
+
+      this.setState({ institutionAccounts });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  retrieveInstitutionAccounts = async () => {
+    try {
+      let institutionAccounts = JSON.parse(
+        await AsyncStorage.getItem("institutionAccounts")
+      );
+
+      if (!institutionAccounts) {
+        institutionAccounts = [];
+      }
+
+      return institutionAccounts;
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
+  removeInstitutionAccount = async itemId => {
+    try {
+      // Update the firestore first
+      const current_user = await this.getCurrentUser();
+
+      const ref = await firebase
+        .firestore()
+        .collection("user_data")
+        .doc(current_user.uid);
+
+      const removeItem = await ref.update({
+        ["plaid_items." + itemId]: firebase.firestore.FieldValue.delete()
+      });
+
+      // Update the local state
+      const updatedInstitutionAccounts = _.filter(
+        this.state.institutionAccounts,
+        item => {
+          return item.itemId !== itemId;
+        }
+      );
+
+      await AsyncStorage.setItem(
+        "institutionAccounts",
+        JSON.stringify(updatedInstitutionAccounts)
+      );
+
+      this.setState({ institutionAccounts: updatedInstitutionAccounts });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   // Todo: this should be removed in production as it should never be needed
   clearAsyncStorage = async () => {
     await AsyncStorage.clear();
@@ -539,6 +673,7 @@ export class GlobalContextProvider extends React.Component {
           updateTransaction: this.updateTransaction,
           deleteTransaction: this.deleteTransaction,
           clearAllTransactions: this.clearAllTransactions,
+          clearAllAccounts: this.clearAllAccounts,
           loadDummyData: this.loadDummyData,
           getAccessTokenFromPublicToken: this.getAccessTokenFromPublicToken,
           getPlaidTransactions: this.getPlaidTransactions,
@@ -550,6 +685,7 @@ export class GlobalContextProvider extends React.Component {
           loginUser: this.loginUser,
           logout: this.logout,
           isUserLoggedIn: this.isUserLoggedIn,
+          removeInstitutionAccount: this.removeInstitutionAccount,
           clearAsyncStorage: this.clearAsyncStorage,
           getEnvironment: this.getEnvironment
         }}

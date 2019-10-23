@@ -26,7 +26,7 @@ export default function TransactionsList({
   };
 
   ListItem = (item, index) => {
-    const { name, amount, date, category, icon } = item;
+    const { name, amount, date, category, icon, institution, account } = item;
 
     return (
       <TouchableOpacity onPress={() => onTransactionPress(item)}>
@@ -50,6 +50,9 @@ export default function TransactionsList({
                   currency: "USD"
                 })}
               </Text>
+            </View>
+            <View style={{ flexDirection: "row", marginTop: 5 }}>
+              <Text style={{color: 'gray'}}>{institution + ' - ' + account}</Text>
             </View>
             <View style={{ flexDirection: "row", marginTop: 5 }}>
               <Text>{toPrettyDate(date)}</Text>

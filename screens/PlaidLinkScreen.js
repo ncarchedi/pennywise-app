@@ -1,14 +1,22 @@
 import React from "react";
+import { Alert } from "react-native";
 import PlaidAuthenticator from "react-native-plaid-link";
 
 import { withGlobalContext } from "../GlobalContext";
 
 class PlaidLinkScreen extends React.Component {
-  onMessage = data => {
+  onMessage = async data => {
     const { getAccessTokenFromPublicToken } = this.props.global;
 
     if (data.action.includes("connected")) {
-      getAccessTokenFromPublicToken(data.metadata.public_token);
+      try {
+        await getAccessTokenFromPublicToken(data.metadata.public_token);
+      } catch (error) {
+        console.log(error);
+        Alert.alert("Error when linking bank accounts", error, {
+          cancelable: false
+        });
+      }
       this.setState({ data });
       this.onFinish();
     } else if (data.action.includes("plaid_link-undefined::exit")) {
