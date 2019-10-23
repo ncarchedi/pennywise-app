@@ -245,8 +245,8 @@ export class GlobalContextProvider extends React.Component {
           const itemId = nextItemTransaction.item.item_id;
           const plaidTransactions = nextItemTransaction.transactions;
 
-          console.log("item id");
-          console.log(itemId);
+          // console.log("item id");
+          // console.log(itemId);
 
           if (plaidTransactions) {
             for (let plaidTransaction of plaidTransactions) {

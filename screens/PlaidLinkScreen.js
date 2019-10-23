@@ -43,7 +43,7 @@ class PlaidLinkScreen extends React.Component {
         publicKey="aef79d0fac8493ad10a8760b0c01a6"
         env={this.props.global.getEnvironment()}
         product="transactions"
-        clientName="Conscious Spending"
+        clientName="Conscious Spending" // TODO: update to "Pennywise"
         selectAccount={false}
       />
     );
