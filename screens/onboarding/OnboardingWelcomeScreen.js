@@ -26,7 +26,7 @@ class OnboardingWelcomeScreen extends React.Component {
         <TouchableWithoutFeedback onPress={this.handleNext}>
           <View style={styles.touchableContainer}>
             <View style={styles.contentContainer}>
-              <Text style={styles.text}>Welcome to Conscious Spending!</Text>
+              <Text style={styles.text}>Welcome to Pennywise!</Text>
             </View>
             <View styles={styles.footerContainer}>
               <Text style={styles.continueText}>

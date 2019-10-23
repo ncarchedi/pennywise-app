@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "Conscious Spending",
-    "slug": "conscious-spending",
+    "name": "Pennywise",
+    "slug": "pennywise",
     "privacy": "public",
     "sdkVersion": "33.0.0",
     "platforms": ["ios"],
-    "version": "1.0.6",
+    "version": "1.0.7",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "splash": {
@@ -18,7 +18,7 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "bundleIdentifier": "com.dayonelabs.conscious-spending",
+      "bundleIdentifier": "com.dayonelabs.pennywise",
       "supportsTablet": true
     }
   }
