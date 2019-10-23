@@ -18,7 +18,7 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "bundleIdentifier": "com.dayonelabs.pennywise",
+      "bundleIdentifier": "com.dayonelabs.conscious-spending",
       "supportsTablet": true
     }
   }
