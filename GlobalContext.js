@@ -14,6 +14,12 @@ import {
   handleDuplicateHashTransactionsFromPlaid
 } from "./utils/TransactionUtils";
 
+import {
+  saveItem,
+  loadItem,
+  migrateStorageToLatestVersion
+} from "./utils/StorageUtils";
+
 import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/functions";
@@ -28,11 +34,12 @@ import {
   FIREBASE_PROJECT_ID,
   FIREBASE_STORAGE_BUCKET,
   FIREBASE_MESSAGING_SENDER_ID,
-  FIREBASE_APP_ID
+  FIREBASE_APP_ID,
+  ENVIRONMENT
 } from "react-native-dotenv";
 
 export class GlobalContextProvider extends React.Component {
-  state = {
+  cleanState = {
     transactions: [],
     categories: [],
     notificationTime: {
@@ -41,6 +48,8 @@ export class GlobalContextProvider extends React.Component {
     },
     institutionAccounts: []
   };
+
+  state = this.cleanState;
 
   constructor() {
     super();
@@ -60,45 +69,49 @@ export class GlobalContextProvider extends React.Component {
   }
 
   componentDidMount = async () => {
-    try {
-      const transactionsRaw = JSON.parse(
-        await AsyncStorage.getItem("transactions")
-      );
+    await this.loadStateFromStorage();
+  };
 
-      const transactions = transactionsRaw.map(t => ({
-        ...t,
-        date: new Date(t.date)
-      }));
+  loadStateFromStorage = async () => {
+    if (await this.isUserLoggedIn()) {
+      const uid = (await this.getCurrentUser()).uid;
 
-      this.setState({ transactions });
-    } catch (error) {
-      console.log(error.message);
-    }
+      try {
+        const transactionsRaw = await loadItem(uid, "transactions");
 
-    try {
-      const savedCategories = JSON.parse(
-        await AsyncStorage.getItem("categories")
-      );
+        const transactions = transactionsRaw.map(t => ({
+          ...t,
+          date: new Date(t.date)
+        }));
 
-      // if savedCategories is null, then use default categories
-      const categories = savedCategories ? savedCategories : defaultCategories;
-      this.setState({ categories });
-    } catch (error) {
-      console.log(error.message);
-    }
-
-    try {
-      let notificationTime = JSON.parse(
-        await AsyncStorage.getItem("notificationTime")
-      );
-
-      if (!notificationTime) {
-        notificationTime = this.state.notificationTime;
+        this.setState({ transactions });
+      } catch (error) {
+        console.log(error.message);
       }
 
-      this.setState({ notificationTime });
-    } catch (error) {
-      console.log(error.message);
+      try {
+        const savedCategories = await loadItem(uid, "categories");
+
+        // if savedCategories is null, then use default categories
+        const categories = savedCategories
+          ? savedCategories
+          : defaultCategories;
+        this.setState({ categories });
+      } catch (error) {
+        console.log(error.message);
+      }
+
+      try {
+        let notificationTime = await loadItem(uid, "notificationTime");
+
+        if (!notificationTime) {
+          notificationTime = this.state.notificationTime;
+        }
+
+        this.setState({ notificationTime });
+      } catch (error) {
+        console.log(error.message);
+      }
     }
 
     try {
@@ -108,6 +121,10 @@ export class GlobalContextProvider extends React.Component {
     } catch (error) {
       console.log(error.message);
     }
+  };
+
+  initState = async () => {
+    this.setState(this.cleanState);
   };
 
   addTransaction = async (transaction = {}) => {
@@ -130,14 +147,11 @@ export class GlobalContextProvider extends React.Component {
       "id"
     );
 
-    try {
-      await AsyncStorage.setItem(
-        "transactions",
-        JSON.stringify(updatedTransactionsList)
-      );
-    } catch (error) {
-      console.log(error.message);
-    }
+    await saveItem(
+      (await this.getCurrentUser()).uid,
+      "transactions",
+      updatedTransactionsList
+    );
 
     this.setState({
       transactions: updatedTransactionsList
@@ -153,6 +167,7 @@ export class GlobalContextProvider extends React.Component {
         .httpsCallable("getAccessTokenFromPublicToken_v3");
 
       let result = await getAccessTokenFromPublicToken({
+        env: ENVIRONMENT,
         public_token: publicToken
       });
 
@@ -176,7 +191,7 @@ export class GlobalContextProvider extends React.Component {
       startDate = moment.utc(lastTransactionDate).format("YYYY-MM-DD");
     } else {
       startDate = moment()
-        .subtract(3, "days")
+        .subtract(5, "days")
         .format("YYYY-MM-DD");
     }
 
@@ -186,6 +201,7 @@ export class GlobalContextProvider extends React.Component {
         .httpsCallable("getPlaidTransactions_v3");
 
       let result = await getPlaidTransactions({
+        env: ENVIRONMENT,
         start_date: startDate,
         end_date: endDate
       });
@@ -273,12 +289,17 @@ export class GlobalContextProvider extends React.Component {
         };
       }
     } catch (error) {
-      console.error(error);
       return {
         error: true,
         message: error
       };
     }
+  };
+
+  listTransactions = () => {
+    return this.state.transactions.filter(
+      transaction => !transaction.isRemoved
+    );
   };
 
   updateTransaction = async attrs => {
@@ -305,14 +326,11 @@ export class GlobalContextProvider extends React.Component {
       return transaction;
     });
 
-    try {
-      await AsyncStorage.setItem(
-        "transactions",
-        JSON.stringify(updatedTransactions)
-      );
-    } catch (error) {
-      console.log(error.message);
-    }
+    await saveItem(
+      (await this.getCurrentUser()).uid,
+      "transactions",
+      updatedTransactions
+    );
 
     this.setState({ transactions: updatedTransactions });
   };
@@ -320,16 +338,22 @@ export class GlobalContextProvider extends React.Component {
   deleteTransaction = async id => {
     const { transactions } = this.state;
 
-    const updatedTransactions = transactions.filter(t => t.id !== id);
+    const updatedTransactions = transactions.map(transaction => {
+      if (transaction.id === id) {
+        return {
+          ...transaction,
+          isRemoved: true
+        };
+      } else {
+        return transaction;
+      }
+    });
 
-    try {
-      await AsyncStorage.setItem(
-        "transactions",
-        JSON.stringify(updatedTransactions)
-      );
-    } catch (error) {
-      console.log(error.message);
-    }
+    await saveItem(
+      (await this.getCurrentUser()).uid,
+      "transactions",
+      updatedTransactions
+    );
 
     this.setState({ transactions: updatedTransactions });
   };
@@ -370,11 +394,11 @@ export class GlobalContextProvider extends React.Component {
       date: new Date(t.date)
     }));
 
-    try {
-      await AsyncStorage.setItem("transactions", JSON.stringify(dummyData));
-    } catch (error) {
-      console.log(error.message);
-    }
+    await saveItem(
+      (await this.getCurrentUser()).uid,
+      "transactions",
+      dummyData
+    );
 
     this.setState({ transactions: dummyData });
   };
@@ -399,14 +423,11 @@ export class GlobalContextProvider extends React.Component {
 
     const updatedCategoriesList = [...categories, newCategory];
 
-    try {
-      await AsyncStorage.setItem(
-        "categories",
-        JSON.stringify(updatedCategoriesList)
-      );
-    } catch (error) {
-      console.log(error.message);
-    }
+    await saveItem(
+      (await this.getCurrentUser()).uid,
+      "categories",
+      updatedCategoriesList
+    );
 
     this.setState({
       categories: updatedCategoriesList
@@ -416,14 +437,11 @@ export class GlobalContextProvider extends React.Component {
   };
 
   setNotificationTime = async newNotificationTime => {
-    try {
-      await AsyncStorage.setItem(
-        "notificationTime",
-        JSON.stringify(newNotificationTime)
-      );
-    } catch (error) {
-      console.log(error.message);
-    }
+    await saveItem(
+      (await this.getCurrentUser()).uid,
+      "notificationTime",
+      newNotificationTime
+    );
 
     this.setState({ notificationTime: newNotificationTime });
   };
@@ -491,6 +509,8 @@ export class GlobalContextProvider extends React.Component {
         .auth()
         .createUserWithEmailAndPassword(user, password);
 
+      await this.loadStateFromStorage();
+
       return {
         success: true,
         message: ""
@@ -511,6 +531,8 @@ export class GlobalContextProvider extends React.Component {
         .auth()
         .signInWithEmailAndPassword(user, password);
 
+      await this.loadStateFromStorage();
+
       return {
         success: true,
         message: ""
@@ -528,6 +550,9 @@ export class GlobalContextProvider extends React.Component {
   logout = async () => {
     try {
       await firebase.auth().signOut();
+
+      // Clear the state
+      this.initState();
     } catch (error) {
       console.error(error);
     }
@@ -536,6 +561,7 @@ export class GlobalContextProvider extends React.Component {
   isUserLoggedIn = async () => {
     try {
       let current_user = await this.getCurrentUser();
+
       return current_user ? true : false;
     } catch (error) {
       console.log(error.message);
@@ -632,12 +658,17 @@ export class GlobalContextProvider extends React.Component {
     await AsyncStorage.clear();
   };
 
+  getEnvironment = () => {
+    return ENVIRONMENT;
+  };
+
   render() {
     return (
       <GlobalContext.Provider
         value={{
           ...this.state,
           // Every function to update the state should be listed here:
+          listTransactions: this.listTransactions,
           addTransaction: this.addTransaction,
           updateTransaction: this.updateTransaction,
           deleteTransaction: this.deleteTransaction,
@@ -656,6 +687,7 @@ export class GlobalContextProvider extends React.Component {
           isUserLoggedIn: this.isUserLoggedIn,
           removeInstitutionAccount: this.removeInstitutionAccount,
           clearAsyncStorage: this.clearAsyncStorage
+          getEnvironment: this.getEnvironment
         }}
       >
         {this.props.children}

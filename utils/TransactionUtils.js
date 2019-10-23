@@ -12,6 +12,7 @@ export const createNewTransaction = (attrs = {}) => {
     date: attrs.date ? new Date(attrs.date) : new Date(),
     institution: attrs.institution || "",
     account: attrs.account || ""
+    isRemoved: false
   };
 
   return transaction;

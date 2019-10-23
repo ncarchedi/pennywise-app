@@ -33,7 +33,7 @@ class PlaidLinkScreen extends React.Component {
       <PlaidAuthenticator
         onMessage={data => this.onMessage(data)}
         publicKey="aef79d0fac8493ad10a8760b0c01a6"
-        env="development"
+        env={this.props.global.getEnvironment()}
         product="transactions"
         clientName="Conscious Spending"
         selectAccount={false}
