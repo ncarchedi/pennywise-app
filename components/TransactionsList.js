@@ -52,12 +52,14 @@ export default function TransactionsList({
               </Text>
             </View>
             <View style={{ flexDirection: "row", marginTop: 5 }}>
-              <Text style={{color: 'gray'}}>{institution + ' - ' + account}</Text>
-            </View>
-            <View style={{ flexDirection: "row", marginTop: 5 }}>
               <Text>{toPrettyDate(date)}</Text>
               <Text style={{ fontStyle: "italic", marginLeft: "auto" }}>
                 {category}
+              </Text>
+            </View>
+            <View style={{ marginTop: 5 }}>
+              <Text style={{ color: "gray", fontSize: 12 }}>
+                {institution + " - " + account}
               </Text>
             </View>
           </View>
