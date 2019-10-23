@@ -25,6 +25,8 @@ import "firebase/auth";
 import "firebase/functions";
 import "firebase/firestore";
 
+import SimpleCrypto from "simple-crypto-js";
+
 const GlobalContext = React.createContext({});
 
 import {
@@ -167,6 +169,7 @@ export class GlobalContextProvider extends React.Component {
 
     let result = await getAccessTokenFromPublicToken({
       env: ENVIRONMENT,
+      encryptionKey: await this.getEncryptionKey(),
       public_token: publicToken
     });
 
@@ -203,6 +206,7 @@ export class GlobalContextProvider extends React.Component {
 
       let result = await getPlaidTransactions({
         env: ENVIRONMENT,
+        encryptionKey: await this.getEncryptionKey(),
         start_date: startDate,
         end_date: endDate
       });
@@ -660,6 +664,22 @@ export class GlobalContextProvider extends React.Component {
 
   getEnvironment = () => {
     return ENVIRONMENT;
+  };
+
+  getEncryptionKey = async () => {
+    const uid = (await this.getCurrentUser()).uid;
+
+    let encryptionKey = await loadItem(uid, "encryptionKey");
+
+    if (encryptionKey) {
+      return encryptionKey;
+    } else {
+      const newEncryptionKey = SimpleCrypto.generateRandom(512);
+
+      await saveItem(uid, "encryptionKey", newEncryptionKey);
+
+      return newEncryptionKey;
+    }
   };
 
   render() {
