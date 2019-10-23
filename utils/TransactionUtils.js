@@ -11,7 +11,7 @@ export const createNewTransaction = (attrs = {}) => {
     category: attrs.category || "No Category",
     date: attrs.date ? new Date(attrs.date) : new Date(),
     institution: attrs.institution || "",
-    account: attrs.account || ""
+    account: attrs.account || "",
     isRemoved: false
   };
 

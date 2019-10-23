@@ -161,23 +161,24 @@ export class GlobalContextProvider extends React.Component {
   };
 
   getAccessTokenFromPublicToken = async publicToken => {
-    try {
-      const getAccessTokenFromPublicToken = firebase
-        .functions()
-        .httpsCallable("getAccessTokenFromPublicToken_v3");
+    const getAccessTokenFromPublicToken = firebase
+      .functions()
+      .httpsCallable("getAccessTokenFromPublicToken_v4");
 
-      let result = await getAccessTokenFromPublicToken({
-        env: ENVIRONMENT,
-        public_token: publicToken
-      });
+    let result = await getAccessTokenFromPublicToken({
+      env: ENVIRONMENT,
+      public_token: publicToken
+    });
 
+    if (result.data.error) {
+      console.log(result);
+      throw result.data.error.error_message;
+    } else {
       await this.addInstitutionAccount(
         result.data.item_id,
         result.data.institution_name,
         result.data.account_details
       );
-    } catch (error) {
-      console.log(error);
     }
   };
 
@@ -198,7 +199,7 @@ export class GlobalContextProvider extends React.Component {
     try {
       const getPlaidTransactions = firebase
         .functions()
-        .httpsCallable("getPlaidTransactions_v3");
+        .httpsCallable("getPlaidTransactions_v4");
 
       let result = await getPlaidTransactions({
         env: ENVIRONMENT,
@@ -207,6 +208,7 @@ export class GlobalContextProvider extends React.Component {
       });
 
       if (result.data.error) {
+        console.log(result.data.error);
         return {
           error: true,
           message: result.data.error
@@ -215,9 +217,6 @@ export class GlobalContextProvider extends React.Component {
         let itemTransactions = result.data.transactions;
 
         const institutions = this.state.institutionAccounts;
-
-        console.log("hey");
-        console.log(institutions);
 
         const itemIdToNameMap = _.reduce(
           institutions,
@@ -289,6 +288,7 @@ export class GlobalContextProvider extends React.Component {
         };
       }
     } catch (error) {
+      console.log(error);
       return {
         error: true,
         message: error
@@ -686,7 +686,7 @@ export class GlobalContextProvider extends React.Component {
           logout: this.logout,
           isUserLoggedIn: this.isUserLoggedIn,
           removeInstitutionAccount: this.removeInstitutionAccount,
-          clearAsyncStorage: this.clearAsyncStorage
+          clearAsyncStorage: this.clearAsyncStorage,
           getEnvironment: this.getEnvironment
         }}
       >

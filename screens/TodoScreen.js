@@ -61,6 +61,7 @@ class TodoScreen extends React.Component {
     this.setState({ refreshing: false });
 
     if (result.error) {
+      console.log(result);
       Alert.alert("Error while downloading transactions", result.message, {
         cancelable: false
       });

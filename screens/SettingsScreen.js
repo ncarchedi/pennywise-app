@@ -72,12 +72,6 @@ class SettingsScreen extends React.Component {
               <Text>Clear All Transactions</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={clearAsyncStorage}
-              style={{ paddingTop: 20 }}
-            >
-              <Text>Clear All Async Storage</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
               onPress={loadDummyData}
               style={{ paddingTop: 20 }}
             >
