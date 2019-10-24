@@ -136,6 +136,7 @@ class SettingsScreen extends React.Component {
             />
           </View>
           {/* Admin Settings */}
+          {/* TODO: make this visible only in development mode? */}
           <View>
             <SettingsHeader text="Admins Only" />
             <PressableSetting
