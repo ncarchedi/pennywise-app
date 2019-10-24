@@ -59,7 +59,8 @@ export default function TransactionsList({
             </View>
             <View style={{ marginTop: 5 }}>
               <Text style={{ color: "gray", fontSize: 12 }}>
-                {institution + " - " + account}
+                {/* TODO: allow users to choose account when adding manually? */}
+                {institution ? institution + " - " + account : "No Account"}
               </Text>
             </View>
           </View>
