@@ -107,8 +107,9 @@ class SettingsScreen extends React.Component {
             }}
           >
             <Ionicons name="ios-person" size={30} />
+            {/* TODO: how to get username of current user? */}
             <Text style={{ fontWeight: "bold", marginLeft: 10 }}>
-              our_email@example.com
+              your_email@example.com
             </Text>
           </View>
           {/* User Settings */}
