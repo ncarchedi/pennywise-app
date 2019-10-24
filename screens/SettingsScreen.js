@@ -7,9 +7,40 @@ import {
   TouchableOpacity,
   DatePickerIOS
 } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import moment from "moment";
 
 import { withGlobalContext } from "../GlobalContext";
+
+PressableSetting = ({ text, onPress, style = {} }) => {
+  return (
+    <TouchableOpacity
+      onPress={onPress}
+      style={{
+        paddingVertical: 10,
+        borderColor: "#f1f1f1",
+        borderBottomWidth: 1,
+        ...style
+      }}
+    >
+      <Text style={{ paddingHorizontal: 10 }}>{text}</Text>
+    </TouchableOpacity>
+  );
+};
+
+SettingsHeader = ({ text }) => {
+  return (
+    <View
+      style={{
+        paddingVertical: 10,
+        paddingHorizontal: 10,
+        backgroundColor: "#f1f1f1"
+      }}
+    >
+      <Text style={{ fontWeight: "bold" }}>{text}</Text>
+    </View>
+  );
+};
 
 class SettingsScreen extends React.Component {
   static navigationOptions = {
@@ -31,9 +62,14 @@ class SettingsScreen extends React.Component {
     this.setState({ notificationTime: newNotificationTime });
   };
 
-  handleScheduleNotifications = async item => {
+  handleScheduleNotifications = async () => {
+    const notificationTime = this.state;
+
     await this.props.global.setNotificationTime(this.state.notificationTime);
     await this.props.global.scheduleNotifications();
+
+    // TODO: tell user what time they are scheduled for!
+    alert(`Notifications scheduled!`);
   };
 
   handleLogout = async () => {
@@ -44,9 +80,7 @@ class SettingsScreen extends React.Component {
   render() {
     const {
       clearAllTransactions,
-      clearAllAccounts,
       loadDummyData,
-      logout,
       clearAsyncStorage
     } = this.props.global;
 
@@ -59,68 +93,72 @@ class SettingsScreen extends React.Component {
       <View style={styles.container}>
         <ScrollView
           style={styles.container}
-          contentContainerStyle={styles.contentContainer}
           keyboardShouldPersistTaps="always"
           keyboardDismissMode="on-drag"
           showsVerticalScrollIndicator={false}
         >
-          <View style={styles.settingsContainer}>
-            <TouchableOpacity
-              onPress={clearAllTransactions}
-              style={{ paddingTop: 20 }}
-            >
-              <Text>Clear All Transactions</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={loadDummyData}
-              style={{ paddingTop: 20 }}
-            >
-              <Text>Clear All Accounts</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={clearAsyncStorage}
-              style={{ paddingTop: 20 }}
-            >
-              <Text>Clear All Async Storage</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={loadDummyData}
-              style={{ paddingTop: 20 }}
-            >
-              <Text>Load Example Transactions</Text>
-            </TouchableOpacity>
-            <View style={styles.notificationContainer}>
+          <View
+            style={{
+              paddingVertical: 10,
+              paddingHorizontal: 10,
+              backgroundColor: "#f1f1f1",
+              flexDirection: "row",
+              alignItems: "center"
+            }}
+          >
+            <Ionicons name="ios-person" size={30} />
+            <Text style={{ fontWeight: "bold", marginLeft: 10 }}>
+              our_email@example.com
+            </Text>
+          </View>
+          {/* User Settings */}
+          <View>
+            <PressableSetting
+              text="Linked Bank Accounts"
+              onPress={() => this.props.navigation.navigate("LinkedAccounts")}
+            />
+            <View>
+              <PressableSetting
+                text="Schedule Notifications"
+                onPress={this.handleScheduleNotifications}
+              />
               <DatePickerIOS
                 date={notificationDate}
                 onDateChange={this.setNotificationDate}
                 mode={"time"}
               />
-              <TouchableOpacity
-                onPress={this.handleScheduleNotifications}
-                style={{ paddingVertical: 20, alignSelf: "center" }}
-              >
-                <Text>Schedule Notifications</Text>
-              </TouchableOpacity>
             </View>
-            <TouchableOpacity
+            <PressableSetting
+              text="Logout"
+              onPress={this.handleLogout}
+              style={{ borderTopWidth: 1 }}
+            />
+          </View>
+          {/* Admin Settings */}
+          <View>
+            <SettingsHeader text="Admins Only" />
+            <PressableSetting
+              text="Clear All Transactions"
+              onPress={clearAllTransactions}
+            />
+            <PressableSetting
+              text="Clear All Accounts"
+              onPress={loadDummyData}
+            />
+            <PressableSetting
+              text="Clear All Async Storage"
+              onPress={clearAsyncStorage}
+            />
+            <PressableSetting
+              text="Load Example Transactions"
+              onPress={loadDummyData}
+            />
+            <PressableSetting
+              text="Go To Onboarding"
               onPress={() =>
                 this.props.navigation.navigate("OnboardingWelcome")
               }
-            >
-              <Text>Go To Onboarding</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate("LinkedAccounts")}
-              style={{ paddingVertical: 20, alignSelf: "center" }}
-            >
-              <Text>Linked Bank Accounts</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={this.handleLogout}
-              style={{ paddingTop: 20 }}
-            >
-              <Text>Logout</Text>
-            </TouchableOpacity>
+            />
           </View>
         </ScrollView>
       </View>
@@ -134,16 +172,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff"
-  },
-  contentContainer: {},
-  settingsContainer: {
-    alignItems: "center"
-  },
-  notificationContainer: {
-    flexDirection: "column",
-    width: "100%",
-    borderWidth: 1,
-    borderColor: "#f1f1f1",
-    margin: 20
   }
 });
