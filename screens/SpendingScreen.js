@@ -86,6 +86,8 @@ class SpendingScreen extends React.Component {
       lastMonth: spendingPerCategoryLastMonth
     };
 
+    // console.log(plotData);
+
     const nbCategories = Math.max(
       spendingPerCategoryThisMonth.length,
       spendingPerCategoryLastMonth.length
@@ -148,9 +150,13 @@ class SpendingScreen extends React.Component {
               />
             </VictoryGroup>
             {/* The vertical axis */}
-            <VictoryAxis />
+            <VictoryAxis style={{ grid: { stroke: null } }} />
             {/* The horizontal axis */}
-            <VictoryAxis dependentAxis tickFormat={x => `$${x}`} />
+            <VictoryAxis
+              dependentAxis
+              tickFormat={x => `$${x}`}
+              style={{ grid: { stroke: null } }}
+            />
           </VictoryChart>
         </View>
       </View>
