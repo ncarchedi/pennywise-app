@@ -58,8 +58,14 @@ class EditTransactionModal extends React.Component {
   handleSaveTransaction = () => {
     const { updateTransaction } = this.props.global;
     const { transaction } = this.state;
+    const amount = transaction.amount;
 
-    updateTransaction({ ...transaction });
+    savedTransaction =
+      typeof amount === "string"
+        ? { ...transaction, amount: Number(amount) }
+        : transaction;
+
+    updateTransaction({ ...savedTransaction });
     this.props.navigation.goBack();
   };
 

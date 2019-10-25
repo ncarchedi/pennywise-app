@@ -61,6 +61,7 @@ class SpendingScreen extends React.Component {
               category: categoryName,
               amountSpent: _(category).sumBy("amount")
             }))
+            .sortBy("amountSpent")
             .value()
         };
       });
@@ -94,6 +95,8 @@ class SpendingScreen extends React.Component {
       thisMonth: spendingPerCategoryThisMonth,
       lastMonth: spendingPerCategoryLastMonth
     };
+
+    console.log(actualData)
 
     const plotData = JSON.parse(JSON.stringify(actualData));
 
