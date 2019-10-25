@@ -5,10 +5,10 @@ import {
   Text,
   View,
   TouchableOpacity,
-  DatePickerIOS,
   Linking
 } from "react-native";
 import moment from "moment";
+import DateTimePicker from "react-native-modal-datetime-picker";
 
 import { withGlobalContext } from "../GlobalContext";
 
@@ -32,6 +32,7 @@ SettingsHeader = ({ text }) => {
   return (
     <View
       style={{
+        marginTop: 30,
         paddingVertical: 10,
         paddingHorizontal: 10,
         backgroundColor: "#f1f1f1"
@@ -43,7 +44,7 @@ SettingsHeader = ({ text }) => {
 };
 
 SettingsSeparator = () => {
-  return <View style={{ height: 10, backgroundColor: "#f1f1f1" }}></View>;
+  return <View style={{ height: 15, backgroundColor: "#f1f1f1" }}></View>;
 };
 
 class SettingsScreen extends React.Component {
@@ -53,19 +54,25 @@ class SettingsScreen extends React.Component {
 
   state = {
     notificationTime: this.props.global.notificationTime,
-    userEmail: ""
+    userEmail: "",
+    isTimePickerVisible: false
   };
 
   componentDidMount() {
     this.getUserEmail();
   }
 
-  setNotificationDate = newDate => {
-    let momentDate = moment(newDate);
+  toggleTimePicker = () => {
+    const { isTimePickerVisible } = this.state;
+    this.setState({ isTimePickerVisible: !isTimePickerVisible });
+  };
+
+  setNotificationTime = newTime => {
+    let momentTime = moment(newTime);
 
     const newNotificationTime = {
-      hours: momentDate.hours(),
-      minutes: momentDate.minutes()
+      hours: momentTime.hours(),
+      minutes: momentTime.minutes()
     };
 
     this.setState({ notificationTime: newNotificationTime });
@@ -74,6 +81,8 @@ class SettingsScreen extends React.Component {
   handleScheduleNotifications = async () => {
     await this.props.global.setNotificationTime(this.state.notificationTime);
     await this.props.global.scheduleNotifications();
+
+    this.toggleTimePicker();
 
     // TODO: tell user what time they are scheduled for!
     alert(`Notifications scheduled!`);
@@ -101,7 +110,7 @@ class SettingsScreen extends React.Component {
       clearAsyncStorage
     } = this.props.global;
 
-    const notificationDate = moment(new Date())
+    const notificationTime = moment(new Date())
       .hours(this.state.notificationTime.hours)
       .minutes(this.state.notificationTime.minutes)
       .toDate();
@@ -120,7 +129,9 @@ class SettingsScreen extends React.Component {
               paddingVertical: 10
             }}
           >
-            <Text style={{ color: "grey", fontSize: 12 }}>LOGGED IN AS</Text>
+            <Text style={{ color: "grey", fontSize: 12, marginBottom: 3 }}>
+              LOGGED IN AS
+            </Text>
             <Text>{this.state.userEmail}</Text>
           </View>
           <SettingsSeparator />
@@ -133,19 +144,23 @@ class SettingsScreen extends React.Component {
             />
             <View>
               <PressableSetting
-                text="Schedule Notifications"
-                onPress={this.handleScheduleNotifications}
+                text="Manage Notifications"
+                onPress={this.toggleTimePicker}
               />
-              <DatePickerIOS
-                date={notificationDate}
-                onDateChange={this.setNotificationDate}
-                mode={"time"}
+              <DateTimePicker
+                date={notificationTime}
+                isVisible={this.state.isTimePickerVisible}
+                onConfirm={this.handleScheduleNotifications}
+                onDateChange={this.setNotificationTime}
+                onCancel={this.toggleTimePicker}
+                mode="time"
+                hideTitleContainerIOS={true}
               />
             </View>
+            <SettingsSeparator />
             <PressableSetting
               text="Share Feedback"
               onPress={this.handleShareFeedback}
-              style={{ borderTopWidth: 1 }}
             />
             <PressableSetting text="Logout" onPress={this.handleLogout} />
           </View>
@@ -158,6 +173,11 @@ class SettingsScreen extends React.Component {
               onPress={clearAllTransactions}
             />
             <PressableSetting
+              text="Load Example Transactions"
+              onPress={loadDummyData}
+            />
+            <SettingsSeparator />
+            <PressableSetting
               text="Clear All Accounts"
               onPress={loadDummyData}
             />
@@ -165,10 +185,7 @@ class SettingsScreen extends React.Component {
               text="Clear All Async Storage"
               onPress={clearAsyncStorage}
             />
-            <PressableSetting
-              text="Load Example Transactions"
-              onPress={loadDummyData}
-            />
+            <SettingsSeparator />
             <PressableSetting
               text="Go To Onboarding"
               onPress={() =>
