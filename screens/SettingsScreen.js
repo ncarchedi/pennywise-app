@@ -5,7 +5,8 @@ import {
   Text,
   View,
   TouchableOpacity,
-  DatePickerIOS
+  DatePickerIOS,
+  Linking
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import moment from "moment";
@@ -72,6 +73,11 @@ class SettingsScreen extends React.Component {
     alert(`Notifications scheduled!`);
   };
 
+  handleShareFeedback = async () => {
+    // This doesn't work in the simulator, but should work on a real device
+    Linking.openURL("mailto:borisgordts@hotmail.com?subject=Feedback");
+  };
+
   handleLogout = async () => {
     await this.props.global.logout();
     this.props.navigation.navigate("AuthLoading");
@@ -129,6 +135,11 @@ class SettingsScreen extends React.Component {
                 mode={"time"}
               />
             </View>
+            <PressableSetting
+              text="Share feedback"
+              onPress={this.handleShareFeedback}
+              style={{ borderTopWidth: 1 }}
+            />
             <PressableSetting
               text="Logout"
               onPress={this.handleLogout}
