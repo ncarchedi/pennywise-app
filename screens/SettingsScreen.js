@@ -164,7 +164,7 @@ class SettingsScreen extends React.Component {
           {/* Admin Settings */}
           {/* TODO: make this visible only in development mode */}
           <View>
-            <SettingsHeader text="ADMINS ONLY" />
+            <SettingsHeader text="ADMIN ONLY" />
             <PressableSetting
               text="Clear All Transactions"
               onPress={clearAllTransactions}
