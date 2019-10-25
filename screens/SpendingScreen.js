@@ -89,7 +89,6 @@ class SpendingScreen extends React.Component {
         ? spendingLastMonth[0].categories
         : [];
 
-    // TODO: make sure months are ordered correctly
     const actualData = {
       thisMonth: spendingPerCategoryThisMonth,
       lastMonth: spendingPerCategoryLastMonth

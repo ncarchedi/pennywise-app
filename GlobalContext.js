@@ -657,7 +657,6 @@ export class GlobalContextProvider extends React.Component {
     }
   };
 
-  // Todo: this should be removed in production as it should never be needed
   clearAsyncStorage = async () => {
     await AsyncStorage.clear();
   };

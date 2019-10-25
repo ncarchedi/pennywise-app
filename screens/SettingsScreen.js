@@ -83,9 +83,6 @@ class SettingsScreen extends React.Component {
     await this.props.global.scheduleNotifications();
 
     this.toggleTimePicker();
-
-    // TODO: tell user what time they are scheduled for!
-    alert(`Notifications scheduled!`);
   };
 
   handleShareFeedback = async () => {
@@ -165,7 +162,7 @@ class SettingsScreen extends React.Component {
             <PressableSetting text="Logout" onPress={this.handleLogout} />
           </View>
           {/* Admin Settings */}
-          {/* TODO: make this visible only in development mode? */}
+          {/* TODO: make this visible only in development mode */}
           <View>
             <SettingsHeader text="ADMINS ONLY" />
             <PressableSetting
