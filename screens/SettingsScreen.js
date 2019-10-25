@@ -8,7 +8,6 @@ import {
   DatePickerIOS,
   Linking
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import moment from "moment";
 
 import { withGlobalContext } from "../GlobalContext";
@@ -38,9 +37,13 @@ SettingsHeader = ({ text }) => {
         backgroundColor: "#f1f1f1"
       }}
     >
-      <Text style={{ fontWeight: "bold" }}>{text}</Text>
+      <Text style={{ fontSize: 12 }}>{text}</Text>
     </View>
   );
+};
+
+SettingsSeparator = () => {
+  return <View style={{ height: 10, backgroundColor: "#f1f1f1" }}></View>;
 };
 
 class SettingsScreen extends React.Component {
@@ -49,8 +52,13 @@ class SettingsScreen extends React.Component {
   };
 
   state = {
-    notificationTime: this.props.global.notificationTime
+    notificationTime: this.props.global.notificationTime,
+    userEmail: ""
   };
+
+  componentDidMount() {
+    this.getUserEmail();
+  }
 
   setNotificationDate = newDate => {
     let momentDate = moment(newDate);
@@ -64,8 +72,6 @@ class SettingsScreen extends React.Component {
   };
 
   handleScheduleNotifications = async () => {
-    const notificationTime = this.state;
-
     await this.props.global.setNotificationTime(this.state.notificationTime);
     await this.props.global.scheduleNotifications();
 
@@ -81,6 +87,11 @@ class SettingsScreen extends React.Component {
   handleLogout = async () => {
     await this.props.global.logout();
     this.props.navigation.navigate("AuthLoading");
+  };
+
+  getUserEmail = async () => {
+    const currentUser = await this.props.global.getCurrentUser();
+    this.setState({ userEmail: currentUser.email });
   };
 
   render() {
@@ -105,24 +116,20 @@ class SettingsScreen extends React.Component {
         >
           <View
             style={{
-              paddingVertical: 10,
               paddingHorizontal: 10,
-              backgroundColor: "#f1f1f1",
-              flexDirection: "row",
-              alignItems: "center"
+              paddingVertical: 10
             }}
           >
-            <Ionicons name="ios-person" size={30} />
-            {/* TODO: how to get username of current user? */}
-            <Text style={{ fontWeight: "bold", marginLeft: 10 }}>
-              your_email@example.com
-            </Text>
+            <Text style={{ color: "grey", fontSize: 12 }}>LOGGED IN AS</Text>
+            <Text>{this.state.userEmail}</Text>
           </View>
+          <SettingsSeparator />
           {/* User Settings */}
           <View>
             <PressableSetting
-              text="Linked Bank Accounts"
+              text="Manage Accounts"
               onPress={() => this.props.navigation.navigate("LinkedAccounts")}
+              style={{ borderTopWidth: 1 }}
             />
             <View>
               <PressableSetting
@@ -145,7 +152,7 @@ class SettingsScreen extends React.Component {
           {/* Admin Settings */}
           {/* TODO: make this visible only in development mode? */}
           <View>
-            <SettingsHeader text="Admins Only" />
+            <SettingsHeader text="ADMINS ONLY" />
             <PressableSetting
               text="Clear All Transactions"
               onPress={clearAllTransactions}
