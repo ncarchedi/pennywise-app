@@ -136,15 +136,11 @@ class SettingsScreen extends React.Component {
               />
             </View>
             <PressableSetting
-              text="Share feedback"
+              text="Share Feedback"
               onPress={this.handleShareFeedback}
               style={{ borderTopWidth: 1 }}
             />
-            <PressableSetting
-              text="Logout"
-              onPress={this.handleLogout}
-              style={{ borderTopWidth: 1 }}
-            />
+            <PressableSetting text="Logout" onPress={this.handleLogout} />
           </View>
           {/* Admin Settings */}
           {/* TODO: make this visible only in development mode? */}
