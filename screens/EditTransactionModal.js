@@ -48,6 +48,14 @@ class EditTransactionModal extends React.Component {
     this.props.navigation.setParams({
       saveTransaction: this.handleSaveTransaction
     });
+
+    // when modal loads, display amount with 2 trailing digits
+    this.setState({
+      transaction: {
+        ...this.state.transaction,
+        amount: Number(this.state.transaction.amount).toFixed(2)
+      }
+    });
   }
 
   handleChangeTransaction = (key, value) => {
@@ -58,8 +66,14 @@ class EditTransactionModal extends React.Component {
   handleSaveTransaction = () => {
     const { updateTransaction } = this.props.global;
     const { transaction } = this.state;
+    const amount = transaction.amount;
 
-    updateTransaction({ ...transaction });
+    savedTransaction =
+      typeof amount === "string"
+        ? { ...transaction, amount: Number(amount) }
+        : transaction;
+
+    updateTransaction({ ...savedTransaction });
     this.props.navigation.goBack();
   };
 
@@ -92,7 +106,8 @@ class EditTransactionModal extends React.Component {
         ? "CategoryModalTodo"
         : "CategoryModalTransactions";
 
-    const { name, amount, date, notes, category } = this.state.transaction;
+    const transaction = this.state.transaction;
+    const { name, amount, date, notes, category } = transaction;
 
     return (
       <ScrollView
@@ -111,6 +126,15 @@ class EditTransactionModal extends React.Component {
                 onChangeText={amount =>
                   this.handleChangeTransaction("amount", amount)
                 }
+                // on blur, add 2 trailing decimals to amount if necessary
+                onBlur={() => {
+                  this.setState({
+                    transaction: {
+                      ...transaction,
+                      amount: Number(amount).toFixed(2)
+                    }
+                  });
+                }}
                 keyboardType={"numeric"}
                 autoCorrect={false}
               />
