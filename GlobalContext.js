@@ -574,7 +574,7 @@ export class GlobalContextProvider extends React.Component {
   };
 
   // Get the current user, and wait for it if it was
-  // not initilaized yet by firebase.
+  // not initialized yet by firebase.
   // https://github.com/firebase/firebase-js-sdk/issues/462
   getCurrentUser = async () => {
     const user = new Promise((resolve, reject) => {
@@ -657,7 +657,6 @@ export class GlobalContextProvider extends React.Component {
     }
   };
 
-  // Todo: this should be removed in production as it should never be needed
   clearAsyncStorage = async () => {
     await AsyncStorage.clear();
   };
@@ -705,6 +704,7 @@ export class GlobalContextProvider extends React.Component {
           loginUser: this.loginUser,
           logout: this.logout,
           isUserLoggedIn: this.isUserLoggedIn,
+          getCurrentUser: this.getCurrentUser,
           removeInstitutionAccount: this.removeInstitutionAccount,
           clearAsyncStorage: this.clearAsyncStorage,
           getEnvironment: this.getEnvironment

@@ -74,7 +74,6 @@ export default class SelectCategoryModal extends React.Component {
           autoFocus={true}
           autoCorrect={false}
         />
-        {/* TODO: fix scroll so not hidden behind footer */}
         <FlatList
           data={categories.filter(c =>
             _.includes(_.lowerCase(c.label), _.lowerCase(searchText))
