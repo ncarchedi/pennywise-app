@@ -27,12 +27,6 @@ class SpendingScreen extends React.Component {
   render() {
     const transactions = this.props.global.listTransactions();
 
-    // const firstDayPreviousMonth = moment()
-    //   .subtract(1, "months")
-    //   .startOf("month");
-
-    // const lastDayThisMonth = moment().endOf("month");
-
     const spendingByMonth = _(transactions)
       .map(t => ({
         monthIdentifier: this.monthIdentifier(t.date),
@@ -42,15 +36,6 @@ class SpendingScreen extends React.Component {
       .filter(t => {
         return t.category !== "No Category";
       })
-      // // Filter out transactions that are not in the past 2 months
-      // .filter(t => {
-      //   const momentDate = moment(t.date);
-
-      //   return (
-      //     firstDayPreviousMonth.isSameOrBefore(momentDate) &&
-      //     lastDayThisMonth.isSameOrAfter(momentDate)
-      //   );
-      // })
       .groupBy("monthIdentifier")
       .map((month, monthIdentifier) => {
         return {
@@ -89,13 +74,17 @@ class SpendingScreen extends React.Component {
         ? spendingLastMonth[0].categories
         : [];
 
+    // get the proper ordering of categories based on spending this month
+    const orderedCategories = _(spendingPerCategoryThisMonth)
+      .sortBy("amountSpent")
+      .map("category")
+      .value();
+
     // TODO: make sure months are ordered correctly
-    const actualData = {
+    const plotData = {
       thisMonth: spendingPerCategoryThisMonth,
       lastMonth: spendingPerCategoryLastMonth
     };
-
-    const plotData = JSON.parse(JSON.stringify(actualData));
 
     const nbCategories = Math.max(
       spendingPerCategoryThisMonth.length,
@@ -146,8 +135,8 @@ class SpendingScreen extends React.Component {
                   return "$" + Math.round(datum.amountSpent);
                 }}
                 labelComponent={<VictoryLabel dx={5} />}
+                categories={{ x: orderedCategories }}
               />
-
               <VictoryBar
                 data={plotData.thisMonth}
                 x="category"
@@ -178,8 +167,5 @@ const styles = StyleSheet.create({
   },
   chartContainer: {
     flex: 1
-    // backgroundColor: "green"
-    // justifyContent: "center",
-    // alignItems: "center"
   }
 });
