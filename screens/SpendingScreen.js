@@ -80,7 +80,6 @@ class SpendingScreen extends React.Component {
       .map("category")
       .value();
 
-    // TODO: make sure months are ordered correctly
     const plotData = {
       thisMonth: spendingPerCategoryThisMonth,
       lastMonth: spendingPerCategoryLastMonth

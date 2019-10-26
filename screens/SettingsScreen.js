@@ -5,11 +5,10 @@ import {
   Text,
   View,
   TouchableOpacity,
-  DatePickerIOS,
   Linking
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import moment from "moment";
+import DateTimePicker from "react-native-modal-datetime-picker";
 
 import { withGlobalContext } from "../GlobalContext";
 
@@ -33,14 +32,19 @@ SettingsHeader = ({ text }) => {
   return (
     <View
       style={{
+        marginTop: 30,
         paddingVertical: 10,
         paddingHorizontal: 10,
         backgroundColor: "#f1f1f1"
       }}
     >
-      <Text style={{ fontWeight: "bold" }}>{text}</Text>
+      <Text style={{ fontSize: 12 }}>{text}</Text>
     </View>
   );
+};
+
+SettingsSeparator = () => {
+  return <View style={{ height: 15, backgroundColor: "#f1f1f1" }}></View>;
 };
 
 class SettingsScreen extends React.Component {
@@ -49,28 +53,36 @@ class SettingsScreen extends React.Component {
   };
 
   state = {
-    notificationTime: this.props.global.notificationTime
+    notificationTime: this.props.global.notificationTime,
+    userEmail: "",
+    isTimePickerVisible: false
   };
 
-  setNotificationDate = newDate => {
-    let momentDate = moment(newDate);
+  componentDidMount() {
+    this.getUserEmail();
+  }
+
+  toggleTimePicker = () => {
+    const { isTimePickerVisible } = this.state;
+    this.setState({ isTimePickerVisible: !isTimePickerVisible });
+  };
+
+  setNotificationTime = newTime => {
+    let momentTime = moment(newTime);
 
     const newNotificationTime = {
-      hours: momentDate.hours(),
-      minutes: momentDate.minutes()
+      hours: momentTime.hours(),
+      minutes: momentTime.minutes()
     };
 
     this.setState({ notificationTime: newNotificationTime });
   };
 
   handleScheduleNotifications = async () => {
-    const notificationTime = this.state;
-
     await this.props.global.setNotificationTime(this.state.notificationTime);
     await this.props.global.scheduleNotifications();
 
-    // TODO: tell user what time they are scheduled for!
-    alert(`Notifications scheduled!`);
+    this.toggleTimePicker();
   };
 
   handleShareFeedback = async () => {
@@ -83,6 +95,11 @@ class SettingsScreen extends React.Component {
     this.props.navigation.navigate("AuthLoading");
   };
 
+  getUserEmail = async () => {
+    const currentUser = await this.props.global.getCurrentUser();
+    this.setState({ userEmail: currentUser.email });
+  };
+
   render() {
     const {
       clearAllTransactions,
@@ -90,7 +107,7 @@ class SettingsScreen extends React.Component {
       clearAsyncStorage
     } = this.props.global;
 
-    const notificationDate = moment(new Date())
+    const notificationTime = moment(new Date())
       .hours(this.state.notificationTime.hours)
       .minutes(this.state.notificationTime.minutes)
       .toDate();
@@ -105,54 +122,58 @@ class SettingsScreen extends React.Component {
         >
           <View
             style={{
-              paddingVertical: 10,
               paddingHorizontal: 10,
-              backgroundColor: "#f1f1f1",
-              flexDirection: "row",
-              alignItems: "center"
+              paddingVertical: 10
             }}
           >
-            <Ionicons name="ios-person" size={30} />
-            {/* TODO: how to get username of current user? */}
-            <Text style={{ fontWeight: "bold", marginLeft: 10 }}>
-              your_email@example.com
+            <Text style={{ color: "grey", fontSize: 12, marginBottom: 3 }}>
+              LOGGED IN AS
             </Text>
+            <Text>{this.state.userEmail}</Text>
           </View>
+          <SettingsSeparator />
           {/* User Settings */}
           <View>
             <PressableSetting
-              text="Linked Bank Accounts"
+              text="Manage Accounts"
               onPress={() => this.props.navigation.navigate("LinkedAccounts")}
+              style={{ borderTopWidth: 1 }}
             />
             <View>
               <PressableSetting
-                text="Schedule Notifications"
-                onPress={this.handleScheduleNotifications}
+                text="Manage Notifications"
+                onPress={this.toggleTimePicker}
               />
-              <DatePickerIOS
-                date={notificationDate}
-                onDateChange={this.setNotificationDate}
-                mode={"time"}
+              <DateTimePicker
+                date={notificationTime}
+                isVisible={this.state.isTimePickerVisible}
+                onConfirm={this.handleScheduleNotifications}
+                onDateChange={this.setNotificationTime}
+                onCancel={this.toggleTimePicker}
+                mode="time"
+                hideTitleContainerIOS={true}
               />
             </View>
+            <SettingsSeparator />
             <PressableSetting
-              text="Share feedback"
+              text="Share Feedback"
               onPress={this.handleShareFeedback}
-              style={{ borderTopWidth: 1 }}
             />
-            <PressableSetting
-              text="Logout"
-              onPress={this.handleLogout}
-              style={{ borderTopWidth: 1 }}
-            />
+            <PressableSetting text="Logout" onPress={this.handleLogout} />
           </View>
           {/* Admin Settings */}
+          {/* TODO: make this visible only in development mode */}
           <View>
-            <SettingsHeader text="Admins Only" />
+            <SettingsHeader text="ADMIN ONLY" />
             <PressableSetting
               text="Clear All Transactions"
               onPress={clearAllTransactions}
             />
+            <PressableSetting
+              text="Load Example Transactions"
+              onPress={loadDummyData}
+            />
+            <SettingsSeparator />
             <PressableSetting
               text="Clear All Accounts"
               onPress={loadDummyData}
@@ -161,10 +182,7 @@ class SettingsScreen extends React.Component {
               text="Clear All Async Storage"
               onPress={clearAsyncStorage}
             />
-            <PressableSetting
-              text="Load Example Transactions"
-              onPress={loadDummyData}
-            />
+            <SettingsSeparator />
             <PressableSetting
               text="Go To Onboarding"
               onPress={() =>
