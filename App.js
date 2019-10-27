@@ -5,9 +5,23 @@ import React, { useState } from "react";
 import { Platform, StatusBar, StyleSheet, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
+import * as Amplitude from "expo-analytics-amplitude";
+
 import AppNavigator from "./navigation/AppNavigator";
 
 import { GlobalContextProvider } from "./GlobalContext";
+
+function getActiveRouteName(navigationState) {
+  if (!navigationState) {
+    return null;
+  }
+  const route = navigationState.routes[navigationState.index];
+  // dive into nested navigators
+  if (route.routes) {
+    return getActiveRouteName(route);
+  }
+  return route.routeName;
+}
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
@@ -25,7 +39,16 @@ export default function App(props) {
       <View style={styles.container}>
         {Platform.OS === "ios" && <StatusBar barStyle="default" />}
         <GlobalContextProvider>
-          <AppNavigator />
+          <AppNavigator
+            onNavigationStateChange={(prevState, currentState, action) => {
+              const currentRouteName = getActiveRouteName(currentState);
+              const previousRouteName = getActiveRouteName(prevState);
+
+              if (previousRouteName !== currentRouteName) {
+                Amplitude.logEvent("Navigte_" + currentRouteName);
+              }
+            }}
+          />
         </GlobalContextProvider>
       </View>
     );

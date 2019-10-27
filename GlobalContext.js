@@ -85,6 +85,8 @@ export class GlobalContextProvider extends React.Component {
     if (await this.isUserLoggedIn()) {
       const uid = (await this.getCurrentUser()).uid;
 
+      Amplitude.setUserId(uid);
+
       try {
         const transactionsRaw = await loadItem(uid, "transactions");
 
@@ -197,8 +199,6 @@ export class GlobalContextProvider extends React.Component {
   };
 
   getPlaidTransactions = async () => {
-    Amplitude.logEvent("TEST_EVENT");
-
     let lastTransactionDate = this.getLastPlaidTransactionDate();
 
     let startDate;
@@ -557,6 +557,8 @@ export class GlobalContextProvider extends React.Component {
   logout = async () => {
     try {
       await firebase.auth().signOut();
+
+      Amplitude.setUserId(null);
 
       // Clear the state
       this.initState();
