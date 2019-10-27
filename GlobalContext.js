@@ -387,18 +387,6 @@ export class GlobalContextProvider extends React.Component {
     this.setState({ transactions: [] });
   };
 
-  clearAllAccounts = async () => {
-    console.log("clearing all accounts...");
-
-    try {
-      removeItem((await this.getCurrentUser()).uid, "institutionAccounts");
-    } catch (error) {
-      console.log(error.message);
-    }
-
-    this.setState({ institutionAccounts: [] });
-  };
-
   loadDummyData = async () => {
     console.log("loading dummy data...");
 
@@ -528,7 +516,7 @@ export class GlobalContextProvider extends React.Component {
 
       await this.loadStateFromStorage();
 
-      Amplitude.setUserId(userId);
+      // Amplitude.setUserId(userId);
 
       return {
         success: true,
@@ -697,7 +685,6 @@ export class GlobalContextProvider extends React.Component {
           updateTransaction: this.updateTransaction,
           deleteTransaction: this.deleteTransaction,
           clearAllTransactions: this.clearAllTransactions,
-          clearAllAccounts: this.clearAllAccounts,
           loadDummyData: this.loadDummyData,
           getAccessTokenFromPublicToken: this.getAccessTokenFromPublicToken,
           getPlaidTransactions: this.getPlaidTransactions,

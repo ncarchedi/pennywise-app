@@ -166,17 +166,13 @@ class SettingsScreen extends React.Component {
           <View>
             <SettingsHeader text="ADMIN ONLY" />
             <PressableSetting
-              text="Clear All Transactions"
-              onPress={clearAllTransactions}
-            />
-            <PressableSetting
               text="Load Example Transactions"
               onPress={loadDummyData}
             />
             <SettingsSeparator />
             <PressableSetting
-              text="Clear All Accounts"
-              onPress={loadDummyData}
+              text="Clear All Transactions"
+              onPress={clearAllTransactions}
             />
             <PressableSetting
               text="Clear All Async Storage"
