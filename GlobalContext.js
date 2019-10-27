@@ -30,6 +30,8 @@ import SimpleCrypto from "simple-crypto-js";
 
 import * as Amplitude from "expo-analytics-amplitude";
 
+import * as Sentry from "sentry-expo";
+
 const GlobalContext = React.createContext({});
 
 import {
@@ -98,6 +100,7 @@ export class GlobalContextProvider extends React.Component {
         this.setState({ transactions });
       } catch (error) {
         console.log(error.message);
+        Sentry.captureException(error);
       }
 
       try {
@@ -110,6 +113,7 @@ export class GlobalContextProvider extends React.Component {
         this.setState({ categories });
       } catch (error) {
         console.log(error.message);
+        Sentry.captureException(error);
       }
 
       try {
@@ -122,6 +126,7 @@ export class GlobalContextProvider extends React.Component {
         this.setState({ notificationTime });
       } catch (error) {
         console.log(error.message);
+        Sentry.captureException(error);
       }
 
       try {
@@ -134,6 +139,7 @@ export class GlobalContextProvider extends React.Component {
         this.setState({ institutionAccounts });
       } catch (error) {
         console.log(error.message);
+        Sentry.captureException(error);
       }
     }
   };
@@ -306,6 +312,7 @@ export class GlobalContextProvider extends React.Component {
       }
     } catch (error) {
       console.log(error);
+      Sentry.captureException(error);
       return {
         error: true,
         message: error
@@ -382,6 +389,7 @@ export class GlobalContextProvider extends React.Component {
       removeItem((await this.getCurrentUser()).uid, "transactions");
     } catch (error) {
       console.log(error.message);
+      Sentry.captureException(error);
     }
 
     this.setState({ transactions: [] });
@@ -524,6 +532,7 @@ export class GlobalContextProvider extends React.Component {
       };
     } catch (error) {
       console.log(error.message);
+      Sentry.captureException(error);
 
       return {
         success: false,
@@ -546,6 +555,7 @@ export class GlobalContextProvider extends React.Component {
       };
     } catch (error) {
       console.log(error.message);
+      Sentry.captureException(error);
 
       return {
         success: false,
@@ -564,6 +574,7 @@ export class GlobalContextProvider extends React.Component {
       this.initState();
     } catch (error) {
       console.error(error);
+      Sentry.captureException(error);
     }
   };
 
@@ -574,6 +585,7 @@ export class GlobalContextProvider extends React.Component {
       return current_user ? true : false;
     } catch (error) {
       console.log(error.message);
+      Sentry.captureException(error);
       return false;
     }
   };
@@ -611,6 +623,7 @@ export class GlobalContextProvider extends React.Component {
       this.setState({ institutionAccounts });
     } catch (error) {
       console.log(error.message);
+      Sentry.captureException(error);
     }
   };
 
@@ -649,6 +662,7 @@ export class GlobalContextProvider extends React.Component {
       this.setState({ institutionAccounts: updatedInstitutionAccounts });
     } catch (error) {
       console.error(error);
+      Sentry.captureException(error);
     }
   };
 

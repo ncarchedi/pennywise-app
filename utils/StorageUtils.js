@@ -1,5 +1,7 @@
 import { AsyncStorage } from "react-native";
 
+import * as Sentry from "sentry-expo";
+
 // Used to decide whether we need to run a migration or not
 const STORAGE_VERSION = "2";
 
@@ -11,6 +13,7 @@ export const saveItem = async (uid, itemName, itemValue) => {
     );
   } catch (error) {
     console.log(error.message);
+    Sentry.captureException(error);
   }
 };
 

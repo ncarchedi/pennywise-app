@@ -6,10 +6,21 @@ import { Platform, StatusBar, StyleSheet, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 import * as Amplitude from "expo-analytics-amplitude";
+import * as Sentry from "sentry-expo";
 
 import AppNavigator from "./navigation/AppNavigator";
 
 import { GlobalContextProvider } from "./GlobalContext";
+
+import Constants from "expo-constants";
+
+Sentry.init({
+  dsn: "https://1e9d77632d084ae3848b322b3dbbbb0d@sentry.io/1797801",
+  enableInExpoDevelopment: true,
+  debug: true
+});
+
+Sentry.setRelease(Constants.manifest.revisionId);
 
 function getActiveRouteName(navigationState) {
   if (!navigationState) {

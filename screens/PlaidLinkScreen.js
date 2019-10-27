@@ -4,6 +4,8 @@ import PlaidAuthenticator from "react-native-plaid-link";
 
 import { withGlobalContext } from "../GlobalContext";
 
+import * as Sentry from "sentry-expo";
+
 class PlaidLinkScreen extends React.Component {
   onMessage = async data => {
     const { getAccessTokenFromPublicToken } = this.props.global;
@@ -13,6 +15,7 @@ class PlaidLinkScreen extends React.Component {
         await getAccessTokenFromPublicToken(data.metadata.public_token);
       } catch (error) {
         console.log(error);
+        Sentry.captureException(error);
         Alert.alert("Error when linking bank accounts", error, {
           cancelable: false
         });
