@@ -1,5 +1,4 @@
 import React from "react";
-import { AsyncStorage } from "react-native";
 import _ from "lodash";
 import moment from "moment";
 import { Notifications } from "expo";
@@ -17,6 +16,8 @@ import {
 import {
   saveItem,
   loadItem,
+  removeItem,
+  clearStorage,
   migrateStorageToLatestVersion
 } from "./utils/StorageUtils";
 
@@ -26,6 +27,8 @@ import "firebase/functions";
 import "firebase/firestore";
 
 import SimpleCrypto from "simple-crypto-js";
+
+import * as Amplitude from "expo-analytics-amplitude";
 
 const GlobalContext = React.createContext({});
 
@@ -37,6 +40,8 @@ import {
   FIREBASE_STORAGE_BUCKET,
   FIREBASE_MESSAGING_SENDER_ID,
   FIREBASE_APP_ID,
+  FIREBASE_MEASUREMENT_ID,
+  AMPLITUDE_API_KEY,
   ENVIRONMENT
 } from "react-native-dotenv";
 
@@ -68,6 +73,8 @@ export class GlobalContextProvider extends React.Component {
 
     firebase.initializeApp(firebaseConfig);
     firebase.functions();
+
+    Amplitude.initialize(AMPLITUDE_API_KEY);
   }
 
   componentDidMount = async () => {
@@ -114,14 +121,18 @@ export class GlobalContextProvider extends React.Component {
       } catch (error) {
         console.log(error.message);
       }
-    }
 
-    try {
-      const institutionAccounts = await this.retrieveInstitutionAccounts();
+      try {
+        let institutionAccounts = await loadItem(uid, "institutionAccounts");
 
-      this.setState({ institutionAccounts });
-    } catch (error) {
-      console.log(error.message);
+        if (!institutionAccounts) {
+          institutionAccounts = [];
+        }
+
+        this.setState({ institutionAccounts });
+      } catch (error) {
+        console.log(error.message);
+      }
     }
   };
 
@@ -186,6 +197,8 @@ export class GlobalContextProvider extends React.Component {
   };
 
   getPlaidTransactions = async () => {
+    Amplitude.logEvent("TEST_EVENT");
+
     let lastTransactionDate = this.getLastPlaidTransactionDate();
 
     let startDate;
@@ -366,7 +379,7 @@ export class GlobalContextProvider extends React.Component {
     console.log("clearing all transactions...");
 
     try {
-      await AsyncStorage.removeItem("transactions");
+      removeItem((await this.getCurrentUser()).uid, "transactions");
     } catch (error) {
       console.log(error.message);
     }
@@ -378,7 +391,7 @@ export class GlobalContextProvider extends React.Component {
     console.log("clearing all accounts...");
 
     try {
-      await AsyncStorage.removeItem("institutionAccounts");
+      removeItem((await this.getCurrentUser()).uid, "institutionAccounts");
     } catch (error) {
       console.log(error.message);
     }
@@ -515,6 +528,8 @@ export class GlobalContextProvider extends React.Component {
 
       await this.loadStateFromStorage();
 
+      Amplitude.setUserId(userId);
+
       return {
         success: true,
         message: ""
@@ -597,9 +612,10 @@ export class GlobalContextProvider extends React.Component {
         accounts
       });
 
-      await AsyncStorage.setItem(
+      await saveItem(
+        (await this.getCurrentUser()).uid,
         "institutionAccounts",
-        JSON.stringify(institutionAccounts)
+        institutionAccounts
       );
 
       this.setState({ institutionAccounts });
@@ -608,24 +624,11 @@ export class GlobalContextProvider extends React.Component {
     }
   };
 
-  retrieveInstitutionAccounts = async () => {
-    try {
-      let institutionAccounts = JSON.parse(
-        await AsyncStorage.getItem("institutionAccounts")
-      );
-
-      if (!institutionAccounts) {
-        institutionAccounts = [];
-      }
-
-      return institutionAccounts;
-    } catch (error) {
-      console.error(error.message);
-    }
-  };
-
   removeInstitutionAccount = async itemId => {
     try {
+      // TODO: update this code as it will not work
+      // itemID is now encrypted. This should be handled through an API call
+      // -------------- UPDATE -------------->
       // Update the firestore first
       const current_user = await this.getCurrentUser();
 
@@ -637,6 +640,7 @@ export class GlobalContextProvider extends React.Component {
       const removeItem = await ref.update({
         ["plaid_items." + itemId]: firebase.firestore.FieldValue.delete()
       });
+      // <-------------- UPDATE --------------
 
       // Update the local state
       const updatedInstitutionAccounts = _.filter(
@@ -646,9 +650,10 @@ export class GlobalContextProvider extends React.Component {
         }
       );
 
-      await AsyncStorage.setItem(
+      await saveItem(
+        (await this.getCurrentUser()).uid,
         "institutionAccounts",
-        JSON.stringify(updatedInstitutionAccounts)
+        updatedInstitutionAccounts
       );
 
       this.setState({ institutionAccounts: updatedInstitutionAccounts });
@@ -658,7 +663,7 @@ export class GlobalContextProvider extends React.Component {
   };
 
   clearAsyncStorage = async () => {
-    await AsyncStorage.clear();
+    await clearStorage();
   };
 
   getEnvironment = () => {

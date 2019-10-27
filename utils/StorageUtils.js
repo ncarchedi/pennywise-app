@@ -20,6 +20,14 @@ export const loadItem = async (uid, itemName) => {
   );
 };
 
+export const removeItem = async (uid, itemName) => {
+  await AsyncStorage.removeItem(constructSotrageLocation(uid, itemName));
+};
+
+export const clearStorage = async () => {
+  await AsyncStorage.clear();
+};
+
 const constructSotrageLocation = (uid, itemName) => {
   return uid + "_" + itemName;
 };
