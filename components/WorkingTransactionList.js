@@ -10,15 +10,28 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import _ from "lodash";
-
 import { toPrettyDate, leftJoin } from "../utils/TransactionUtils";
 import allQuotes from "../data/quotes.json";
 import Swipeable from 'react-native-gesture-handler/Swipeable'
-import {SwipeListView} from "react-native-swipe-list-view"
+
+const LeftAction = (progress,dragX) =>{
+
+  const scale = dragX.interpolate({
+    inputRange: [0,100],
+    outputRange: [0,1],
+    extrapolate: 'clamp'
+  })
+  return (
+    <View style = {styles.leftAction}>
+      <Animated.Text style = {[styles.actionText,{ transform: [{ scale }]}]}>  
+        Edit Transaction
+      </Animated.Text>
+    </View>
+  )
+};
 
 
-
-export default function TransactionsList({
+export default function WorkingTransactionsList({
   transactions,
   categories,
   onTransactionEdit,
@@ -35,10 +48,32 @@ export default function TransactionsList({
   ListItem = (item, index) => {
     const { name, amount, date, category, icon } = item;
 
-    
+    const RightAction = ({progress,dragX,}) =>{
+      const scale = dragX.interpolate({
+        inputRange: [-50,0],
+        outputRange: [1,0],
+        extrapolate: 'clamp'
+      })
+      
+      
+      return (
+        <TouchableOpacity onPress={() => {this.close; onRightClick(item);}}>
+          <View style = {styles.rightAction}>
+            <Animated.Text style = {[styles.actionText,{ transform: [{ scale }]}]}>  
+              Delete
+            </Animated.Text>
+          </View>
+        </TouchableOpacity>
+        
+      )
+    };
 
     return (
-      <View>
+      <Swipeable 
+        renderLeftActions={LeftAction}
+        onSwipeableLeftOpen= {() => onTransactionEdit(item)}
+        renderRightActions ={(progress, dragX) => <RightAction progress = {progress} dragX = {dragX}/>}
+      >
         <View style = {styles.swipeItem}>
         <View style={styles.transactionsListItem} key={index}>
           <View
@@ -70,7 +105,7 @@ export default function TransactionsList({
           </View>
         </View>
         </View>
-      </View>
+      </Swipeable>
     );
   };
 
@@ -97,39 +132,15 @@ export default function TransactionsList({
 
   // get random quote for empty screen
   const quote = allQuotes[Math.floor(Math.random() * allQuotes.length)];
+
   // console.log("rendering transactions list...");
-
-
 
   return (
     <View style={styles.container}>
-      <SwipeListView
-        useFlatList = {true}
+      <FlatList
         style = {styles.flatListstyle}
         data={transactionsFinal}
         renderItem={({ item, index }) => this.ListItem(item, index)}
-        renderHiddenItem = {({item,index}) => 
-        (
-          <View style= {styles.hiddenItems}>
-            <View style = {styles.leftItem}>
-              <TouchableOpacity onPress = {() => onTransactionEdit(item)}>
-                <Text style = {styles.actionTextLeft}>Edit</Text>
-              </TouchableOpacity>
-            </View>
-
-            <View style = {styles.rightItem}>
-              <TouchableOpacity onPress = {() => {onRightClick(item)}}>
-              <Text style = {styles.actionTextRight}>Delete</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        )}
-        leftOpenValue= {50}
-        rightOpenValue= {-65}
-        stopRightSwipe= {-180}
-        stopLeftSwipe= {180}
-        closeOnRowBeginSwipe = {true}
-        closeOnScroll = {true}
         ItemSeparatorComponent={this.ListItemSeparator}
         keyExtractor={(item, index) => item + index}
         ListEmptyComponent={() => (
@@ -217,33 +228,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1
   },
-  actionTextLeft: {
+  actionText: {
       color: "white",
       padding: 10,
-      paddingTop: 22,
-      fontWeight: 'bold',
+      fontWeight: '600',
       fontSize: 14
-  },
-  actionTextRight: {
-    textAlign: "right",
-    color: "white",
-    padding:10,
-    paddingBottom: 25,
-    fontWeight: 'bold',
-    fontSize: 14,
-  },
-  hiddenItems: {
-    flexDirection: "row",
-    flex: 1
-  },
-  leftItem: {
-    backgroundColor: "orange",
-    justifyContent: "flex-start",
-    flex: 0.5
-  },
-  rightItem: {
-    backgroundColor: "red",
-    justifyContent: "flex-end",
-    flex: 0.5
-  }
+  } 
 });

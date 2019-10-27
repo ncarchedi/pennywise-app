@@ -7,13 +7,12 @@ import {
   RefreshControl,
   Alert
 } from "react-native";
-
 import TransactionsList from "../components/TransactionsList";
 import { Ionicons } from "@expo/vector-icons";
 import _ from "lodash";
-
 import { withGlobalContext } from "../GlobalContext";
 
+import WorkingTransactionsList from "../components/WorkingTransactionList";
 class TodoScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
@@ -48,6 +47,14 @@ class TodoScreen extends React.Component {
   handleTransactionPress = transaction => {
     this.props.navigation.navigate("EditModalTodo", { transaction });
   };
+
+
+  handleDeleteTransaction = transaction => {
+    const { deleteTransaction } = this.props.global;
+    const  id  = transaction.id;
+    this.props.navigation.goBack();
+    deleteTransaction(id);
+    };
 
   handleRefresh = async () => {
     const { getPlaidTransactions, scheduleNotifications } = this.props.global;
@@ -98,8 +105,9 @@ class TodoScreen extends React.Component {
           <TransactionsList
             transactions={transactions}
             categories={categories}
-            onTransactionPress={this.handleTransactionPress}
+            onTransactionEdit={this.handleTransactionPress}
             categorized={false}
+            onRightClick={this.handleDeleteTransaction}
             statusMessage={statusMessage}
           />
         </ScrollView>

@@ -15,6 +15,13 @@ class TransactionsScreen extends React.Component {
     this.props.navigation.navigate("EditModalTransactions", { transaction });
   };
 
+  handleDeleteTransaction = transaction => {
+    const { deleteTransaction } = this.props.global;
+    const  id  = transaction.id;
+    this.props.navigation.goBack();
+    deleteTransaction(id);
+    };
+
   render() {
     // console.log("rendering transactions screen...");
 
@@ -33,7 +40,8 @@ class TransactionsScreen extends React.Component {
           <TransactionsList
             transactions={transactions}
             categories={categories}
-            onTransactionPress={this.handleTransactionPress}
+            onTransactionEdit={this.handleTransactionPress}
+            onRightClick={this.handleDeleteTransaction}
             categorized={true}
           />
         </ScrollView>
