@@ -36,32 +36,18 @@ TodoStack.navigationOptions = {
   )
 };
 
-const TransactionsStack = createStackNavigator(
-  {
-    Transactions: TransactionsScreen,
-    EditModalTransactions: EditTransactionModal,
-    CategoryModalTransactions: SelectCategoryModal
-  },
-  { ...config, mode: "modal" }
-);
-
-TransactionsStack.navigationOptions = {
-  tabBarLabel: "Transactions",
-  tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="ios-list" />
-};
-
 const SpendingStack = createStackNavigator(
   {
-    Spending: SpendingScreen
+    Spending: SpendingScreen,
+    EditModalTransactions: EditTransactionModal,
+    CategoryModalTransactions: SelectCategoryModal
   },
   config
 );
 
 SpendingStack.navigationOptions = {
   tabBarLabel: "Spending",
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name="ios-wallet" />
-  )
+  tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="ios-cash" />
 };
 
 const SettingsStack = createStackNavigator(
@@ -76,13 +62,12 @@ const SettingsStack = createStackNavigator(
 SettingsStack.navigationOptions = {
   tabBarLabel: "Settings",
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name="ios-settings" />
+    <TabBarIcon focused={focused} name="ios-options" />
   )
 };
 
 const tabNavigator = createBottomTabNavigator({
   TodoStack,
-  TransactionsStack,
   SpendingStack,
   SettingsStack
 });

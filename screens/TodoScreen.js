@@ -23,7 +23,7 @@ class TodoScreen extends React.Component {
           onPress={navigation.getParam("addTransaction")}
           style={{ marginRight: 20 }}
         >
-          <Ionicons name="ios-add" size={40} />
+          <Ionicons name="ios-add" size={35} />
         </TouchableOpacity>
       )
     };

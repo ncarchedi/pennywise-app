@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, TouchableOpacity, ScrollView } from "react-native";
 import _ from "lodash";
 import {
   VictoryBar,
@@ -10,22 +10,83 @@ import {
   VictoryAxis,
   VictoryLabel
 } from "victory-native";
-
 import moment from "moment";
+import { Ionicons } from "@expo/vector-icons";
+
+import TransactionsList from "../components/TransactionsList";
 
 import { withGlobalContext } from "../GlobalContext";
 
 class SpendingScreen extends React.Component {
-  static navigationOptions = {
-    title: "Spending"
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: "Spending",
+      headerRight: (
+        <TouchableOpacity
+          onPress={navigation.getParam("toggleListView")}
+          style={{ marginRight: 20 }}
+        >
+          <Ionicons name={navigation.getParam("toggleViewIcon")} size={25} />
+        </TouchableOpacity>
+      )
+    };
   };
 
-  monthIdentifier(date) {
-    return moment(date).format("YYYY-MM");
+  state = {
+    showListView: false
+  };
+
+  componentDidMount() {
+    // necessary for parameterizing the header bar button. See:
+    // https://reactnavigation.org/docs/en/header-buttons.html#adding-a-button-to-the-header
+    this.props.navigation.setParams({
+      toggleListView: this.toggleListView,
+      toggleViewIcon: "ios-list"
+    });
   }
+
+  toggleListView = () => {
+    const { showListView } = this.state;
+    this.setState({ showListView: !showListView });
+
+    this.props.navigation.setParams({
+      toggleViewIcon: this.state.showListView ? "ios-list" : "ios-stats"
+    });
+  };
+
+  handleTransactionPress = transaction => {
+    this.props.navigation.navigate("EditModalTransactions", { transaction });
+  };
+
+  monthIdentifier = date => {
+    return moment(date).format("YYYY-MM");
+  };
 
   render() {
     const transactions = this.props.global.listTransactions();
+    const { categories } = this.props.global;
+    const { showListView } = this.state;
+
+    if (showListView) {
+      return (
+        <View style={styles.container}>
+          <ScrollView
+            style={styles.container}
+            contentContainerStyle={styles.contentContainer}
+            keyboardShouldPersistTaps="always"
+            keyboardDismissMode="on-drag"
+            showsVerticalScrollIndicator={false}
+          >
+            <TransactionsList
+              transactions={transactions}
+              categories={categories}
+              onTransactionPress={this.handleTransactionPress}
+              categorized={true}
+            />
+          </ScrollView>
+        </View>
+      );
+    }
 
     const spendingByMonth = _(transactions)
       .map(t => ({
