@@ -10,7 +10,6 @@ import { Ionicons } from "@expo/vector-icons";
 import _ from "lodash";
 
 import { toPrettyDate, leftJoin } from "../utils/TransactionUtils";
-import allQuotes from "../data/quotes.json";
 
 export default function TransactionsList({
   transactions,
@@ -90,9 +89,6 @@ export default function TransactionsList({
     .reverse()
     .value();
 
-  // get random quote for empty screen
-  const quote = allQuotes[Math.floor(Math.random() * allQuotes.length)];
-
   // console.log("rendering transactions list...");
 
   return (
@@ -109,12 +105,6 @@ export default function TransactionsList({
             {statusMessage ? (
               <Text style={styles.statusMessageText}>{statusMessage}</Text>
             ) : null}
-            <View style={styles.emptyScreenQuoteBox}>
-              <Text style={styles.emptyScreenQuoteText}>{quote.text}</Text>
-              <Text style={styles.emptyScreenQuoteSource}>
-                {"-" + quote.source}
-              </Text>
-            </View>
           </View>
         )}
       />
@@ -155,23 +145,5 @@ const styles = StyleSheet.create({
     fontSize: 17,
     marginTop: 15,
     textAlign: "center"
-  },
-  emptyScreenQuoteBox: {
-    backgroundColor: "#f1f1f1",
-    marginTop: 50,
-    paddingVertical: 30
-  },
-  emptyScreenQuoteText: {
-    textAlign: "center",
-    fontSize: 17,
-    marginHorizontal: 30,
-    fontStyle: "italic",
-    color: "grey"
-  },
-  emptyScreenQuoteSource: {
-    textAlign: "center",
-    fontSize: 17,
-    marginTop: 10,
-    color: "grey"
   }
 });
