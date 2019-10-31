@@ -87,7 +87,7 @@ class SettingsScreen extends React.Component {
 
   handleShareFeedback = async () => {
     // This doesn't work in the simulator, but should work on a real device
-    Linking.openURL("mailto:borisgordts@hotmail.com?subject=Feedback");
+    Linking.openURL("mailto:hello@pennywise.io?subject=Feedback");
   };
 
   handleLogout = async () => {
@@ -166,17 +166,13 @@ class SettingsScreen extends React.Component {
           <View>
             <SettingsHeader text="ADMIN ONLY" />
             <PressableSetting
-              text="Clear All Transactions"
-              onPress={clearAllTransactions}
-            />
-            <PressableSetting
               text="Load Example Transactions"
               onPress={loadDummyData}
             />
             <SettingsSeparator />
             <PressableSetting
-              text="Clear All Accounts"
-              onPress={loadDummyData}
+              text="Clear All Transactions"
+              onPress={clearAllTransactions}
             />
             <PressableSetting
               text="Clear All Async Storage"
