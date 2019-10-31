@@ -1,5 +1,11 @@
 import React from "react";
-import { StyleSheet, View, TouchableOpacity, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  ScrollView,
+  Text
+} from "react-native";
 import _ from "lodash";
 import {
   VictoryBar,
@@ -68,6 +74,24 @@ class SpendingScreen extends React.Component {
     const { showListView } = this.state;
 
     if (showListView) {
+      // get only categorized transactions
+      // const categorizedTransactions = _.reject(transactions, {
+      //   category: "No Category"
+      // });
+
+      const categorizedTransactions = [];
+
+      if (
+        Array.isArray(categorizedTransactions) &&
+        !categorizedTransactions.length
+      )
+        return (
+          <View>
+            <Text style={styles.emptyScreenEmoji}>🎉</Text>
+            <Text style={styles.emptyScreenHeader}>All done for today!</Text>
+          </View>
+        );
+
       return (
         <View style={styles.container}>
           <ScrollView
@@ -78,10 +102,9 @@ class SpendingScreen extends React.Component {
             showsVerticalScrollIndicator={false}
           >
             <TransactionsList
-              transactions={transactions}
+              transactions={categorizedTransactions}
               categories={categories}
               onTransactionPress={this.handleTransactionPress}
-              categorized={true}
             />
           </ScrollView>
         </View>
@@ -260,5 +283,20 @@ const styles = StyleSheet.create({
   },
   chartContainer: {
     flex: 1
+  },
+  emptyScreenEmoji: {
+    fontSize: 60,
+    textAlign: "center",
+    marginTop: 30
+  },
+  emptyScreenHeader: {
+    fontSize: 22,
+    marginTop: 15,
+    textAlign: "center"
+  },
+  statusMessageText: {
+    fontSize: 17,
+    marginTop: 15,
+    textAlign: "center"
   }
 });

@@ -14,9 +14,7 @@ import { toPrettyDate, leftJoin } from "../utils/TransactionUtils";
 export default function TransactionsList({
   transactions,
   categories,
-  onTransactionPress,
-  categorized,
-  statusMessage
+  onTransactionPress
 }) {
   ListItemSeparator = () => {
     return (
@@ -68,17 +66,8 @@ export default function TransactionsList({
     );
   };
 
-  // get only the relevant transactions
-  const transactionsFiltered = categorized
-    ? _.reject(transactions, {
-        category: "No Category"
-      })
-    : _.filter(transactions, {
-        category: "No Category"
-      });
-
   const transactionsWithIcons = leftJoin(
-    transactionsFiltered,
+    transactions,
     categories,
     "category",
     "label"
@@ -98,15 +87,6 @@ export default function TransactionsList({
         renderItem={({ item, index }) => this.ListItem(item, index)}
         ItemSeparatorComponent={this.ListItemSeparator}
         keyExtractor={(item, index) => item + index}
-        ListEmptyComponent={() => (
-          <View>
-            <Text style={styles.emptyScreenEmoji}>🎉</Text>
-            <Text style={styles.emptyScreenHeader}>All done for today!</Text>
-            {statusMessage ? (
-              <Text style={styles.statusMessageText}>{statusMessage}</Text>
-            ) : null}
-          </View>
-        )}
       />
     </View>
   );
@@ -121,29 +101,5 @@ const styles = StyleSheet.create({
     marginVertical: 12,
     marginHorizontal: 10,
     flexDirection: "row"
-  },
-  sectionHeader: {
-    paddingLeft: 10,
-    paddingVertical: 4,
-    borderBottomWidth: 1,
-    borderBottomColor: "#f1f1f1"
-  },
-  sectionHeaderText: {
-    fontSize: 28
-  },
-  emptyScreenEmoji: {
-    fontSize: 60,
-    textAlign: "center",
-    marginTop: 30
-  },
-  emptyScreenHeader: {
-    fontSize: 22,
-    marginTop: 15,
-    textAlign: "center"
-  },
-  statusMessageText: {
-    fontSize: 17,
-    marginTop: 15,
-    textAlign: "center"
   }
 });
