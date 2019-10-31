@@ -56,7 +56,7 @@ export default function App(props) {
               const previousRouteName = getActiveRouteName(prevState);
 
               if (previousRouteName !== currentRouteName) {
-                Amplitude.logEvent("Navigte_" + currentRouteName);
+                Amplitude.logEvent("Navigate_" + currentRouteName);
               }
             }}
           />
