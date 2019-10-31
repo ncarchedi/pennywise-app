@@ -96,6 +96,9 @@ class TodoScreen extends React.Component {
         <View>
           <Text style={styles.emptyScreenEmoji}>🎉</Text>
           <Text style={styles.emptyScreenHeader}>All done for today!</Text>
+          <Text style={styles.emptyScreenCTA}>
+            Add a transaction manually or link a new account
+          </Text>
           {statusMessage ? (
             <Text style={styles.statusMessageText}>{statusMessage}</Text>
           ) : null}
@@ -150,5 +153,14 @@ const styles = StyleSheet.create({
     fontSize: 17,
     marginTop: 15,
     textAlign: "center"
+  },
+  emptyScreenCTA: {
+    fontSize: 14,
+    marginTop: 30,
+    color: "darkgrey",
+    width: "50%",
+    textAlign: "center",
+    alignSelf: "center",
+    lineHeight: 20
   }
 });

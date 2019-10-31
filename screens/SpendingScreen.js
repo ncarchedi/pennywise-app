@@ -87,8 +87,17 @@ class SpendingScreen extends React.Component {
       )
         return (
           <View>
-            <Text style={styles.emptyScreenEmoji}>🎉</Text>
-            <Text style={styles.emptyScreenHeader}>All done for today!</Text>
+            <Ionicons
+              name={"ios-pricetags"}
+              size={60}
+              style={styles.emptyScreenEmoji}
+            />
+            <Text style={styles.emptyScreenHeader}>
+              Categorize some expenses!
+            </Text>
+            <Text style={styles.emptyScreenCTA}>
+              Your categorized expenses will show up here
+            </Text>
           </View>
         );
 
@@ -285,7 +294,6 @@ const styles = StyleSheet.create({
     flex: 1
   },
   emptyScreenEmoji: {
-    fontSize: 60,
     textAlign: "center",
     marginTop: 30
   },
@@ -298,5 +306,14 @@ const styles = StyleSheet.create({
     fontSize: 17,
     marginTop: 15,
     textAlign: "center"
+  },
+  emptyScreenCTA: {
+    fontSize: 14,
+    marginTop: 30,
+    color: "darkgrey",
+    width: "50%",
+    textAlign: "center",
+    alignSelf: "center",
+    lineHeight: 20
   }
 });
