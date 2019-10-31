@@ -1,5 +1,4 @@
 import React from "react";
-import { AsyncStorage } from "react-native";
 import _ from "lodash";
 import moment from "moment";
 import { Notifications } from "expo";
@@ -17,6 +16,8 @@ import {
 import {
   saveItem,
   loadItem,
+  removeItem,
+  clearStorage,
   migrateStorageToLatestVersion
 } from "./utils/StorageUtils";
 
@@ -26,6 +27,10 @@ import "firebase/functions";
 import "firebase/firestore";
 
 import SimpleCrypto from "simple-crypto-js";
+
+import * as Amplitude from "expo-analytics-amplitude";
+
+import * as Sentry from "sentry-expo";
 
 const GlobalContext = React.createContext({});
 
@@ -37,6 +42,8 @@ import {
   FIREBASE_STORAGE_BUCKET,
   FIREBASE_MESSAGING_SENDER_ID,
   FIREBASE_APP_ID,
+  FIREBASE_MEASUREMENT_ID,
+  AMPLITUDE_API_KEY,
   ENVIRONMENT
 } from "react-native-dotenv";
 
@@ -68,6 +75,8 @@ export class GlobalContextProvider extends React.Component {
 
     firebase.initializeApp(firebaseConfig);
     firebase.functions();
+
+    Amplitude.initialize(AMPLITUDE_API_KEY);
   }
 
   componentDidMount = async () => {
@@ -77,6 +86,8 @@ export class GlobalContextProvider extends React.Component {
   loadStateFromStorage = async () => {
     if (await this.isUserLoggedIn()) {
       const uid = (await this.getCurrentUser()).uid;
+
+      Amplitude.setUserId(uid);
 
       try {
         const transactionsRaw = await loadItem(uid, "transactions");
@@ -89,6 +100,7 @@ export class GlobalContextProvider extends React.Component {
         this.setState({ transactions });
       } catch (error) {
         console.log(error.message);
+        Sentry.captureException(error);
       }
 
       try {
@@ -101,6 +113,7 @@ export class GlobalContextProvider extends React.Component {
         this.setState({ categories });
       } catch (error) {
         console.log(error.message);
+        Sentry.captureException(error);
       }
 
       try {
@@ -113,15 +126,21 @@ export class GlobalContextProvider extends React.Component {
         this.setState({ notificationTime });
       } catch (error) {
         console.log(error.message);
+        Sentry.captureException(error);
       }
-    }
 
-    try {
-      const institutionAccounts = await this.retrieveInstitutionAccounts();
+      try {
+        let institutionAccounts = await loadItem(uid, "institutionAccounts");
 
-      this.setState({ institutionAccounts });
-    } catch (error) {
-      console.log(error.message);
+        if (!institutionAccounts) {
+          institutionAccounts = [];
+        }
+
+        this.setState({ institutionAccounts });
+      } catch (error) {
+        console.log(error.message);
+        Sentry.captureException(error);
+      }
     }
   };
 
@@ -293,6 +312,7 @@ export class GlobalContextProvider extends React.Component {
       }
     } catch (error) {
       console.log(error);
+      Sentry.captureException(error);
       return {
         error: true,
         message: error
@@ -366,24 +386,13 @@ export class GlobalContextProvider extends React.Component {
     console.log("clearing all transactions...");
 
     try {
-      await AsyncStorage.removeItem("transactions");
+      removeItem((await this.getCurrentUser()).uid, "transactions");
     } catch (error) {
       console.log(error.message);
+      Sentry.captureException(error);
     }
 
     this.setState({ transactions: [] });
-  };
-
-  clearAllAccounts = async () => {
-    console.log("clearing all accounts...");
-
-    try {
-      await AsyncStorage.removeItem("institutionAccounts");
-    } catch (error) {
-      console.log(error.message);
-    }
-
-    this.setState({ institutionAccounts: [] });
   };
 
   loadDummyData = async () => {
@@ -515,12 +524,15 @@ export class GlobalContextProvider extends React.Component {
 
       await this.loadStateFromStorage();
 
+      // Amplitude.setUserId(userId);
+
       return {
         success: true,
         message: ""
       };
     } catch (error) {
       console.log(error.message);
+      Sentry.captureException(error);
 
       return {
         success: false,
@@ -543,6 +555,7 @@ export class GlobalContextProvider extends React.Component {
       };
     } catch (error) {
       console.log(error.message);
+      Sentry.captureException(error);
 
       return {
         success: false,
@@ -555,10 +568,13 @@ export class GlobalContextProvider extends React.Component {
     try {
       await firebase.auth().signOut();
 
+      Amplitude.setUserId(null);
+
       // Clear the state
       this.initState();
     } catch (error) {
       console.error(error);
+      Sentry.captureException(error);
     }
   };
 
@@ -569,6 +585,7 @@ export class GlobalContextProvider extends React.Component {
       return current_user ? true : false;
     } catch (error) {
       console.log(error.message);
+      Sentry.captureException(error);
       return false;
     }
   };
@@ -597,35 +614,24 @@ export class GlobalContextProvider extends React.Component {
         accounts
       });
 
-      await AsyncStorage.setItem(
+      await saveItem(
+        (await this.getCurrentUser()).uid,
         "institutionAccounts",
-        JSON.stringify(institutionAccounts)
+        institutionAccounts
       );
 
       this.setState({ institutionAccounts });
     } catch (error) {
       console.log(error.message);
-    }
-  };
-
-  retrieveInstitutionAccounts = async () => {
-    try {
-      let institutionAccounts = JSON.parse(
-        await AsyncStorage.getItem("institutionAccounts")
-      );
-
-      if (!institutionAccounts) {
-        institutionAccounts = [];
-      }
-
-      return institutionAccounts;
-    } catch (error) {
-      console.error(error.message);
+      Sentry.captureException(error);
     }
   };
 
   removeInstitutionAccount = async itemId => {
     try {
+      // TODO: update this code as it will not work
+      // itemID is now encrypted. This should be handled through an API call
+      // -------------- UPDATE -------------->
       // Update the firestore first
       const current_user = await this.getCurrentUser();
 
@@ -637,6 +643,7 @@ export class GlobalContextProvider extends React.Component {
       const removeItem = await ref.update({
         ["plaid_items." + itemId]: firebase.firestore.FieldValue.delete()
       });
+      // <-------------- UPDATE --------------
 
       // Update the local state
       const updatedInstitutionAccounts = _.filter(
@@ -646,19 +653,21 @@ export class GlobalContextProvider extends React.Component {
         }
       );
 
-      await AsyncStorage.setItem(
+      await saveItem(
+        (await this.getCurrentUser()).uid,
         "institutionAccounts",
-        JSON.stringify(updatedInstitutionAccounts)
+        updatedInstitutionAccounts
       );
 
       this.setState({ institutionAccounts: updatedInstitutionAccounts });
     } catch (error) {
       console.error(error);
+      Sentry.captureException(error);
     }
   };
 
   clearAsyncStorage = async () => {
-    await AsyncStorage.clear();
+    await clearStorage();
   };
 
   getEnvironment = () => {
@@ -692,7 +701,6 @@ export class GlobalContextProvider extends React.Component {
           updateTransaction: this.updateTransaction,
           deleteTransaction: this.deleteTransaction,
           clearAllTransactions: this.clearAllTransactions,
-          clearAllAccounts: this.clearAllAccounts,
           loadDummyData: this.loadDummyData,
           getAccessTokenFromPublicToken: this.getAccessTokenFromPublicToken,
           getPlaidTransactions: this.getPlaidTransactions,
