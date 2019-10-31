@@ -5,7 +5,8 @@ import {
   View,
   TouchableOpacity,
   RefreshControl,
-  Alert
+  Alert,
+  Text
 } from "react-native";
 
 import TransactionsList from "../components/TransactionsList";
@@ -23,7 +24,7 @@ class TodoScreen extends React.Component {
           onPress={navigation.getParam("addTransaction")}
           style={{ marginRight: 20 }}
         >
-          <Ionicons name="ios-add" size={40} />
+          <Ionicons name="ios-add" size={35} />
         </TouchableOpacity>
       )
     };
@@ -66,6 +67,7 @@ class TodoScreen extends React.Component {
         cancelable: false
       });
     } else if (result.transactions.length === 0) {
+      // TODO: is this status message logic necessary?
       this.setState({ statusMessage: "No new transactions available." });
     }
   };
@@ -80,6 +82,11 @@ class TodoScreen extends React.Component {
     const { categories } = this.props.global;
     const { refreshing, statusMessage } = this.state;
     const transactions = this.props.global.listTransactions();
+
+    // get only uncategorized transactions
+    const uncategorizedTransactions = _.filter(transactions, {
+      category: "No Category"
+    });
 
     return (
       <View style={styles.container}>
@@ -97,11 +104,24 @@ class TodoScreen extends React.Component {
           }
         >
           <TransactionsList
-            transactions={transactions}
+            transactions={uncategorizedTransactions}
             categories={categories}
             onTransactionPress={this.handleTransactionPress}
-            categorized={false}
             statusMessage={statusMessage}
+            emptyScreen={
+              <View>
+                <Text style={styles.emptyScreenEmoji}>🎉</Text>
+                <Text style={styles.emptyScreenHeader}>
+                  All done for today!
+                </Text>
+                <Text style={styles.emptyScreenCTA}>
+                  Add a transaction manually or link a new account
+                </Text>
+                {statusMessage ? (
+                  <Text style={styles.statusMessageText}>{statusMessage}</Text>
+                ) : null}
+              </View>
+            }
           />
         </ScrollView>
       </View>
@@ -116,5 +136,27 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff"
   },
-  contentContainer: {}
+  emptyScreenEmoji: {
+    fontSize: 60,
+    textAlign: "center",
+    marginTop: 30
+  },
+  emptyScreenHeader: {
+    fontSize: 22,
+    marginTop: 15,
+    textAlign: "center"
+  },
+  statusMessageText: {
+    fontSize: 17,
+    marginTop: 15,
+    textAlign: "center"
+  },
+  emptyScreenCTA: {
+    marginTop: 30,
+    color: "darkgrey",
+    width: "50%",
+    textAlign: "center",
+    alignSelf: "center",
+    lineHeight: 20
+  }
 });

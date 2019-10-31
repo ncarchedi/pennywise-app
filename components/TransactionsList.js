@@ -10,14 +10,12 @@ import { Ionicons } from "@expo/vector-icons";
 import _ from "lodash";
 
 import { toPrettyDate, leftJoin } from "../utils/TransactionUtils";
-import allQuotes from "../data/quotes.json";
 
 export default function TransactionsList({
   transactions,
   categories,
   onTransactionPress,
-  categorized,
-  statusMessage
+  emptyScreen
 }) {
   ListItemSeparator = () => {
     return (
@@ -69,17 +67,8 @@ export default function TransactionsList({
     );
   };
 
-  // get only the relevant transactions
-  const transactionsFiltered = categorized
-    ? _.reject(transactions, {
-        category: "No Category"
-      })
-    : _.filter(transactions, {
-        category: "No Category"
-      });
-
   const transactionsWithIcons = leftJoin(
-    transactionsFiltered,
+    transactions,
     categories,
     "category",
     "label"
@@ -90,9 +79,6 @@ export default function TransactionsList({
     .reverse()
     .value();
 
-  // get random quote for empty screen
-  const quote = allQuotes[Math.floor(Math.random() * allQuotes.length)];
-
   // console.log("rendering transactions list...");
 
   return (
@@ -102,21 +88,7 @@ export default function TransactionsList({
         renderItem={({ item, index }) => this.ListItem(item, index)}
         ItemSeparatorComponent={this.ListItemSeparator}
         keyExtractor={(item, index) => item + index}
-        ListEmptyComponent={() => (
-          <View>
-            <Text style={styles.emptyScreenEmoji}>🎉</Text>
-            <Text style={styles.emptyScreenHeader}>All done for today!</Text>
-            {statusMessage ? (
-              <Text style={styles.statusMessageText}>{statusMessage}</Text>
-            ) : null}
-            <View style={styles.emptyScreenQuoteBox}>
-              <Text style={styles.emptyScreenQuoteText}>{quote.text}</Text>
-              <Text style={styles.emptyScreenQuoteSource}>
-                {"-" + quote.source}
-              </Text>
-            </View>
-          </View>
-        )}
+        ListEmptyComponent={emptyScreen}
       />
     </View>
   );
@@ -131,47 +103,5 @@ const styles = StyleSheet.create({
     marginVertical: 12,
     marginHorizontal: 10,
     flexDirection: "row"
-  },
-  sectionHeader: {
-    paddingLeft: 10,
-    paddingVertical: 4,
-    borderBottomWidth: 1,
-    borderBottomColor: "#f1f1f1"
-  },
-  sectionHeaderText: {
-    fontSize: 28
-  },
-  emptyScreenEmoji: {
-    fontSize: 60,
-    textAlign: "center",
-    marginTop: 30
-  },
-  emptyScreenHeader: {
-    fontSize: 22,
-    marginTop: 15,
-    textAlign: "center"
-  },
-  statusMessageText: {
-    fontSize: 17,
-    marginTop: 15,
-    textAlign: "center"
-  },
-  emptyScreenQuoteBox: {
-    backgroundColor: "#f1f1f1",
-    marginTop: 50,
-    paddingVertical: 30
-  },
-  emptyScreenQuoteText: {
-    textAlign: "center",
-    fontSize: 17,
-    marginHorizontal: 30,
-    fontStyle: "italic",
-    color: "grey"
-  },
-  emptyScreenQuoteSource: {
-    textAlign: "center",
-    fontSize: 17,
-    marginTop: 10,
-    color: "grey"
   }
 });
