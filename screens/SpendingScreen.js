@@ -73,34 +73,32 @@ class SpendingScreen extends React.Component {
     const { categories } = this.props.global;
     const { showListView } = this.state;
 
+    // get only categorized transactions
+    const categorizedTransactions = _.reject(transactions, {
+      category: "No Category"
+    });
+
+    if (
+      Array.isArray(categorizedTransactions) &&
+      !categorizedTransactions.length
+    )
+      return (
+        <View>
+          <Ionicons
+            name={"ios-pricetags"}
+            size={60}
+            style={styles.emptyScreenEmoji}
+          />
+          <Text style={styles.emptyScreenHeader}>
+            Categorize some expenses!
+          </Text>
+          <Text style={styles.emptyScreenCTA}>
+            Your categorized expenses will show up here
+          </Text>
+        </View>
+      );
+
     if (showListView) {
-      // get only categorized transactions
-      // const categorizedTransactions = _.reject(transactions, {
-      //   category: "No Category"
-      // });
-
-      const categorizedTransactions = [];
-
-      if (
-        Array.isArray(categorizedTransactions) &&
-        !categorizedTransactions.length
-      )
-        return (
-          <View>
-            <Ionicons
-              name={"ios-pricetags"}
-              size={60}
-              style={styles.emptyScreenEmoji}
-            />
-            <Text style={styles.emptyScreenHeader}>
-              Categorize some expenses!
-            </Text>
-            <Text style={styles.emptyScreenCTA}>
-              Your categorized expenses will show up here
-            </Text>
-          </View>
-        );
-
       return (
         <View style={styles.container}>
           <ScrollView
@@ -120,15 +118,11 @@ class SpendingScreen extends React.Component {
       );
     }
 
-    const spendingByMonth = _(transactions)
+    const spendingByMonth = _(categorizedTransactions)
       .map(t => ({
         monthIdentifier: this.monthIdentifier(t.date),
         ...t
       }))
-      // Filter out transactions without category
-      .filter(t => {
-        return t.category !== "No Category";
-      })
       .groupBy("monthIdentifier")
       .map((month, monthIdentifier) => {
         return {
