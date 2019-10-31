@@ -161,27 +161,28 @@ class SpendingScreen extends React.Component {
         ? spendingLastMonth[0].categories
         : [];
 
-    // get the proper ordering of categories based on spending this month
-    const orderedCategories = _(spendingPerCategoryThisMonth)
-      .sortBy("amountSpent")
-      .map("category")
-      .value();
-
     const plotData = {
       thisMonth: spendingPerCategoryThisMonth,
       lastMonth: spendingPerCategoryLastMonth
     };
 
-    // console.log(plotData);
-
-    const nbCategories = Math.max(
-      spendingPerCategoryThisMonth.length,
-      spendingPerCategoryLastMonth.length
-    );
+    // order based on the greater of either this month or last month
+    const orderedCategories = _(spendingPerCategoryThisMonth)
+      .concat(spendingPerCategoryLastMonth)
+      .groupBy("category")
+      .map((category, categoryName) => ({
+        category: categoryName,
+        maxSpent: _(category).maxBy("amountSpent").amountSpent
+      }))
+      .orderBy("maxSpent")
+      .map("category")
+      .value();
 
     // These calculations are not exact. E.g. I'm not sure how many pixels
     // 'overhead' should be. It's just to adjust the height
     // more or less with the nb of categories.
+    const nbCategories = orderedCategories.length;
+
     const nbPixelsOverhead = 100;
     const nbPixelsPerCategory = 30;
     const nbPixelsSpacing = 15;
