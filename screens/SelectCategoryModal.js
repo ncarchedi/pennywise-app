@@ -12,6 +12,19 @@ import { Ionicons } from "@expo/vector-icons";
 import _ from "lodash";
 
 export default class SelectCategoryModal extends React.Component {
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerRight: (
+        <TouchableOpacity
+          onPress={() => alert("Open add category modal!")}
+          style={{ marginRight: 20 }}
+        >
+          <Ionicons name="ios-add" size={35} />
+        </TouchableOpacity>
+      )
+    };
+  };
+
   state = {
     searchText: ""
   };
@@ -23,17 +36,17 @@ export default class SelectCategoryModal extends React.Component {
     this.props.navigation.goBack();
   };
 
-  handleAddCategory = async () => {
-    const onAddCategory = this.props.navigation.getParam("onAddCategory");
-    const { searchText } = this.state;
+  // handleAddCategory = async () => {
+  //   const onAddCategory = this.props.navigation.getParam("onAddCategory");
+  //   const { searchText } = this.state;
 
-    const newCategory = await onAddCategory({
-      // TODO: allow user to pick icon?
-      icon: "ios-card",
-      label: searchText
-    });
-    this.handleChangeCategory(newCategory.label);
-  };
+  //   const newCategory = await onAddCategory({
+  //     // TODO: allow user to pick icon?
+  //     icon: "ios-card",
+  //     label: searchText
+  //   });
+  //   this.handleChangeCategory(newCategory.label);
+  // };
 
   listItem = item => {
     const { icon, label } = item;
@@ -82,7 +95,7 @@ export default class SelectCategoryModal extends React.Component {
           keyExtractor={item => item.label}
           ItemSeparatorComponent={this.ListItemSeparator}
           ListEmptyComponent={() => (
-            <TouchableOpacity onPress={this.handleAddCategory}>
+            <TouchableOpacity onPress={() => alert("Open add category modal!")}>
               <Text style={{ marginTop: 10, fontStyle: "italic" }}>
                 {`+ Create a new category called ${searchText}`}
               </Text>

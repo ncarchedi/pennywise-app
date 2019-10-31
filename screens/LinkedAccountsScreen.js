@@ -22,7 +22,7 @@ class LinkedAccountsScreen extends React.Component {
           onPress={() => navigation.navigate("PlaidModal")}
           style={{ marginRight: 20 }}
         >
-          <Ionicons name="ios-add" size={40} />
+          <Ionicons name="ios-add" size={35} />
         </TouchableOpacity>
       )
     };
