@@ -88,23 +88,6 @@ class TodoScreen extends React.Component {
       category: "No Category"
     });
 
-    if (
-      Array.isArray(uncategorizedTransactions) &&
-      !uncategorizedTransactions.length
-    )
-      return (
-        <View>
-          <Text style={styles.emptyScreenEmoji}>🎉</Text>
-          <Text style={styles.emptyScreenHeader}>All done for today!</Text>
-          <Text style={styles.emptyScreenCTA}>
-            Add a transaction manually or link a new account
-          </Text>
-          {statusMessage ? (
-            <Text style={styles.statusMessageText}>{statusMessage}</Text>
-          ) : null}
-        </View>
-      );
-
     return (
       <View style={styles.container}>
         <ScrollView
@@ -125,6 +108,20 @@ class TodoScreen extends React.Component {
             categories={categories}
             onTransactionPress={this.handleTransactionPress}
             statusMessage={statusMessage}
+            emptyScreen={
+              <View>
+                <Text style={styles.emptyScreenEmoji}>🎉</Text>
+                <Text style={styles.emptyScreenHeader}>
+                  All done for today!
+                </Text>
+                <Text style={styles.emptyScreenCTA}>
+                  Add a transaction manually or link a new account
+                </Text>
+                {statusMessage ? (
+                  <Text style={styles.statusMessageText}>{statusMessage}</Text>
+                ) : null}
+              </View>
+            }
           />
         </ScrollView>
       </View>

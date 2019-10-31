@@ -14,7 +14,8 @@ import { toPrettyDate, leftJoin } from "../utils/TransactionUtils";
 export default function TransactionsList({
   transactions,
   categories,
-  onTransactionPress
+  onTransactionPress,
+  emptyScreen
 }) {
   ListItemSeparator = () => {
     return (
@@ -87,6 +88,7 @@ export default function TransactionsList({
         renderItem={({ item, index }) => this.ListItem(item, index)}
         ItemSeparatorComponent={this.ListItemSeparator}
         keyExtractor={(item, index) => item + index}
+        ListEmptyComponent={emptyScreen}
       />
     </View>
   );
