@@ -165,59 +165,86 @@ class SpendingScreen extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.chartContainer}>
-          <VictoryChart
-            theme={VictoryTheme.material}
-            // TODO: make sure long category names don't get cutoff
-            // https://formidable.com/open-source/victory/docs/faq/#my-axis-labels-are-cut-off-how-can-i-fix-them
-            padding={{ top: 50, bottom: 30, left: 100, right: 40 }}
-            height={height}
+          <ScrollView
+            style={styles.container}
+            contentContainerStyle={styles.contentContainer}
+            showsVerticalScrollIndicator={false}
           >
-            <VictoryLegend
-              x={100}
-              y={15}
-              orientation="horizontal"
-              data={[
-                { name: "This Month", symbol: { fill: "tomato" } },
-                { name: "Last Month", symbol: { fill: "brown" } }
-              ]}
-            />
-            <VictoryGroup
-              horizontal
-              offset={15}
-              style={{
-                data: { width: 15 }
-              }}
-              colorScale={["brown", "tomato"]}
+            <VictoryChart
+              theme={VictoryTheme.material}
+              // TODO: make sure long category names don't get cutoff
+              // https://formidable.com/open-source/victory/docs/faq/#my-axis-labels-are-cut-off-how-can-i-fix-them
+              padding={{ top: 50, bottom: 50, left: 120, right: 50 }}
+              height={height}
             >
-              <VictoryBar
-                data={plotData.lastMonth}
-                x="category"
-                y="amountSpent"
-                labels={({ datum }) => {
-                  return "$" + Math.round(datum.amountSpent);
-                }}
-                labelComponent={<VictoryLabel dx={5} />}
-                categories={{ x: orderedCategories }}
+              <VictoryLegend
+                x={100}
+                y={15}
+                orientation="horizontal"
+                data={[
+                  { name: "This Month", symbol: { fill: "tomato" } },
+                  { name: "Last Month", symbol: { fill: "brown" } }
+                ]}
               />
-              <VictoryBar
-                data={plotData.thisMonth}
-                x="category"
-                y="amountSpent"
-                labels={({ datum }) => {
-                  return "$" + Math.round(datum.amountSpent);
+              <VictoryGroup
+                horizontal
+                offset={15}
+                style={{
+                  data: { width: 15 }
                 }}
-                labelComponent={<VictoryLabel dx={5} />}
+                colorScale={["brown", "tomato"]}
+              >
+                <VictoryBar
+                  data={plotData.lastMonth}
+                  x="category"
+                  y="amountSpent"
+                  labels={({ datum }) => {
+                    return datum.amountSpent.toLocaleString("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 0
+                    });
+                  }}
+                  labelComponent={<VictoryLabel dx={5} />}
+                  categories={{ x: orderedCategories }}
+                />
+                <VictoryBar
+                  data={plotData.thisMonth}
+                  x="category"
+                  y="amountSpent"
+                  labels={({ datum }) => {
+                    return datum.amountSpent.toLocaleString("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 0
+                    });
+                  }}
+                  labelComponent={<VictoryLabel dx={5} />}
+                />
+              </VictoryGroup>
+              {/* The vertical axis */}
+              <VictoryAxis style={{ grid: { stroke: null } }} />
+              {/* The horizontal axis */}
+              <VictoryAxis
+                dependentAxis
+                tickFormat={x =>
+                  x.toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                  })
+                }
+                style={{ grid: { stroke: null } }}
+                tickLabelComponent={
+                  <VictoryLabel angle={-45} dx={-15} dy={-5} />
+                }
               />
-            </VictoryGroup>
-            {/* The vertical axis */}
-            <VictoryAxis style={{ grid: { stroke: null } }} />
-            {/* The horizontal axis */}
-            <VictoryAxis
-              dependentAxis
-              tickFormat={x => `$${x}`}
-              style={{ grid: { stroke: null } }}
-            />
-          </VictoryChart>
+              <VictoryLabel angle={45} />
+            </VictoryChart>
+          </ScrollView>
         </View>
       </View>
     );
