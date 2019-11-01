@@ -1,11 +1,9 @@
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
-import { StyleSheet, View, Text, Image } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 import AppIntroSlider from "react-native-app-intro-slider";
 
 import { withGlobalContext } from "../GlobalContext";
-
-import placeholderImage from "../assets/images/2.jpeg";
 
 const slides = [
   {
@@ -17,23 +15,22 @@ const slides = [
   },
   {
     key: "slide2",
-    title: "Connect your bank accounts",
-    text:
-      "Connect your bank accounts to automatically import your transactions",
+    title: "Connect Your Bank Accounts",
+    text: "Connect your bank accounts to automatically import your expenses",
     icon: "ios-business",
     color: "#636363"
   },
   {
     key: "slide3",
-    title: "Manually categorize tranactions",
+    title: "Manually Categorize Expenses",
     text:
-      "Manually categorizing transcastions gives you full control and forces you to be conscious of your spending",
+      "Take control of your finances by manually categorizing every dollar you spend",
     icon: "ios-options",
     color: "#636363"
   },
   {
     key: "slide4",
-    title: "Analyze your spending",
+    title: "Analyze Your Spending",
     text:
       "Use analytics to understand your spending and improve your financial habits",
     icon: "ios-stats",
@@ -41,9 +38,9 @@ const slides = [
   },
   {
     key: "slide5",
-    title: "Secure & Private",
+    title: "Secure and Private",
     text:
-      "Your data never leaves your device, and we'll never share it with anyone",
+      "Your data is encrypted on your device and will never be shared without your permission",
     icon: "ios-lock",
     color: "#636363"
   }
@@ -83,7 +80,7 @@ class IntroScreen extends React.Component {
         renderItem={this.renderItem}
         // bottomButton
         showPrevButton
-        //showSkipButton
+        // showSkipButton
         // hideNextButton
         // hideDoneButton
         // onSkip={() => console.log("skipped")}

@@ -181,9 +181,7 @@ class SettingsScreen extends React.Component {
             <SettingsSeparator />
             <PressableSetting
               text="Go To Onboarding"
-              onPress={() =>
-                this.props.navigation.navigate("OnboardingWelcome")
-              }
+              onPress={() => this.props.navigation.navigate("Intro")}
             />
           </View>
         </ScrollView>
