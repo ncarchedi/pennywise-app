@@ -16,23 +16,21 @@ const slides = [
   {
     key: "slide2",
     title: "Connect Your Bank Accounts",
-    text: "Connect your bank accounts to automatically import your expenses",
+    text: "Automatically import your daily expenses",
     icon: "ios-business",
     color: "#636363"
   },
   {
     key: "slide3",
     title: "Manually Categorize Expenses",
-    text:
-      "Take control of your finances by manually categorizing every dollar you spend",
+    text: "Manually categorize expenses to promote more mindful spending",
     icon: "ios-options",
     color: "#636363"
   },
   {
     key: "slide4",
     title: "Analyze Your Spending",
-    text:
-      "Use analytics to understand your spending and improve your financial habits",
+    text: "Data-driven insights help you (re)gain control of your finances",
     icon: "ios-stats",
     color: "#636363"
   },
@@ -40,7 +38,7 @@ const slides = [
     key: "slide5",
     title: "Secure and Private",
     text:
-      "Your data is encrypted on your device and will never be shared without your permission",
+      "Your data is encrypted on your personal device and never shared with third parties",
     icon: "ios-lock",
     color: "#636363"
   }
