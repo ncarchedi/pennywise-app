@@ -147,6 +147,10 @@ class SpendingScreen extends React.Component {
       }))
       .value();
 
+    const monthLabelsArray = _(monthLabels)
+      .map("name")
+      .value();
+
     const orderedCategories = _(categorizedTransactions)
       .map(t => ({
         monthIdentifier: this.monthIdentifier(t.date),
@@ -165,9 +169,10 @@ class SpendingScreen extends React.Component {
     // 'overhead' should be. It's just to adjust the height
     // more or less with the nb of categories.
     const nbCategories = orderedCategories.length;
+    const nbMonths = monthLabelsArray.length;
 
     const nbPixelsOverhead = 100;
-    const nbPixelsPerCategory = 30;
+    const nbPixelsPerCategory = nbMonths * 15;
     const nbPixelsSpacing = 15;
     const height =
       nbPixelsOverhead + nbCategories * (nbPixelsPerCategory + nbPixelsSpacing);
@@ -200,35 +205,24 @@ class SpendingScreen extends React.Component {
                   data: { width: 15 }
                 }}
               >
-                <VictoryBar
-                  data={spendingByMonthFinal["2019-11"]}
-                  x="category"
-                  y="amountSpent"
-                  labels={({ datum }) => {
-                    return datum.amountSpent.toLocaleString("en-US", {
-                      style: "currency",
-                      currency: "USD",
-                      minimumFractionDigits: 0,
-                      maximumFractionDigits: 0
-                    });
-                  }}
-                  labelComponent={<VictoryLabel dx={5} />}
-                  categories={{ x: orderedCategories }}
-                />
-                <VictoryBar
-                  data={spendingByMonthFinal["2019-10"]}
-                  x="category"
-                  y="amountSpent"
-                  labels={({ datum }) => {
-                    return datum.amountSpent.toLocaleString("en-US", {
-                      style: "currency",
-                      currency: "USD",
-                      minimumFractionDigits: 0,
-                      maximumFractionDigits: 0
-                    });
-                  }}
-                  labelComponent={<VictoryLabel dx={5} />}
-                />
+                {monthLabelsArray.map(m => (
+                  <VictoryBar
+                    key={m}
+                    data={spendingByMonthFinal[m]}
+                    x="category"
+                    y="amountSpent"
+                    labels={({ datum }) => {
+                      return datum.amountSpent.toLocaleString("en-US", {
+                        style: "currency",
+                        currency: "USD",
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0
+                      });
+                    }}
+                    labelComponent={<VictoryLabel dx={5} />}
+                    categories={{ x: orderedCategories }}
+                  />
+                ))}
               </VictoryGroup>
               {/* The vertical axis */}
               <VictoryAxis style={{ grid: { stroke: null } }} />
