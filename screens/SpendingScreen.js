@@ -98,6 +98,7 @@ class SpendingScreen extends React.Component {
         </View>
       );
 
+    // list view logic
     if (showListView) {
       return (
         <View style={styles.container}>
@@ -118,6 +119,7 @@ class SpendingScreen extends React.Component {
       );
     }
 
+    // spending chart logic
     const spendingByMonth = _(categorizedTransactions)
       .map(t => ({
         monthIdentifier: this.monthIdentifier(t.date),
@@ -136,6 +138,10 @@ class SpendingScreen extends React.Component {
             .value()
         };
       });
+
+    // TODO: keep all categories for both months
+    // set any to 0 if no transactions?
+    // console.log(spendingByMonth);
 
     const spendingThisMonth = spendingByMonth
       .filter(item => {
@@ -165,6 +171,25 @@ class SpendingScreen extends React.Component {
       thisMonth: spendingPerCategoryThisMonth,
       lastMonth: spendingPerCategoryLastMonth
     };
+
+    // return helpful empty screen if no transactions for this month or last month
+    if (!plotData.thisMonth.length && !plotData.lastMonth.length)
+      return (
+        <View>
+          <Ionicons
+            name={"ios-calendar"}
+            size={60}
+            style={styles.emptyScreenEmoji}
+          />
+          <Text style={styles.emptyScreenHeader}>
+            Categorize recent expenses!
+          </Text>
+          <Text style={styles.emptyScreenCTA}>
+            You have no categorized expenses in the current and previous
+            calendar months
+          </Text>
+        </View>
+      );
 
     // order based on the greater of either this month or last month
     const orderedCategories = _(spendingPerCategoryThisMonth)
@@ -208,10 +233,7 @@ class SpendingScreen extends React.Component {
                 x={100}
                 y={15}
                 orientation="horizontal"
-                data={[
-                  { name: "This Month", symbol: { fill: "tomato" } },
-                  { name: "Last Month", symbol: { fill: "brown" } }
-                ]}
+                data={[{ name: "This Month" }, { name: "Last Month" }]}
               />
               <VictoryGroup
                 horizontal
@@ -219,7 +241,6 @@ class SpendingScreen extends React.Component {
                 style={{
                   data: { width: 15 }
                 }}
-                colorScale={["brown", "tomato"]}
               >
                 <VictoryBar
                   data={plotData.lastMonth}
