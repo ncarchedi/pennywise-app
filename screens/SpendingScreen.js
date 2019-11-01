@@ -145,6 +145,7 @@ class SpendingScreen extends React.Component {
       .map((month, monthIdentifier) => ({
         name: monthIdentifier
       }))
+      .orderBy("name")
       .value();
 
     const monthLabelsArray = _(monthLabels)
