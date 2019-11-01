@@ -194,7 +194,7 @@ class SpendingScreen extends React.Component {
               height={height}
             >
               <VictoryLegend
-                x={0}
+                x={10}
                 y={15}
                 orientation="horizontal"
                 data={monthLabels}
