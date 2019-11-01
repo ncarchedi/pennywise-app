@@ -21,13 +21,13 @@ class OnboardingSelectBankScreen extends React.Component {
 
     navigation.navigate("PlaidLink", {
       onComplete: () => {
-        navigation.navigate("OnboardingCompleted");
+        navigation.navigate("Main");
       }
     });
   };
 
   handleSkip = () => {
-    this.props.navigation.navigate("OnboardingCompleted");
+    this.props.navigation.navigate("Main");
   };
 
   render() {
