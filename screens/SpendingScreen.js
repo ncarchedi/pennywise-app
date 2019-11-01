@@ -98,6 +98,7 @@ class SpendingScreen extends React.Component {
         </View>
       );
 
+    // list view logic
     if (showListView) {
       return (
         <View style={styles.container}>
@@ -118,61 +119,48 @@ class SpendingScreen extends React.Component {
       );
     }
 
+    // spending chart logic
     const spendingByMonth = _(categorizedTransactions)
       .map(t => ({
         monthIdentifier: this.monthIdentifier(t.date),
         ...t
       }))
       .groupBy("monthIdentifier")
-      .map((month, monthIdentifier) => {
-        return {
-          monthIdentifier,
-          categories: _(month)
-            .groupBy("category")
-            .map((category, categoryName) => ({
-              category: categoryName,
-              amountSpent: _(category).sumBy("amount")
-            }))
-            .value()
-        };
-      });
+      .map((month, monthIdentifier) => ({
+        [monthIdentifier]: _(month)
+          .groupBy("category")
+          .map((category, categoryName) => ({
+            category: categoryName,
+            amountSpent: _(category).sumBy("amount")
+          }))
+      }))
+      // from: https://stackoverflow.com/questions/30221286/how-to-convert-an-array-of-objects-to-an-object-in-lodash
+      .reduce(function(memo, current) {
+        return _.assign(memo, current);
+      }, {});
 
-    const spendingThisMonth = spendingByMonth
-      .filter(item => {
-        return item.monthIdentifier === this.monthIdentifier(new Date());
-      })
+    const spendingByMonthFinal = JSON.parse(JSON.stringify(spendingByMonth));
+
+    const monthLabels = _(spendingByMonthFinal)
+      .map((month, monthIdentifier) => ({
+        name: monthIdentifier
+      }))
+      .orderBy("name")
       .value();
 
-    const spendingLastMonth = spendingByMonth
-      .filter(item => {
-        return (
-          item.monthIdentifier ===
-          this.monthIdentifier(moment().subtract(1, "months"))
-        );
-      })
+    const monthLabelsArray = _(monthLabels)
+      .map("name")
       .value();
 
-    const spendingPerCategoryThisMonth =
-      spendingThisMonth[0] && spendingThisMonth[0].categories
-        ? spendingThisMonth[0].categories
-        : [];
-    const spendingPerCategoryLastMonth =
-      spendingLastMonth[0] && spendingLastMonth[0].categories
-        ? spendingLastMonth[0].categories
-        : [];
-
-    const plotData = {
-      thisMonth: spendingPerCategoryThisMonth,
-      lastMonth: spendingPerCategoryLastMonth
-    };
-
-    // order based on the greater of either this month or last month
-    const orderedCategories = _(spendingPerCategoryThisMonth)
-      .concat(spendingPerCategoryLastMonth)
+    const orderedCategories = _(categorizedTransactions)
+      .map(t => ({
+        monthIdentifier: this.monthIdentifier(t.date),
+        ...t
+      }))
       .groupBy("category")
       .map((category, categoryName) => ({
         category: categoryName,
-        maxSpent: _(category).maxBy("amountSpent").amountSpent
+        maxSpent: _(category).maxBy("amount").amount
       }))
       .orderBy("maxSpent")
       .map("category")
@@ -182,9 +170,10 @@ class SpendingScreen extends React.Component {
     // 'overhead' should be. It's just to adjust the height
     // more or less with the nb of categories.
     const nbCategories = orderedCategories.length;
+    const nbMonths = monthLabelsArray.length;
 
     const nbPixelsOverhead = 100;
-    const nbPixelsPerCategory = 30;
+    const nbPixelsPerCategory = nbMonths * 15;
     const nbPixelsSpacing = 15;
     const height =
       nbPixelsOverhead + nbCategories * (nbPixelsPerCategory + nbPixelsSpacing);
@@ -205,13 +194,10 @@ class SpendingScreen extends React.Component {
               height={height}
             >
               <VictoryLegend
-                x={100}
+                x={10}
                 y={15}
                 orientation="horizontal"
-                data={[
-                  { name: "This Month", symbol: { fill: "tomato" } },
-                  { name: "Last Month", symbol: { fill: "brown" } }
-                ]}
+                data={monthLabels}
               />
               <VictoryGroup
                 horizontal
@@ -219,37 +205,25 @@ class SpendingScreen extends React.Component {
                 style={{
                   data: { width: 15 }
                 }}
-                colorScale={["brown", "tomato"]}
               >
-                <VictoryBar
-                  data={plotData.lastMonth}
-                  x="category"
-                  y="amountSpent"
-                  labels={({ datum }) => {
-                    return datum.amountSpent.toLocaleString("en-US", {
-                      style: "currency",
-                      currency: "USD",
-                      minimumFractionDigits: 0,
-                      maximumFractionDigits: 0
-                    });
-                  }}
-                  labelComponent={<VictoryLabel dx={5} />}
-                  categories={{ x: orderedCategories }}
-                />
-                <VictoryBar
-                  data={plotData.thisMonth}
-                  x="category"
-                  y="amountSpent"
-                  labels={({ datum }) => {
-                    return datum.amountSpent.toLocaleString("en-US", {
-                      style: "currency",
-                      currency: "USD",
-                      minimumFractionDigits: 0,
-                      maximumFractionDigits: 0
-                    });
-                  }}
-                  labelComponent={<VictoryLabel dx={5} />}
-                />
+                {monthLabelsArray.map(m => (
+                  <VictoryBar
+                    key={m}
+                    data={spendingByMonthFinal[m]}
+                    x="category"
+                    y="amountSpent"
+                    labels={({ datum }) => {
+                      return datum.amountSpent.toLocaleString("en-US", {
+                        style: "currency",
+                        currency: "USD",
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0
+                      });
+                    }}
+                    labelComponent={<VictoryLabel dx={5} />}
+                    categories={{ x: orderedCategories }}
+                  />
+                ))}
               </VictoryGroup>
               {/* The vertical axis */}
               <VictoryAxis style={{ grid: { stroke: null } }} />
