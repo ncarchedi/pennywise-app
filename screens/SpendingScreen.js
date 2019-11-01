@@ -126,78 +126,36 @@ class SpendingScreen extends React.Component {
         ...t
       }))
       .groupBy("monthIdentifier")
-      .map((month, monthIdentifier) => {
-        return {
-          monthIdentifier,
-          categories: _(month)
-            .groupBy("category")
-            .map((category, categoryName) => ({
-              category: categoryName,
-              amountSpent: _(category).sumBy("amount")
-            }))
-            .value()
-        };
-      });
+      .map((month, monthIdentifier) => ({
+        [monthIdentifier]: _(month)
+          .groupBy("category")
+          .map((category, categoryName) => ({
+            category: categoryName,
+            amountSpent: _(category).sumBy("amount")
+          }))
+      }))
+      // from: https://stackoverflow.com/questions/30221286/how-to-convert-an-array-of-objects-to-an-object-in-lodash
+      .reduce(function(memo, current) {
+        return _.assign(memo, current);
+      }, {});
 
-    // TODO: keep all categories for both months
-    // set any to 0 if no transactions?
-    // console.log(spendingByMonth);
+    const spendingByMonthFinal = JSON.parse(JSON.stringify(spendingByMonth));
 
-    const spendingThisMonth = spendingByMonth
-      .filter(item => {
-        return item.monthIdentifier === this.monthIdentifier(new Date());
-      })
+    const monthLabels = _(spendingByMonthFinal)
+      .map((month, monthIdentifier) => ({
+        name: monthIdentifier
+      }))
       .value();
 
-    const spendingLastMonth = spendingByMonth
-      .filter(item => {
-        return (
-          item.monthIdentifier ===
-          this.monthIdentifier(moment().subtract(1, "months"))
-        );
-      })
-      .value();
-
-    const spendingPerCategoryThisMonth =
-      spendingThisMonth[0] && spendingThisMonth[0].categories
-        ? spendingThisMonth[0].categories
-        : [];
-    const spendingPerCategoryLastMonth =
-      spendingLastMonth[0] && spendingLastMonth[0].categories
-        ? spendingLastMonth[0].categories
-        : [];
-
-    const plotData = {
-      thisMonth: spendingPerCategoryThisMonth,
-      lastMonth: spendingPerCategoryLastMonth
-    };
-
-    // return helpful empty screen if no transactions for this month or last month
-    if (!plotData.thisMonth.length && !plotData.lastMonth.length)
-      return (
-        <View>
-          <Ionicons
-            name={"ios-calendar"}
-            size={60}
-            style={styles.emptyScreenEmoji}
-          />
-          <Text style={styles.emptyScreenHeader}>
-            Categorize recent expenses!
-          </Text>
-          <Text style={styles.emptyScreenCTA}>
-            You have no categorized expenses in the current and previous
-            calendar months
-          </Text>
-        </View>
-      );
-
-    // order based on the greater of either this month or last month
-    const orderedCategories = _(spendingPerCategoryThisMonth)
-      .concat(spendingPerCategoryLastMonth)
+    const orderedCategories = _(categorizedTransactions)
+      .map(t => ({
+        monthIdentifier: this.monthIdentifier(t.date),
+        ...t
+      }))
       .groupBy("category")
       .map((category, categoryName) => ({
         category: categoryName,
-        maxSpent: _(category).maxBy("amountSpent").amountSpent
+        maxSpent: _(category).maxBy("amount").amount
       }))
       .orderBy("maxSpent")
       .map("category")
@@ -230,10 +188,10 @@ class SpendingScreen extends React.Component {
               height={height}
             >
               <VictoryLegend
-                x={100}
+                x={0}
                 y={15}
                 orientation="horizontal"
-                data={[{ name: "This Month" }, { name: "Last Month" }]}
+                data={monthLabels}
               />
               <VictoryGroup
                 horizontal
@@ -243,7 +201,7 @@ class SpendingScreen extends React.Component {
                 }}
               >
                 <VictoryBar
-                  data={plotData.lastMonth}
+                  data={spendingByMonthFinal["2019-11"]}
                   x="category"
                   y="amountSpent"
                   labels={({ datum }) => {
@@ -258,7 +216,7 @@ class SpendingScreen extends React.Component {
                   categories={{ x: orderedCategories }}
                 />
                 <VictoryBar
-                  data={plotData.thisMonth}
+                  data={spendingByMonthFinal["2019-10"]}
                   x="category"
                   y="amountSpent"
                   labels={({ datum }) => {
