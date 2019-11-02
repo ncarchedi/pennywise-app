@@ -10,7 +10,7 @@ import * as Sentry from "sentry-expo";
 
 import AppNavigator from "./navigation/AppNavigator";
 
-import { GlobalContextProvider } from "./GlobalContext";
+import { GlobalContextProvider, GlobalContext } from "./GlobalContext";
 
 import Constants from "expo-constants";
 
@@ -50,16 +50,26 @@ export default function App(props) {
       <View style={styles.container}>
         {Platform.OS === "ios" && <StatusBar barStyle="default" />}
         <GlobalContextProvider>
-          <AppNavigator
-            onNavigationStateChange={(prevState, currentState, action) => {
-              const currentRouteName = getActiveRouteName(currentState);
-              const previousRouteName = getActiveRouteName(prevState);
+          <GlobalContext.Consumer>
+            {context => {
+              return (
+                <AppNavigator
+                  onNavigationStateChange={(
+                    prevState,
+                    currentState,
+                    action
+                  ) => {
+                    const currentRouteName = getActiveRouteName(currentState);
+                    const previousRouteName = getActiveRouteName(prevState);
 
-              if (previousRouteName !== currentRouteName) {
-                Amplitude.logEvent("Navigate_" + currentRouteName);
-              }
+                    if (previousRouteName !== currentRouteName) {
+                      Amplitude.logEvent("Navigate_" + currentRouteName);
+                    }
+                  }}
+                />
+              );
             }}
-          />
+          </GlobalContext.Consumer>
         </GlobalContextProvider>
       </View>
     );

@@ -32,7 +32,7 @@ import * as Amplitude from "expo-analytics-amplitude";
 
 import * as Sentry from "sentry-expo";
 
-const GlobalContext = React.createContext({});
+export const GlobalContext = React.createContext({});
 
 import {
   FIREBASE_API_KEY,
@@ -78,10 +78,6 @@ export class GlobalContextProvider extends React.Component {
 
     Amplitude.initialize(AMPLITUDE_API_KEY);
   }
-
-  componentDidMount = async () => {
-    await this.loadStateFromStorage();
-  };
 
   loadStateFromStorage = async () => {
     if (await this.isUserLoggedIn()) {
@@ -218,16 +214,21 @@ export class GlobalContextProvider extends React.Component {
         .format("YYYY-MM-DD");
     }
 
+    let plaidItemsToLoad = _(this.state.institutionAccounts)
+      .map(nextInstitutionAccount => nextInstitutionAccount.itemId)
+      .value();
+
     try {
       const getPlaidTransactions = firebase
         .functions()
-        .httpsCallable("getPlaidTransactions_v4");
+        .httpsCallable("getPlaidTransactions_v5");
 
       let result = await getPlaidTransactions({
         env: ENVIRONMENT,
         encryptionKey: await this.getEncryptionKey(),
         start_date: startDate,
-        end_date: endDate
+        end_date: endDate,
+        plaidItemsToUse: plaidItemsToLoad
       });
 
       if (result.data.error) {
@@ -629,22 +630,6 @@ export class GlobalContextProvider extends React.Component {
 
   removeInstitutionAccount = async itemId => {
     try {
-      // TODO: update this code as it will not work
-      // itemID is now encrypted. This should be handled through an API call
-      // -------------- UPDATE -------------->
-      // Update the firestore first
-      const current_user = await this.getCurrentUser();
-
-      const ref = await firebase
-        .firestore()
-        .collection("user_data")
-        .doc(current_user.uid);
-
-      const removeItem = await ref.update({
-        ["plaid_items." + itemId]: firebase.firestore.FieldValue.delete()
-      });
-      // <-------------- UPDATE --------------
-
       // Update the local state
       const updatedInstitutionAccounts = _.filter(
         this.state.institutionAccounts,
@@ -696,6 +681,7 @@ export class GlobalContextProvider extends React.Component {
         value={{
           ...this.state,
           // Every function to update the state should be listed here:
+          loadStateFromStorage: this.loadStateFromStorage,
           listTransactions: this.listTransactions,
           addTransaction: this.addTransaction,
           updateTransaction: this.updateTransaction,
