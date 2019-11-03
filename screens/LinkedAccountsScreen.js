@@ -6,7 +6,8 @@ import {
   View,
   TouchableOpacity,
   DatePickerIOS,
-  SectionList
+  SectionList,
+  Alert
 } from "react-native";
 import moment from "moment";
 import { Ionicons } from "@expo/vector-icons";
@@ -29,7 +30,14 @@ class LinkedAccountsScreen extends React.Component {
   };
 
   onRemovePressed = async itemId => {
-    await this.props.global.removeInstitutionAccount(itemId);
+    const result = await this.props.global.removeInstitutionAccount(itemId);
+
+    if (result.error) {
+      Alert.alert(
+        "Error removing account",
+        "Make sure you're connected to the internet and try again."
+      );
+    }
   };
 
   render() {

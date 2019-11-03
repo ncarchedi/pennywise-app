@@ -21,12 +21,12 @@ import {
   migrateStorageToLatestVersion
 } from "./utils/StorageUtils";
 
+import { dbRemoveInstitutionAccount } from "./utils/DataBaseCommunication";
+
 import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/functions";
 import "firebase/firestore";
-
-import SimpleCrypto from "simple-crypto-js";
 
 import * as Amplitude from "expo-analytics-amplitude";
 
@@ -180,11 +180,10 @@ export class GlobalContextProvider extends React.Component {
   getAccessTokenFromPublicToken = async publicToken => {
     const getAccessTokenFromPublicToken = firebase
       .functions()
-      .httpsCallable("getAccessTokenFromPublicToken_v4");
+      .httpsCallable("getAccessTokenFromPublicToken_v6");
 
     let result = await getAccessTokenFromPublicToken({
       env: ENVIRONMENT,
-      encryptionKey: await this.getEncryptionKey(),
       public_token: publicToken
     });
 
@@ -221,11 +220,10 @@ export class GlobalContextProvider extends React.Component {
     try {
       const getPlaidTransactions = firebase
         .functions()
-        .httpsCallable("getPlaidTransactions_v5");
+        .httpsCallable("getPlaidTransactions_v6");
 
       let result = await getPlaidTransactions({
         env: ENVIRONMENT,
-        encryptionKey: await this.getEncryptionKey(),
         start_date: startDate,
         end_date: endDate,
         plaidItemsToUse: plaidItemsToLoad
@@ -630,6 +628,13 @@ export class GlobalContextProvider extends React.Component {
 
   removeInstitutionAccount = async itemId => {
     try {
+      // First remove in the database
+      await dbRemoveInstitutionAccount(
+        firebase,
+        (await this.getCurrentUser()).uid,
+        itemId
+      );
+
       // Update the local state
       const updatedInstitutionAccounts = _.filter(
         this.state.institutionAccounts,
@@ -645,9 +650,19 @@ export class GlobalContextProvider extends React.Component {
       );
 
       this.setState({ institutionAccounts: updatedInstitutionAccounts });
+
+      return {
+        error: false,
+        errorMessage: ""
+      };
     } catch (error) {
-      console.error(error);
+      console.log(error);
       Sentry.captureException(error);
+
+      return {
+        error: true,
+        message: error
+      };
     }
   };
 
@@ -657,22 +672,6 @@ export class GlobalContextProvider extends React.Component {
 
   getEnvironment = () => {
     return ENVIRONMENT;
-  };
-
-  getEncryptionKey = async () => {
-    const uid = (await this.getCurrentUser()).uid;
-
-    let encryptionKey = await loadItem(uid, "encryptionKey");
-
-    if (encryptionKey) {
-      return encryptionKey;
-    } else {
-      const newEncryptionKey = SimpleCrypto.generateRandom(512);
-
-      await saveItem(uid, "encryptionKey", newEncryptionKey);
-
-      return newEncryptionKey;
-    }
   };
 
   render() {
