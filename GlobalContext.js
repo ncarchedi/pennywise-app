@@ -86,12 +86,7 @@ export class GlobalContextProvider extends React.Component {
       Amplitude.setUserId(uid);
 
       try {
-        const transactionsRaw = await loadItem(uid, "transactions");
-
-        const transactions = transactionsRaw.map(t => ({
-          ...t,
-          date: new Date(t.date)
-        }));
+        const transactions = await loadItem(uid, "transactions");
 
         this.setState({ transactions });
       } catch (error) {
@@ -200,6 +195,9 @@ export class GlobalContextProvider extends React.Component {
     }
   };
 
+  // A note on dates:
+  // - Plaid uses the 'local' date as used by the bank and visible by the user on the bank website
+  // - By default, MomentJS uses the local timezone (e.g. the timezone of the user's device)
   getPlaidTransactions = async () => {
     let lastTransactionDate = this.getLastPlaidTransactionDate();
 
@@ -207,7 +205,13 @@ export class GlobalContextProvider extends React.Component {
     let endDate = moment().format("YYYY-MM-DD");
 
     if (lastTransactionDate) {
-      startDate = moment.utc(lastTransactionDate).format("YYYY-MM-DD");
+      // We subtract 2 days from the most recent transaction's date. This way, we're 100% sure that
+      // we won't miss any transactions.
+      // Why not 1 day? Because the maximum time difference between two locations is 27 hours
+      // (https://stackoverflow.com/questions/8131023/what-is-the-maximum-possible-time-zone-difference)
+      startDate = moment(lastTransactionDate)
+        .subtract(2, "days")
+        .format("YYYY-MM-DD");
     } else {
       startDate = moment()
         .subtract(5, "days")
@@ -405,7 +409,7 @@ export class GlobalContextProvider extends React.Component {
       name: t.name,
       amount: t.amount,
       category: t.category,
-      date: new Date(t.date)
+      date: t.date
     }));
 
     await saveItem(
@@ -478,12 +482,12 @@ export class GlobalContextProvider extends React.Component {
     // console.log(notificationStatus);
 
     // Calculate the time to send the next notification
-    let notificationDate = moment(new Date())
+    let notificationDate = moment()
       .hours(this.state.notificationTime.hours)
       .minutes(this.state.notificationTime.minutes);
 
     // Make sure this 'date' is after now
-    if (moment(new Date()).diff(notificationDate) >= 0) {
+    if (moment().diff(notificationDate) >= 0) {
       notificationDate.add(1, "days");
     }
 

@@ -8,7 +8,6 @@ import {
   DatePickerIOS,
   SectionList
 } from "react-native";
-import moment from "moment";
 import { Ionicons } from "@expo/vector-icons";
 
 import { withGlobalContext } from "../GlobalContext";

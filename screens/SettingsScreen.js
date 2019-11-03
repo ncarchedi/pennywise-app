@@ -107,7 +107,7 @@ class SettingsScreen extends React.Component {
       clearAsyncStorage
     } = this.props.global;
 
-    const notificationTime = moment(new Date())
+    const notificationTime = moment()
       .hours(this.state.notificationTime.hours)
       .minutes(this.state.notificationTime.minutes)
       .toDate();
