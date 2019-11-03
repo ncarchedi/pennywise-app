@@ -77,12 +77,12 @@ class IntroScreen extends React.Component {
         slides={slides}
         renderItem={this.renderItem}
         // bottomButton
-        showPrevButton
+        // showPrevButton
         // showSkipButton
         // hideNextButton
         // hideDoneButton
         // onSkip={() => console.log("skipped")}
-        renderNextButton={this.renderNavigationButton("Next")}
+        // renderNextButton={this.renderNavigationButton("Next")}
         renderPrevButton={this.renderNavigationButton("Back")}
         renderDoneButton={this.renderDoneButton("Done")}
         dotStyle={styles.dotStyle}
