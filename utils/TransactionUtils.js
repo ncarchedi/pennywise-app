@@ -1,6 +1,7 @@
 import uuidv4 from "uuid/v4";
 import _ from "lodash";
 import hash from "object-hash";
+import moment from "moment";
 
 export const createNewTransaction = (attrs = {}) => {
   const transaction = {
@@ -9,7 +10,9 @@ export const createNewTransaction = (attrs = {}) => {
     name: attrs.name || "",
     amount: attrs.amount || "",
     category: attrs.category || "No Category",
-    date: attrs.date ? new Date(attrs.date) : new Date(),
+    // Plaid outputs dates as 'YYYY-MM-DD'. To not change dates because of user timezone settings, let's keep it
+    // in that format
+    date: attrs.date ? attrs.date : moment().format("YYYY-MM-DD"),
     institution: attrs.institution || "",
     account: attrs.account || "",
     isRemoved: false
@@ -19,14 +22,11 @@ export const createNewTransaction = (attrs = {}) => {
 };
 
 export const toPrettyDate = (date, withDay) => {
-  // if date is a string, convert to a date
-  if (typeof date == "string") date = new Date(date);
-
-  // should we include the day?
-  if (withDay) return date.toString().substr(0, 15);
-
-  // else, just return the existing string
-  return date.toISOString().slice(0, 10);
+  if (withDay) {
+    return moment(date).format("ddd MMM Do YYYY");
+  } else {
+    return moment(date).format("YYYY-MM-DD");
+  }
 };
 
 export const leftJoin = (left, right, left_id, right_id) => {

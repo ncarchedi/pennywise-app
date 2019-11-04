@@ -9,6 +9,8 @@ import {
 } from "react-native";
 import DateTimePicker from "react-native-modal-datetime-picker";
 
+import moment from "moment";
+
 import { withGlobalContext } from "../GlobalContext";
 import { toPrettyDate } from "../utils/TransactionUtils";
 import TextInputWithIcon from "../components/TextInputWithIcon";
@@ -166,7 +168,7 @@ class EditTransactionModal extends React.Component {
               fakeValue={<Text>{toPrettyDate(date, true)}</Text>}
             />
             <DateTimePicker
-              date={date}
+              date={moment(date).toDate()}
               isVisible={this.state.isDatePickerVisible}
               onConfirm={this.handleConfirmDate}
               onCancel={this.toggleDatePicker}
