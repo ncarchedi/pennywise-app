@@ -88,7 +88,7 @@ export class GlobalContextProvider extends React.Component {
       try {
         const transactions = await loadItem(uid, "transactions");
 
-        this.setState({ transactions });
+        setTransactions(transactions, false);
       } catch (error) {
         console.log(error.message);
         Sentry.captureException(error);
@@ -139,6 +139,29 @@ export class GlobalContextProvider extends React.Component {
     this.setState(this.cleanState);
   };
 
+  // This should be the only method that writes state.transactions and saves transactions
+  // to the local storage.
+  // It does all necessary validations and steps to make sure state.transactions
+  // is always in a valid state.
+  setTransactions = async (transactions, saveToStorage = true) => {
+    // Make sure transactions are never undefined or null
+    if (!transactions) {
+      transactions = [];
+    }
+
+    if (saveToStorage) {
+      await saveItem(
+        (await this.getCurrentUser()).uid,
+        "transactions",
+        transactions
+      );
+    }
+
+    this.setState({
+      transactions: transactions
+    });
+  };
+
   addTransaction = async (transaction = {}) => {
     // returns an array of length 1
     const result = await this.addTransactions([transaction]);
@@ -159,15 +182,7 @@ export class GlobalContextProvider extends React.Component {
       "id"
     );
 
-    await saveItem(
-      (await this.getCurrentUser()).uid,
-      "transactions",
-      updatedTransactionsList
-    );
-
-    this.setState({
-      transactions: updatedTransactionsList
-    });
+    this.setTransactions(updatedTransactionsList);
 
     return newTransactions;
   };
@@ -353,13 +368,7 @@ export class GlobalContextProvider extends React.Component {
       return transaction;
     });
 
-    await saveItem(
-      (await this.getCurrentUser()).uid,
-      "transactions",
-      updatedTransactions
-    );
-
-    this.setState({ transactions: updatedTransactions });
+    this.setTransactions(updatedTransactions);
   };
 
   deleteTransaction = async id => {
@@ -376,13 +385,7 @@ export class GlobalContextProvider extends React.Component {
       }
     });
 
-    await saveItem(
-      (await this.getCurrentUser()).uid,
-      "transactions",
-      updatedTransactions
-    );
-
-    this.setState({ transactions: updatedTransactions });
+    this.setTransactions(updatedTransactions);
   };
 
   clearAllTransactions = async () => {
@@ -395,7 +398,7 @@ export class GlobalContextProvider extends React.Component {
       Sentry.captureException(error);
     }
 
-    this.setState({ transactions: [] });
+    this.setTransactions(null, false);
   };
 
   loadDummyData = async () => {
@@ -410,13 +413,7 @@ export class GlobalContextProvider extends React.Component {
       date: t.date
     }));
 
-    await saveItem(
-      (await this.getCurrentUser()).uid,
-      "transactions",
-      dummyData
-    );
-
-    this.setState({ transactions: dummyData });
+    this.setTransactions(dummyData);
   };
 
   getLastPlaidTransactionDate = () => {
