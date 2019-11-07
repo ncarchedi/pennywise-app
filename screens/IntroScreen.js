@@ -56,7 +56,7 @@ class IntroScreen extends React.Component {
         name={item.icon}
         size={200}
       />
-      <View>
+      <View style={styles.textContainer}>
         <Text style={styles.title}>{item.title}</Text>
         <Text style={styles.text}>{item.text}</Text>
       </View>
@@ -101,9 +101,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-around"
   },
+  textContainer: {
+    marginBottom: 20
+  },
   image: {
-    color: "#636363",
-    marginTop: 100
+    color: "#636363"
+    //marginTop: 100
   },
   title: {
     fontSize: 30,

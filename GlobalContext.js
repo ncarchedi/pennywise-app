@@ -88,7 +88,7 @@ export class GlobalContextProvider extends React.Component {
       try {
         const transactions = await loadItem(uid, "transactions");
 
-        setTransactions(transactions, false);
+        this.setTransactions(transactions, false);
       } catch (error) {
         console.log(error.message);
         Sentry.captureException(error);
