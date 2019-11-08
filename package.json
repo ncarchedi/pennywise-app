@@ -18,6 +18,7 @@
     "expo": "^34.0.3",
     "expo-analytics-amplitude": "~6.0.0",
     "expo-asset": "~6.0.0",
+    "expo-cli": "^3.4.1",
     "expo-constants": "~6.0.0",
     "expo-font": "~6.0.1",
     "expo-web-browser": "~6.0.0",
