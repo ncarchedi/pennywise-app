@@ -7,9 +7,9 @@ import {
   View,
   TextInput
 } from "react-native";
-import DateTimePicker from "react-native-modal-datetime-picker";
-
 import moment from "moment";
+import DateTimePicker from "react-native-modal-datetime-picker";
+import { Appearance } from "react-native-appearance";
 
 import { withGlobalContext } from "../GlobalContext";
 import { toPrettyDate } from "../utils/TransactionUtils";
@@ -173,6 +173,10 @@ class EditTransactionModal extends React.Component {
               onConfirm={this.handleConfirmDate}
               onCancel={this.toggleDatePicker}
               hideTitleContainerIOS={true}
+              datePickerContainerStyleIOS={{
+                backgroundColor:
+                  Appearance.getColorScheme() === "dark" ? "black" : "white"
+              }}
             />
             <TextInputWithIcon
               icon="ios-paper"

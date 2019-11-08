@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import moment from "moment";
 import DateTimePicker from "react-native-modal-datetime-picker";
+import { Appearance } from "react-native-appearance";
 
 import { withGlobalContext } from "../GlobalContext";
 
@@ -152,6 +153,10 @@ class SettingsScreen extends React.Component {
                 onCancel={this.toggleTimePicker}
                 mode="time"
                 hideTitleContainerIOS={true}
+                datePickerContainerStyleIOS={{
+                  backgroundColor:
+                    Appearance.getColorScheme() === "dark" ? "black" : "white"
+                }}
               />
             </View>
             <SettingsSeparator />
