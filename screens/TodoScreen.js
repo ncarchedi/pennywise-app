@@ -67,7 +67,7 @@ class TodoScreen extends React.Component {
         cancelable: false
       });
     } else if (result.transactions.length === 0) {
-      // TODO: is this status message logic necessary?
+      // TODO: is this status message logic necessary? Need to revisit
       this.setState({ statusMessage: "No new transactions available." });
     }
   };
