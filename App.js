@@ -4,6 +4,7 @@ import * as Font from "expo-font";
 import React, { useState } from "react";
 import { Platform, StatusBar, StyleSheet, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { AppearanceProvider } from "react-native-appearance";
 
 import * as Amplitude from "expo-analytics-amplitude";
 import * as Sentry from "sentry-expo";
@@ -49,28 +50,30 @@ export default function App(props) {
     return (
       <View style={styles.container}>
         {Platform.OS === "ios" && <StatusBar barStyle="default" />}
-        <GlobalContextProvider>
-          <GlobalContext.Consumer>
-            {context => {
-              return (
-                <AppNavigator
-                  onNavigationStateChange={(
-                    prevState,
-                    currentState,
-                    action
-                  ) => {
-                    const currentRouteName = getActiveRouteName(currentState);
-                    const previousRouteName = getActiveRouteName(prevState);
+        <AppearanceProvider>
+          <GlobalContextProvider>
+            <GlobalContext.Consumer>
+              {context => {
+                return (
+                  <AppNavigator
+                    onNavigationStateChange={(
+                      prevState,
+                      currentState,
+                      action
+                    ) => {
+                      const currentRouteName = getActiveRouteName(currentState);
+                      const previousRouteName = getActiveRouteName(prevState);
 
-                    if (previousRouteName !== currentRouteName) {
-                      Amplitude.logEvent("Navigate_" + currentRouteName);
-                    }
-                  }}
-                />
-              );
-            }}
-          </GlobalContext.Consumer>
-        </GlobalContextProvider>
+                      if (previousRouteName !== currentRouteName) {
+                        Amplitude.logEvent("Navigate_" + currentRouteName);
+                      }
+                    }}
+                  />
+                );
+              }}
+            </GlobalContext.Consumer>
+          </GlobalContextProvider>
+        </AppearanceProvider>
       </View>
     );
   }
