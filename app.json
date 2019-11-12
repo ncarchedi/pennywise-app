@@ -3,8 +3,10 @@
     "name": "Pennywise",
     "slug": "pennywise",
     "privacy": "public",
-    "sdkVersion": "33.0.0",
-    "platforms": ["ios"],
+    "sdkVersion": "35.0.0",
+    "platforms": [
+      "ios"
+    ],
     "version": "1.0.11",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -16,10 +18,11 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "bundleIdentifier": "com.dayonelabs.conscious-spending",
-      "supportsTablet": true
+      "bundleIdentifier": "com.dayonelabs.conscious-spending"
     },
     "hooks": {
       "postPublish": [
