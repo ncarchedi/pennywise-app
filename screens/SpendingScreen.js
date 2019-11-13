@@ -19,6 +19,8 @@ import {
 import moment from "moment";
 import { Ionicons } from "@expo/vector-icons";
 
+import PennywiseVictoryTheme from "../utils/PennywiseVictoryTheme";
+
 import TransactionsList from "../components/TransactionsList";
 
 import { withGlobalContext } from "../GlobalContext";
@@ -188,7 +190,7 @@ class SpendingScreen extends React.Component {
           >
             <VictoryChart
               // temporarily switching to grey scale to avoid issue with Roboto font
-              theme={VictoryTheme.greyScale}
+              theme={PennywiseVictoryTheme}
               // TODO: make sure long category names don't get cutoff
               // https://formidable.com/open-source/victory/docs/faq/#my-axis-labels-are-cut-off-how-can-i-fix-them
               padding={{ top: 50, bottom: 50, left: 120, right: 50 }}
