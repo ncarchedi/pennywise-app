@@ -154,6 +154,12 @@ class SpendingScreen extends React.Component {
       .map("name")
       .value();
 
+    // Order by the second to last month
+    const monthToOrderBy =
+      monthLabelsArray.length >= 2
+        ? monthLabelsArray[monthLabelsArray.length - 2]
+        : monthLabelsArray[0];
+
     const orderedCategories = _(categorizedTransactions)
       .map(t => ({
         monthIdentifier: this.monthIdentifier(t.date),
@@ -162,9 +168,11 @@ class SpendingScreen extends React.Component {
       .groupBy("category")
       .map((category, categoryName) => ({
         category: categoryName,
-        maxSpent: _(category).maxBy("amount").amount
+        maxSpent: _(category)
+          .filter({ monthIdentifier: monthToOrderBy })
+          .sumBy("amount")
       }))
-      .orderBy("maxSpent")
+      .orderBy("maxSpent", "asc")
       .map("category")
       .value();
 
