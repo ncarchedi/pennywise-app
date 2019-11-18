@@ -3,9 +3,9 @@ import {
   SafeAreaView,
   StyleSheet,
   View,
-  Button,
   Text,
-  TouchableOpacity
+  TouchableOpacity,
+  Button
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -16,16 +16,7 @@ class WelcomeScreen extends React.Component {
     return {
       headerStyle: {
         borderBottomWidth: 0
-      },
-      headerLeft: () => (
-        <TouchableOpacity
-          onPress={() => {
-            navigation.goBack();
-          }}
-        >
-          <Text style={styles.navigationButtonText}>{"< Back"}</Text>
-        </TouchableOpacity>
-      )
+      }
     };
   };
 
@@ -39,20 +30,27 @@ class WelcomeScreen extends React.Component {
       <SafeAreaView style={styles.container} behavior="padding" enabled>
         <View style={styles.topContainer}>
           <Ionicons style={styles.image} name={"ios-bowtie"} size={200} />
-          <Text style={styles.title}>Welcome</Text>
         </View>
         <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            onPress={this.handleRegister}
+            style={{ ...styles.button, backgroundColor: "#50E3C2" }}
+          >
+            <Text
+              style={{
+                ...styles.buttonText,
+                color: "white",
+                fontWeight: "bold"
+              }}
+            >
+              Register
+            </Text>
+          </TouchableOpacity>
           <TouchableOpacity
             onPress={this.handleSignIn}
             style={[styles.button, styles.secondaryButton]}
           >
-            <Text style={styles.buttonText}>Sign in</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={this.handleRegister}
-            style={[styles.button, styles.primaryButton]}
-          >
-            <Text style={styles.buttonText}>Register</Text>
+            <Text style={styles.buttonText}>Sign In</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -82,13 +80,6 @@ const styles = StyleSheet.create({
   image: {
     color: "#50E3C2"
   },
-  title: {
-    fontSize: 50,
-    color: "#50E3C2",
-    backgroundColor: "transparent",
-    textAlign: "center",
-    marginHorizontal: 10
-  },
   button: {
     alignItems: "center",
     marginVertical: 10,
@@ -98,27 +89,8 @@ const styles = StyleSheet.create({
     borderColor: "#50E3C2",
     borderRadius: 6
   },
-  primaryButton: {
-    backgroundColor: "#50E3C2"
-  },
-  secondaryButton: {},
   buttonText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#636363",
+    fontSize: 17,
     textAlign: "center"
-  },
-  textStyle: {},
-  textField: {
-    margin: 10,
-    height: 40,
-    borderColor: "gray",
-    borderWidth: 1,
-    padding: 10
-  },
-  navigationButtonText: {
-    fontSize: 18,
-    padding: 12,
-    color: "#636363"
   }
 });
