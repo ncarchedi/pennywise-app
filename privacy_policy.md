@@ -1,6 +1,6 @@
 Effective date: November 16, 2019
 
-Pennywise ("us", "we", or "our") operates the Pennywise mobile application (hereinafter referred to as the "Service").
+Day One Labs LLC ("us", "we", or "our") operates the Pennywise mobile application (hereinafter referred to as the "Service").
 
 This page informs you of our policies regarding the collection, use, and disclosure of personal data when you use our Service and the choices you have associated with that data.
 
@@ -21,12 +21,12 @@ We collect several different types of information for various purposes to provid
 
 ## How and Why We Use Information
 
-Pennywise uses the collected data for various purposes:
+Day One Labs LLC uses the collected data for various purposes:
 
 - To provide and maintain our Services–for example, to set up and maintain your account or load your financial transactions;
 - To further develop and improve our Services–for example by adding new features that we think our users will enjoy or will help them to manage their finances more effectively;
 - To monitor and analyze trends and better understand how users interact with our Services, which helps us improve our Services and make them easier to use;
-- To monitor and prevent any problems with our Services, protect the security of our Services, detect and prevent fraudulent transactions and other illegal activities, fight spam, and protect the rights and property of Pennywise and others, which may result in us declining a transaction or the use of our Services;
+- To monitor and prevent any problems with our Services, protect the security of our Services, detect and prevent fraudulent transactions and other illegal activities, fight spam, and protect the rights and property of Day One Labs LLC and others, which may result in us declining a transaction or the use of our Services;
 - To communicate with you. For example, we may email you to solicit your feedback, share tips for getting the most out of our products, or keep you up to date on Pennywise. If you don’t want to hear from us, you can opt out of marketing communications at any time. (Please keep in mind that even if you opt out, we’ll still send you important updates relating to your account); and
 - To personalize your experience using our Services, provide content recommendations, target our marketing messages to groups of our users (for example, those who have been our user for a certain length of time), and serve relevant advertisements.
 
@@ -38,16 +38,16 @@ We do not sell our users’ private personal information. We share data to fulfi
 
 - **Subsidiaries, Employees, and Independent Contractors:** We may disclose information about you to our subsidiaries, our employees, and individuals who are our independent contractors that need to know the information in order to help us provide our Services or to process the information on our behalf. We require our subsidiaries, employees, and independent contractors to follow this Privacy Policy for personal information that we share with them.
 - **Third Party Vendors:** We may share information about you with third party vendors who need to know information about you in order to provide their services to us, or to provide their services to you or your site. This group includes vendors that help us provide our Services to you, those that assist us with our marketing efforts, those that help us understand and enhance our Services (like analytics providers) and vendors that help us aggregate your banking and other financial accounts.
-- **Legal and Regulatory Requirements:** We may disclose information about you to comply with any court order, law or legal process, including to respond to any government or regulatory request, to protect and defend the rights or property of Pennywise, to prevent or investigate possible wrongdoing in connection with the Service, to protect the personal safety of users of the Service or the public, to protect against legal liability.
-- **To Protect Rights, Property, and Others:** We may disclose information about you when we believe in good faith that disclosure is reasonably necessary to protect the property or rights of Pennywise, third parties, or the public at large. For example, if we have a good faith belief that there is an imminent danger of death or serious physical injury, we may disclose information related to the emergency without delay.
-- **Business Transfers:** In connection with any merger, sale of company assets, or acquisition of all or a portion of our business by another company, or in the unlikely event that Automattic goes out of business or enters bankruptcy, user information would likely be one of the assets that is transferred or acquired by a third party. If any of these events were to happen, this Privacy Policy would continue to apply to your information and the party receiving your information may continue to use your information, but only consistent with this Privacy Policy.
+- **Legal and Regulatory Requirements:** We may disclose information about you to comply with any court order, law or legal process, including to respond to any government or regulatory request, to protect and defend the rights or property of Day One Labs LLC, to prevent or investigate possible wrongdoing in connection with the Service, to protect the personal safety of users of the Service or the public, to protect against legal liability.
+- **To Protect Rights, Property, and Others:** We may disclose information about you when we believe in good faith that disclosure is reasonably necessary to protect the property or rights of Day One Labs LLC, third parties, or the public at large. For example, if we have a good faith belief that there is an imminent danger of death or serious physical injury, we may disclose information related to the emergency without delay.
+- **Business Transfers:** In connection with any merger, sale of company assets, or acquisition of all or a portion of our business by another company, or in the unlikely event that Day One Labs LLC goes out of business or enters bankruptcy, user information would likely be one of the assets that is transferred or acquired by a third party. If any of these events were to happen, this Privacy Policy would continue to apply to your information and the party receiving your information may continue to use your information, but only consistent with this Privacy Policy.
 - **With Your Consent:** We may share and disclose information with your consent or at your direction. For example, we may share your information with third parties with which you authorize us to do so, such as the social media services that you connect to.
 - **Aggregated or De-Identified Information:** We may share information that has been aggregated or reasonably de-identified, so that the information could not reasonably be used to identify you. For instance, we may publish aggregate statistics about the use of our Services and we may share a hashed version of your email address to facilitate customized ad campaigns on other platforms.
 - **Published Support Requests:** And if you send us a request (for example, via a support email or one of our feedback mechanisms), we reserve the right to publish that request in order to help us clarify or respond to your request or to help us support other users.
 
 # How Long We Keep Information
 
-We generally discard information about you when we no longer need the information for the purposes for which we collect and use it--which are described in the section above on How and Why We Use Information--and we are not legally required to continue to keep it.
+We generally discard information about you when we no longer need the information for the purposes for which we collect and use it—which are described in the section above on How and Why We Use Information—and we are not legally required to continue to keep it.
 
 # Security
 
@@ -101,19 +101,19 @@ We do not knowingly collect personally identifiable information from anyone unde
 
 You have several choices available when it comes to information about you:
 
-- **Limit the Information that You Provide:** If you have an account with us, you can choose not to provide the optional account information. Please keep in mind that if you do not provide this information, certain features of our Services–for example, automatically load transactions from your bank account–may not be accessible.
+- **Limit the Information that You Provide:** If you have an account with us, you can choose not to provide the optional account information. Please keep in mind that if you do not provide this information, certain features of our Services—for example, automatic loading of transactions from your bank account—may not be accessible.
 - **Opt-Out of Marketing Communications:** You may opt out of receiving promotional communications from us. Just follow the instructions in those communications or let us know. If you opt out of promotional communications, we may still send you other communications, like those about your account and legal notices.
-- **Close Your Account:** While we’d be very sad to see you go, if you no longer want to use our Services :( :( :( :(, you can close your account. You can ask us to close your account by sending an email to hello@pennywise.io. Please keep in mind that we may continue to retain your information after closing your account, as described in How Long We Keep Information above--for example, when that information is reasonably needed to comply with (or demonstrate our compliance with) legal obligations such as law enforcement requests, or reasonably needed for our legitimate business interests.
+- **Close Your Account:** While we’d be very sad to see you go, if you no longer want to use our Services you can close your account. You can ask us to close your account by sending an email to hello@pennywise.io. Please keep in mind that we may continue to retain your information after closing your account, as described in How Long We Keep Information above—for example, when that information is reasonably needed to comply with (or demonstrate our compliance with) legal obligations such as law enforcement requests, or reasonably needed for our legitimate business interests.
 
 # Transfer Of Data
 
-Your information, including Personal Data, may be transferred to - and maintained on - computers located outside of your state, province, country or other governmental jurisdiction where the data protection laws may differ than those from your jurisdiction.
+Your information, including Personal Data, may be transferred to—and maintained on—computers located outside of your state, province, country or other governmental jurisdiction where the data protection laws may differ than those from your jurisdiction.
 
-If you are located outside United States and choose to provide information to us, please note that we transfer the data, including Personal data, to United States and process it there.
+If you are located outside the United States and choose to provide information to us, please note that we transfer the data, including Personal data, to the United States and process it there.
 
 Your consent to this Privacy Policy followed by your submission of such information represents your agreement to that transfer.
 
-Pennywise will take all steps reasonably necessary to ensure that your data is treated securely and in accordance with this Privacy Policy and no transfer of your Personal Data will take place to an organization or a country unless there are adequate controls in place including the security of your data and other personal information.
+Day One Labs LLC will take all steps reasonably necessary to ensure that your data is treated securely and in accordance with this Privacy Policy and no transfer of your Personal Data will take place to an organization or a country unless there are adequate controls in place including the security of your data and other personal information.
 
 # Your Rights
 
