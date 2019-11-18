@@ -24,7 +24,7 @@ const slides = [
     key: "slide3",
     title: "Categorize Your Expenses",
     text: "Manually categorize every expense to promote more mindful spending",
-    icon: "ios-options",
+    icon: "ios-create",
     color: "#636363"
   },
   {
