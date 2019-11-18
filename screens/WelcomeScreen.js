@@ -4,8 +4,7 @@ import {
   StyleSheet,
   View,
   Text,
-  TouchableOpacity,
-  Button
+  TouchableOpacity
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -18,11 +17,6 @@ class WelcomeScreen extends React.Component {
         borderBottomWidth: 0
       }
     };
-  };
-
-  state = {
-    emailText: "",
-    passText: ""
   };
 
   render() {
@@ -43,14 +37,14 @@ class WelcomeScreen extends React.Component {
                 fontWeight: "bold"
               }}
             >
-              Register
+              Sign Up Now
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={this.handleSignIn}
             style={[styles.button, styles.secondaryButton]}
           >
-            <Text style={styles.buttonText}>Sign In</Text>
+            <Text style={styles.buttonText}>Log In</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -82,11 +76,9 @@ const styles = StyleSheet.create({
   },
   button: {
     alignItems: "center",
-    marginVertical: 10,
+    marginVertical: 6,
     marginHorizontal: 20,
     paddingVertical: 10,
-    borderWidth: 1,
-    borderColor: "#50E3C2",
     borderRadius: 6
   },
   buttonText: {

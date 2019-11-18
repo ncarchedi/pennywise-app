@@ -1,19 +1,18 @@
 import React from "react";
 import {
   StyleSheet,
-  Text,
   View,
   Button,
-  TextInput,
   KeyboardAvoidingView,
   Alert
 } from "react-native";
+import TextInputWithIcon from "../components/TextInputWithIcon";
 
 import { withGlobalContext } from "../GlobalContext";
 
 class RegistrationScreen extends React.Component {
   static navigationOptions = {
-    title: "Create an account"
+    title: "Create Account"
   };
 
   state = {
@@ -22,28 +21,35 @@ class RegistrationScreen extends React.Component {
   };
 
   render() {
+    const { emailText, passText } = this.state;
+
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
         <View style={styles.loginFormContainer}>
-          <Text>Email</Text>
-          <TextInput
-            style={styles.textField}
-            onChangeText={text => this.setState({ emailText: text })}
-            value={this.state.emailText}
+          <TextInputWithIcon
+            icon="ios-mail"
+            value={emailText}
             placeholder="Email"
+            onChangeText={text => this.setState({ emailText: text })}
+            clearButtonMode="while-editing"
+            autoCorrect={false}
             autoCompleteType="email"
             autoCapitalize="none"
           />
-          <Text>Password</Text>
-          <TextInput
-            style={styles.textField}
-            onChangeText={text => this.setState({ passText: text })}
-            value={this.state.passText}
+          <TextInputWithIcon
+            icon="ios-lock"
+            value={passText}
             placeholder="Password"
-            secureTextEntry
+            onChangeText={text => this.setState({ passText: text })}
+            clearButtonMode="while-editing"
+            autoCorrect={false}
             autoCompleteType="password"
+            autoCapitalize="none"
+            secureTextEntry
           />
-          <Button title="Create account" onPress={this.handleRegistration} />
+          <View style={styles.buttonContainer}>
+            <Button title="Create Account" onPress={this.handleRegistration} />
+          </View>
         </View>
       </KeyboardAvoidingView>
     );
@@ -71,15 +77,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "#fff"
   },
-  textField: {
-    marginVertical: 10,
-    height: 40,
-    borderColor: "gray",
-    borderWidth: 1,
-    padding: 10
-  },
-  button: {
-    margin: 20
+  buttonContainer: {
+    marginTop: 20
   },
   loginFormContainer: {
     margin: 20

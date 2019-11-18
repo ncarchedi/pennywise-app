@@ -3,7 +3,6 @@ import {
   StyleSheet,
   View,
   Button,
-  TextInput,
   KeyboardAvoidingView,
   Alert
 } from "react-native";
@@ -12,7 +11,7 @@ import { withGlobalContext } from "../GlobalContext";
 
 class LoginScreen extends React.Component {
   static navigationOptions = {
-    title: "Please sign in"
+    title: "Log In"
   };
 
   state = {
@@ -21,26 +20,35 @@ class LoginScreen extends React.Component {
   };
 
   render() {
+    const { emailText, passText } = this.state;
+
     return (
       <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
         <View style={styles.loginFormContainer}>
-          <TextInput
-            style={styles.textField}
-            onChangeText={text => this.setState({ emailText: text })}
-            value={this.state.emailText}
+          <TextInputWithIcon
+            icon="ios-mail"
+            value={emailText}
             placeholder="Email"
+            onChangeText={text => this.setState({ emailText: text })}
+            clearButtonMode="while-editing"
+            autoCorrect={false}
             autoCompleteType="email"
             autoCapitalize="none"
           />
-          <TextInput
-            style={styles.textField}
-            onChangeText={text => this.setState({ passText: text })}
-            value={this.state.passText}
+          <TextInputWithIcon
+            icon="ios-lock"
+            value={passText}
             placeholder="Password"
-            secureTextEntry
+            onChangeText={text => this.setState({ passText: text })}
+            clearButtonMode="while-editing"
+            autoCorrect={false}
             autoCompleteType="password"
+            autoCapitalize="none"
+            secureTextEntry
           />
-          <Button title="Sign in" onPress={this.signInAsync} />
+          <View style={styles.buttonContainer}>
+            <Button title="Log In" onPress={this.signInAsync} />
+          </View>
         </View>
       </KeyboardAvoidingView>
     );
@@ -68,15 +76,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "#fff"
   },
-  textField: {
-    margin: 10,
-    height: 40,
-    borderColor: "gray",
-    borderWidth: 1,
-    padding: 10
-  },
-  button: {
-    margin: 20
+  buttonContainer: {
+    marginTop: 20
   },
   loginFormContainer: {
     margin: 20
