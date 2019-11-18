@@ -13,7 +13,7 @@ We collect several different types of information for various purposes to provid
 ## Types of Data Collected
 
 - **Personal data:** We ask for basic information from you in order to set up your account. For example, we require individuals who sign up for a Pennywise account to provide an email address.
-- **Financial information:** When you connect one or multiple bank accounts to our Services, we store a so called 'access token' that allows us to pull financial transactions from your bank account on your behalf. We load financial transaction information from your connected bank accounts. This information includes, but is not limitied to: the title of the transaction, the date the transaction was executed, the account to which the transaction belongs and the category to which you assign the transaction. This information is stored exclusively on your device, not in our online database.
+- **Financial information:** When you connect one or multiple bank accounts to our Services, we store a so called 'access token' that allows us to pull financial transactions from your bank account on your behalf. We load financial transaction information from your connected bank accounts. This information includes, but is not limitied to: the title of the transaction, the date the transaction was executed, the account to which the transaction belongs and the category to which you assign the transaction. The financial transaction information is stored exclusively on your device, not in our online database.
 - **Communications with Us:** You may also provide us information when you respond to surveys, communicate with us regarding a support question, or sign up for a newsletter. When you communicate with us via form, email, phone, or otherwise, we store a copy of our communications (including any call recordings as permitted by applicable law).
 - **Log Information:** Like most online service providers, we collect information that web browsers, mobile devices, and servers typically make available, including, but not limited to, the browser type, IP address, unique device identifiers, language preference, referring site, the date and time of access, operating system, and mobile network information. We collect log information when you use our Services.
 - **Usage Information:** We collect information about your usage of our Services. This includes, but is not limited to, the actions that you perform in the app–in other words, who did what, when and to what thing in the app (e.g., visited the 'Todo' tab, categorized a transaction, changed the notification settings). We also collect information about your device (e.g., screen size, name of cellular network, and mobile device manufacturer). We use this information to, for example, provide our Services to you, as well as get insights on how people use our Services, so we can make our Services better.
@@ -29,10 +29,6 @@ Pennywise uses the collected data for various purposes:
 - To monitor and prevent any problems with our Services, protect the security of our Services, detect and prevent fraudulent transactions and other illegal activities, fight spam, and protect the rights and property of Pennywise and others, which may result in us declining a transaction or the use of our Services;
 - To communicate with you. For example, we may email you to solicit your feedback, share tips for getting the most out of our products, or keep you up to date on Pennywise. If you don’t want to hear from us, you can opt out of marketing communications at any time. (Please keep in mind that even if you opt out, we’ll still send you important updates relating to your account); and
 - To personalize your experience using our Services, provide content recommendations, target our marketing messages to groups of our users (for example, those who have been our user for a certain length of time), and serve relevant advertisements.
-
-## Legal Bases for Collecting and Using Information
-
-A note here for those in the European Union about our legal grounds for processing information about you under EU data protection laws, which is that our use of your information is based on the grounds that: (1) The use is necessary in order to fulfill our commitments to you under the applicable terms of service or other agreements with you or is necessary to administer your account--for example, in order to enable access to our app on your device; or (2) The use is necessary for compliance with a legal obligation; or (3) The use is necessary in order to protect your vital interests or those of another person; or (4) We have a legitimate interest in using your information -- for example, to provide and update our Services; to improve our Services so that we can offer you an even better user experience; to safeguard our Services; to communicate with you; to measure, gauge, and improve the effectiveness of our advertising; to understand our user retention and attrition; to monitor and prevent any problems with our Services; and to personalize your experience; or (5) You have given us your consent.
 
 # Sharing Information
 
@@ -65,11 +61,41 @@ These third parties have access to your Personal Data only to perform these task
 
 Categories of services used to process data include:
 
+## Infrastructure
+
+We partner with third-parties to provide storage and server access that acts as infrastructure for our website and apps.
+
+The non-exhaustive list of third parties we use for infrastructure:
+
+- Firebase, their privacy policy is available here: https://firebase.google.com/support/privacy.
+
 ## Analytics
+
+We parner with third-party Service Providers to monitor and analyze the use of our Service.
+
+The non-exhaustive list of third parties we use for analytics:
+
+- Amplitude, their privacy policy is available here: https://amplitude.com/privacy.
 
 ## Aggregation
 
-##
+We partner with third-parties to aggregate financial information from your financial institutions, when you request it.
+
+The non-exhaustive list of third parties we use for aggregation:
+
+- Plaid, their privacy policy is available here: https://plaid.com/legal/.
+
+# Links to Other Sites
+
+Our Service may contain links to other sites that are not operated by us. If you click a third party link, you will be directed to that third party's site. We strongly advise you to review the Privacy Policy of every site you visit.
+
+We have no control over and assume no responsibility for the content, privacy policies or practices of any third party sites or services.
+
+# Children's Privacy
+
+Our Service does not address anyone under the age of 18 ("Children").
+
+We do not knowingly collect personally identifiable information from anyone under the age of 18. If you are a parent or guardian and you are aware that your Child has provided us with Personal Data, please contact us. If we become aware that we have collected Personal Data from children without verification of parental consent, we take steps to remove that information from our servers.
 
 # Choices
 
@@ -78,6 +104,16 @@ You have several choices available when it comes to information about you:
 - **Limit the Information that You Provide:** If you have an account with us, you can choose not to provide the optional account information. Please keep in mind that if you do not provide this information, certain features of our Services–for example, automatically load transactions from your bank account–may not be accessible.
 - **Opt-Out of Marketing Communications:** You may opt out of receiving promotional communications from us. Just follow the instructions in those communications or let us know. If you opt out of promotional communications, we may still send you other communications, like those about your account and legal notices.
 - **Close Your Account:** While we’d be very sad to see you go, if you no longer want to use our Services :( :( :( :(, you can close your account. You can ask us to close your account by sending an email to hello@pennywise.io. Please keep in mind that we may continue to retain your information after closing your account, as described in How Long We Keep Information above--for example, when that information is reasonably needed to comply with (or demonstrate our compliance with) legal obligations such as law enforcement requests, or reasonably needed for our legitimate business interests.
+
+# Transfer Of Data
+
+Your information, including Personal Data, may be transferred to - and maintained on - computers located outside of your state, province, country or other governmental jurisdiction where the data protection laws may differ than those from your jurisdiction.
+
+If you are located outside United States and choose to provide information to us, please note that we transfer the data, including Personal data, to United States and process it there.
+
+Your consent to this Privacy Policy followed by your submission of such information represents your agreement to that transfer.
+
+Pennywise will take all steps reasonably necessary to ensure that your data is treated securely and in accordance with this Privacy Policy and no transfer of your Personal Data will take place to an organization or a country unless there are adequate controls in place including the security of your data and other personal information.
 
 # Your Rights
 
@@ -89,36 +125,20 @@ If you are located in certain countries, including those that fall under the sco
 - Request that we limit our use and processing of your personal data; and
 - Request portability of your personal data.
 
-You can usually access, correct, or delete your personal data using your account settings and tools that we offer, but if you aren’t able to do that, or you would like to contact us about one of the other rights, scroll down to How to Reach Us to, well, find out how to reach us. EU individuals also have the right to make a complaint to a government supervisory authority.
-
-# Controllers and Responsible Companies
-
-Pennywises’s Services are worldwide. Pennywise is the “controller” of all the processing activities across all of our Services worldwide.
-
-**Pennywise** 213 East 15th Street, Apt 3, 10003 New York, New York, USA.
+You can usually access, correct, or delete your personal data using your account settings and tools that we offer, but if you aren’t able to do that, or you would like to contact us about one of the other rights, scroll down to How to Reach Us. EU individuals also have the right to make a complaint to a government supervisory authority.
 
 # How to Reach Us
 
 If you have a question about this Privacy Policy, or you would like to contact us about any of the rights mentioned in the Your Rights section above, please [contact us](mailto:hello@pennywise.io).
 
-# Other Things You Should Know (Keep Reading!)
-
-## _Ads and Analytics Services Provided by Others_
-
-Ads appearing on any of our Services may be delivered by advertising networks. Other parties may also provide analytics services via our Services. These ad networks and analytics providers may set tracking technologies to collect information about your use of our Services and across other websites and online services. These technologies allow these third parties to recognize your device to compile information about you or others who use your device. This information allows us and other companies to, among other things, analyze and track usage, determine the popularity of certain content, and deliver advertisements that may be more targeted to your interests. Please note this Privacy Policy only covers the collection of information by Pennywise and does not cover the collection of information by any third party advertisers or analytics providers.
-
-## _Third Party Software and Services_
-
-If you’d like to use WooCommerce extensions that enable services provided by third parties, third party plugins, embeds, or other third party software or services, please keep in mind that when you interact with them you may provide information about yourself (or your site visitors) to those third parties. For example, some third party services may request or require access to your (yours, your visitors’, or customers’) data. Please note that if you use the third party service or grant access, your data will be handled in accordance with the third party’s privacy policy and practices. We don’t own or control these third parties, and they have their own rules about collection, use, and sharing of information, which you should review before using the software or services.
-
 # Privacy Policy Changes
 
-Although most changes are likely to be minor, Pennywise may change its Privacy Policy from time to time. Pennywise encourages visitors to frequently check this page for any changes to its Privacy Policy. If we make changes, we will notify you by revising the change log below, and, in some cases, we may provide additional notice by sending you a notification through email or your dashboard). Your further use of the Services after a change to our Privacy Policy will be subject to the updated policy.
+We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page.
+
+We will let you know via email and/or a prominent notice on our Service, prior to the change becoming effective and update the "effective date" at the top of this Privacy Policy.
+
+You are advised to review this Privacy Policy periodically for any changes. Changes to this Privacy Policy are effective when they are posted on this page.
 
 # Credit
 
-This privacy policy was adapted from the open source privacy policy provided by [Automattic](https://automattic.com/), which you can find [here](https://github.com/Automattic/legalmattic).
-
-# Changelog
-
-- November 6, 2019: First version of the privacy policy
+This privacy policy was created with the help of the open source privacy policy provided by [Automattic](https://automattic.com/), which you can find [here](https://github.com/Automattic/legalmattic).
