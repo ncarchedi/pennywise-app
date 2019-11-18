@@ -19,6 +19,8 @@ import {
 import moment from "moment";
 import { Ionicons } from "@expo/vector-icons";
 
+import PennywiseVictoryTheme from "../utils/PennywiseVictoryTheme";
+
 import TransactionsList from "../components/TransactionsList";
 
 import { withGlobalContext } from "../GlobalContext";
@@ -152,6 +154,12 @@ class SpendingScreen extends React.Component {
       .map("name")
       .value();
 
+    // Order by the second to last month
+    const monthToOrderBy =
+      monthLabelsArray.length >= 2
+        ? monthLabelsArray[monthLabelsArray.length - 2]
+        : monthLabelsArray[0];
+
     const orderedCategories = _(categorizedTransactions)
       .map(t => ({
         monthIdentifier: this.monthIdentifier(t.date),
@@ -160,9 +168,11 @@ class SpendingScreen extends React.Component {
       .groupBy("category")
       .map((category, categoryName) => ({
         category: categoryName,
-        maxSpent: _(category).maxBy("amount").amount
+        maxSpent: _(category)
+          .filter({ monthIdentifier: monthToOrderBy })
+          .sumBy("amount")
       }))
-      .orderBy("maxSpent")
+      .orderBy("maxSpent", "asc")
       .map("category")
       .value();
 
@@ -187,7 +197,8 @@ class SpendingScreen extends React.Component {
             showsVerticalScrollIndicator={false}
           >
             <VictoryChart
-              theme={VictoryTheme.material}
+              // temporarily switching to grey scale to avoid issue with Roboto font
+              theme={PennywiseVictoryTheme}
               // TODO: make sure long category names don't get cutoff
               // https://formidable.com/open-source/victory/docs/faq/#my-axis-labels-are-cut-off-how-can-i-fix-them
               padding={{ top: 50, bottom: 50, left: 120, right: 50 }}

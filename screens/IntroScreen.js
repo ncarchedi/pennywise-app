@@ -9,7 +9,7 @@ const slides = [
   {
     key: "slide1",
     title: "Welcome to Pennywise",
-    text: "Expense tracking for personal finance nerds",
+    text: "Expense tracking made simple",
     icon: "ios-bowtie",
     color: "#50E3C2"
   },
@@ -22,9 +22,9 @@ const slides = [
   },
   {
     key: "slide3",
-    title: "Manually Categorize Expenses",
-    text: "Manually categorize expenses to promote more mindful spending",
-    icon: "ios-options",
+    title: "Categorize Your Expenses",
+    text: "Manually categorize every expense to promote more mindful spending",
+    icon: "ios-create",
     color: "#636363"
   },
   {
@@ -38,7 +38,7 @@ const slides = [
     key: "slide5",
     title: "Secure and Private",
     text:
-      "Your data is encrypted on your personal device and never shared with third parties",
+      "Your data is stored securely on your device and never shared with third parties",
     icon: "ios-lock",
     color: "#636363"
   }
@@ -56,7 +56,7 @@ class IntroScreen extends React.Component {
         name={item.icon}
         size={200}
       />
-      <View>
+      <View style={styles.textContainer}>
         <Text style={styles.title}>{item.title}</Text>
         <Text style={styles.text}>{item.text}</Text>
       </View>
@@ -101,12 +101,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-around"
   },
+  textContainer: {
+    marginBottom: 40
+  },
   image: {
     color: "#636363",
-    marginTop: 100
+    marginTop: "25%"
   },
   title: {
-    fontSize: 30,
+    fontSize: 28,
     color: "#50E3C2",
     backgroundColor: "transparent",
     textAlign: "center",
@@ -114,19 +117,19 @@ const styles = StyleSheet.create({
     marginHorizontal: 10
   },
   text: {
-    fontSize: 20,
+    fontSize: 17,
     color: "#636363",
     backgroundColor: "transparent",
     textAlign: "center",
     paddingHorizontal: 16
   },
   navigationButtonText: {
-    fontSize: 18,
+    fontSize: 17,
     padding: 12,
     color: "#636363"
   },
   doneButtonText: {
-    fontSize: 18,
+    fontSize: 17,
     padding: 12,
     color: "#636363",
     fontWeight: "bold"

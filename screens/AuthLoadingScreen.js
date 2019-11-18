@@ -10,6 +10,9 @@ class AuthLoadingScreen extends React.Component {
 
   // Fetch the token from storage then navigate to our appropriate place
   componentDidMount = async () => {
+    // First load everything from localstorage
+    await this.props.global.loadStateFromStorage();
+
     const isLoggedIn = await this.props.global.isUserLoggedIn();
 
     // This will switch to the App screen or Auth screen and this loading
