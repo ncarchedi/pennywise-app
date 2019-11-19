@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
     textAlign: "center",
     color: "gray",
-    marginBottom: 10
+    marginBottom: 15
   },
   bankButton: {
     alignSelf: "center",
@@ -92,6 +92,7 @@ const styles = StyleSheet.create({
   bankButtonText: {
     textAlign: "center",
     fontWeight: "bold",
-    fontSize: 17
+    fontSize: 17,
+    color: "white"
   }
 });
