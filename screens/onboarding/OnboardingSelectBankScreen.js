@@ -75,14 +75,8 @@ const styles = StyleSheet.create({
   continueText: {
     fontSize: 17,
     textAlign: "center",
-    color: "gray"
-  },
-  textField: {
-    margin: 10,
-    height: 40,
-    borderColor: "gray",
-    borderWidth: 1,
-    padding: 10
+    color: "gray",
+    marginBottom: 10
   },
   bankButton: {
     alignSelf: "center",
@@ -99,8 +93,5 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "bold",
     fontSize: 17
-  },
-  loginFormContainer: {
-    margin: 20
   }
 });
