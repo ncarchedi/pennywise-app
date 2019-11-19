@@ -1,24 +1,51 @@
 import React from "react";
-import { SafeAreaView, StyleSheet, View, Button } from "react-native";
+import {
+  SafeAreaView,
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 import { withGlobalContext } from "../GlobalContext";
 
 class WelcomeScreen extends React.Component {
-  static navigationOptions = {
-    title: "Welcome"
-  };
-
-  state = {
-    emailText: "",
-    passText: ""
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerStyle: {
+        borderBottomWidth: 0
+      }
+    };
   };
 
   render() {
     return (
       <SafeAreaView style={styles.container} behavior="padding" enabled>
-        <View style={styles.startButtonContainer}>
-          <Button title="Sign in" onPress={this.handleSignIn} />
-          <Button title="Register" onPress={this.handleRegister} />
+        <View style={styles.topContainer}>
+          <Ionicons style={styles.image} name={"ios-bowtie"} size={200} />
+        </View>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            onPress={this.handleRegister}
+            style={{ ...styles.button, backgroundColor: "#50E3C2" }}
+          >
+            <Text
+              style={{
+                ...styles.buttonText,
+                color: "white",
+                fontWeight: "bold"
+              }}
+            >
+              Sign Up Now
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={this.handleSignIn}
+            style={[styles.button, styles.secondaryButton]}
+          >
+            <Text style={styles.buttonText}>Log In</Text>
+          </TouchableOpacity>
         </View>
       </SafeAreaView>
     );
@@ -38,22 +65,24 @@ export default withGlobalContext(WelcomeScreen);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "column-reverse",
-    backgroundColor: "#fff"
+    justifyContent: "space-around"
   },
-  textField: {
-    margin: 10,
-    height: 40,
-    borderColor: "gray",
-    borderWidth: 1,
-    padding: 10
+  topContainer: {
+    alignItems: "center"
+  },
+  buttonContainer: {},
+  image: {
+    color: "#50E3C2"
   },
   button: {
-    margin: 20
+    alignItems: "center",
+    marginVertical: 6,
+    marginHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 6
   },
-  startButtonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    alignContent: "stretch"
+  buttonText: {
+    fontSize: 17,
+    textAlign: "center"
   }
 });

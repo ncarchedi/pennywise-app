@@ -35,18 +35,18 @@ class OnboardingSelectBankScreen extends React.Component {
       <SafeAreaView style={styles.container}>
         <View style={styles.contentContainer}>
           <Text style={styles.text}>
-            To start, connect your bank to access your transactions.
+            To start, connect a bank account to import your recent expenses.
           </Text>
           <TouchableOpacity
             style={styles.bankButton}
             onPress={this.handleSelectBank}
           >
-            <Text style={styles.bankButtonText}>Connect my bank</Text>
+            <Text style={styles.bankButtonText}>Connect My Bank</Text>
           </TouchableOpacity>
         </View>
         <View styles={styles.footerContainer}>
           <TouchableOpacity onPress={this.handleSkip}>
-            <Text style={styles.continueText}>Skip for now</Text>
+            <Text style={styles.continueText}>I'll Do It Later</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -60,45 +60,39 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "column",
-    alignItems: "stretch",
-    backgroundColor: "#fff"
+    justifyContent: "space-around"
   },
   contentContainer: {
     justifyContent: "center",
-    //alignItems: "center",
     flexGrow: 1,
-    flexDirection: "column"
+    margin: 10
   },
   footerContainer: {},
   text: {
-    fontSize: 25,
+    fontSize: 22,
     textAlign: "center"
   },
   continueText: {
-    fontSize: 15,
+    fontSize: 17,
     textAlign: "center",
-    color: "gray"
-  },
-  textField: {
-    margin: 10,
-    height: 40,
-    borderColor: "gray",
-    borderWidth: 1,
-    padding: 10
+    color: "gray",
+    marginBottom: 15
   },
   bankButton: {
+    alignSelf: "center",
     marginTop: 60,
-    padding: 10,
-    width: 200,
-    borderWidth: 1,
-    borderRadius: 4,
-    alignSelf: "center"
+    alignItems: "center",
+    marginVertical: 6,
+    marginHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 6,
+    backgroundColor: "#50E3C2",
+    width: 250
   },
   bankButtonText: {
     textAlign: "center",
-    fontWeight: "bold"
-  },
-  loginFormContainer: {
-    margin: 20
+    fontWeight: "bold",
+    fontSize: 17,
+    color: "white"
   }
 });
