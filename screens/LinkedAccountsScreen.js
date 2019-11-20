@@ -1,13 +1,12 @@
 import React from "react";
 import {
-  ScrollView,
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
-  DatePickerIOS,
   SectionList,
-  Alert
+  Alert,
+  Button
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -16,7 +15,7 @@ import { withGlobalContext } from "../GlobalContext";
 class LinkedAccountsScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      title: "Linked bank accounts",
+      title: "Manage Accounts",
       headerRight: (
         <TouchableOpacity
           onPress={() => navigation.navigate("PlaidModal")}
@@ -46,7 +45,7 @@ class LinkedAccountsScreen extends React.Component {
       return (
         <View style={styles.container}>
           <Text style={styles.emptyAccountsText}>
-            No bank accounts linked yet
+            Add an account to automatically import transactions
           </Text>
         </View>
       );
@@ -96,7 +95,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff"
   },
   emptyAccountsText: {
-    margin: 10
+    marginTop: 30,
+    color: "darkgrey",
+    width: "60%",
+    textAlign: "center",
+    alignSelf: "center",
+    lineHeight: 20
   },
   sectionHeaderContainer: {
     flex: 1,
