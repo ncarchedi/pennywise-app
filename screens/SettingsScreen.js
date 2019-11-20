@@ -166,10 +166,22 @@ class SettingsScreen extends React.Component {
               />
             </View>
             <SettingsSeparator />
+            <Text
+              style={{
+                fontSize: 12,
+                color: "darkgrey",
+                marginHorizontal: 10,
+                marginTop: 5
+              }}
+            >
+              If you have any suggestions for how we can improve the app, please
+              let us know! We read every piece of feedback.
+            </Text>
             <PressableSetting
               text="Share Feedback"
               onPress={this.handleShareFeedback}
             />
+            <SettingsSeparator />
             <PressableSetting text="Logout" onPress={this.handleLogout} />
           </View>
           {/* Admin Settings */}
