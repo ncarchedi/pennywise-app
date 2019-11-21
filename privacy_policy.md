@@ -57,7 +57,7 @@ While no online service is 100% secure, we work very hard to protect information
 
 We may employ third party companies and individuals to facilitate our Service ("Service Providers"), to provide the Service on our behalf, to perform Service-related services or to assist us in analyzing how our Service is used.
 
-These third parties have access to your Personal Data only to perform these tasks on our behalf and are obligated not to disclose or use it for any other purpose.
+These third parties have access to your data only to perform these tasks on our behalf and are obligated not to disclose or use it for any other purpose.
 
 Categories of services used to process data include:
 
@@ -79,7 +79,7 @@ The non-exhaustive list of third parties we use for analytics:
 
 ## Aggregation
 
-We partner with third-parties to aggregate financial information from your financial institutions, when you request it.
+We partner with third-parties to aggregate financial information from your financial institutions.
 
 The non-exhaustive list of third parties we use for aggregation:
 
@@ -87,7 +87,7 @@ The non-exhaustive list of third parties we use for aggregation:
 
 # Links to Other Sites
 
-Our Service may contain links to other sites that are not operated by us. If you click a third party link, you will be directed to that third party's site. We strongly advise you to review the Privacy Policy of every site you visit.
+Our Service may contain links to other sites that are not operated by us. If you click a third party link, you will be directed to that third party's site. We strongly advise you to review the privacy policy of every site you visit.
 
 We have no control over and assume no responsibility for the content, privacy policies or practices of any third party sites or services.
 
@@ -95,7 +95,7 @@ We have no control over and assume no responsibility for the content, privacy po
 
 Our Service does not address anyone under the age of 18 ("Children").
 
-We do not knowingly collect personally identifiable information from anyone under the age of 18. If you are a parent or guardian and you are aware that your Child has provided us with Personal Data, please contact us. If we become aware that we have collected Personal Data from children without verification of parental consent, we take steps to remove that information from our servers.
+We do not knowingly collect personally identifiable information from anyone under the age of 18. If you are a parent or guardian and you are aware that your Child has provided us with data, please contact us. If we become aware that we have collected data from children without verification of parental consent, we take steps to remove that information from our servers.
 
 # Choices
 

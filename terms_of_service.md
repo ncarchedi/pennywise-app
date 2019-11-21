@@ -6,11 +6,11 @@ Please read these Terms and Conditions ("Terms", "Terms and Conditions") careful
 
 Your access to and use of the Service is conditioned on your acceptance of and compliance with these Terms. These Terms apply to all visitors, users and others who access or use the Service.
 
-By accessing or using the Service you agree to be bound by these Terms. If you disagree with any part of the terms then you may not access the Service. The Terms and Conditions agreement for Pennywise has been created with the help of Terms and Conditions Generator.
+By accessing or using the Service you agree to be bound by these Terms. If you disagree with any part of the terms then you may not access the Service.
 
 ## Minimum Age Requirements
 
-Our Services are not directed to children. Access to and use of our Services is only for those over the age of 13 (or 16 in the European Union). If you are younger than this, you may not register for or use our Services. Any person who registers as a user or provides their personal information to our Services represents that they are 13 years of age or older (or 16 years or older in the European Union).
+Our Services are not directed to children. Access to and use of our Services is only for those over the age of 18. If you are younger than this, you may not register for or use our Services. Any person who registers as a user or provides their personal information to our Services represents that they are 18 years of age or older.
 
 ## Your Account
 
