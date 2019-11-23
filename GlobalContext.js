@@ -17,8 +17,7 @@ import {
   saveItem,
   loadItem,
   removeItem,
-  clearStorage,
-  migrateStorageToLatestVersion
+  clearStorage
 } from "./utils/StorageUtils";
 
 import { dbRemoveInstitutionAccount } from "./utils/DataBaseCommunication";
@@ -675,6 +674,11 @@ export class GlobalContextProvider extends React.Component {
     return ENVIRONMENT;
   };
 
+  getUserEmail = async () => {
+    const currentUser = await this.getCurrentUser();
+    return currentUser.email;
+  };
+
   render() {
     return (
       <GlobalContext.Provider
@@ -701,7 +705,8 @@ export class GlobalContextProvider extends React.Component {
           getCurrentUser: this.getCurrentUser,
           removeInstitutionAccount: this.removeInstitutionAccount,
           clearAsyncStorage: this.clearAsyncStorage,
-          getEnvironment: this.getEnvironment
+          getEnvironment: this.getEnvironment,
+          getUserEmail: this.getUserEmail
         }}
       >
         {this.props.children}

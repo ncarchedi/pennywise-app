@@ -41,7 +41,7 @@ class OnboardingSelectBankScreen extends React.Component {
             style={styles.bankButton}
             onPress={this.handleSelectBank}
           >
-            <Text style={styles.bankButtonText}>Connect My Bank</Text>
+            <Text style={styles.bankButtonText}>Connect Bank Account</Text>
           </TouchableOpacity>
         </View>
         <View styles={styles.footerContainer}>

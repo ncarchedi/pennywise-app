@@ -282,11 +282,6 @@ const styles = StyleSheet.create({
     marginTop: 15,
     textAlign: "center"
   },
-  statusMessageText: {
-    fontSize: 17,
-    marginTop: 15,
-    textAlign: "center"
-  },
   emptyScreenCTA: {
     marginTop: 30,
     color: "darkgrey",

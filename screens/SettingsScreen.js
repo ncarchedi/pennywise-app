@@ -60,7 +60,7 @@ class SettingsScreen extends React.Component {
   };
 
   componentDidMount() {
-    this.getUserEmail();
+    this.setUserEmail();
   }
 
   toggleTimePicker = () => {
@@ -96,9 +96,15 @@ class SettingsScreen extends React.Component {
     this.props.navigation.navigate("AuthLoading");
   };
 
-  getUserEmail = async () => {
-    const currentUser = await this.props.global.getCurrentUser();
-    this.setState({ userEmail: currentUser.email });
+  setUserEmail = async () => {
+    const userEmail = await this.props.global.getUserEmail();
+    this.setState({ userEmail: userEmail });
+  };
+
+  userIsAdmin = () => {
+    const userEmail = this.state.userEmail;
+    const admins = ["nick.carchedi@gmail.com", "borisgordts@hotmail.com"];
+    return admins.includes(userEmail);
   };
 
   render() {
@@ -136,7 +142,7 @@ class SettingsScreen extends React.Component {
           {/* User Settings */}
           <View>
             <PressableSetting
-              text="Manage Accounts"
+              text="Manage Bank Accounts"
               onPress={() => this.props.navigation.navigate("LinkedAccounts")}
               style={{ borderTopWidth: 1 }}
             />
@@ -160,35 +166,48 @@ class SettingsScreen extends React.Component {
               />
             </View>
             <SettingsSeparator />
+            <Text
+              style={{
+                fontSize: 12,
+                color: "darkgrey",
+                marginHorizontal: 10,
+                marginTop: 5
+              }}
+            >
+              If you have any suggestions for how we can improve the app, please
+              let us know! We read every piece of feedback.
+            </Text>
             <PressableSetting
               text="Share Feedback"
               onPress={this.handleShareFeedback}
             />
+            <SettingsSeparator />
             <PressableSetting text="Logout" onPress={this.handleLogout} />
           </View>
           {/* Admin Settings */}
-          {/* TODO: make this visible only in development mode */}
-          <View>
-            <SettingsHeader text="ADMIN ONLY" />
-            <PressableSetting
-              text="Load Example Transactions"
-              onPress={loadDummyData}
-            />
-            <SettingsSeparator />
-            <PressableSetting
-              text="Clear All Transactions"
-              onPress={clearAllTransactions}
-            />
-            <PressableSetting
-              text="Clear All Async Storage"
-              onPress={clearAsyncStorage}
-            />
-            <SettingsSeparator />
-            <PressableSetting
-              text="Go To Onboarding"
-              onPress={() => this.props.navigation.navigate("Intro")}
-            />
-          </View>
+          {this.userIsAdmin() ? (
+            <View>
+              <SettingsHeader text="ADMIN ONLY" />
+              <PressableSetting
+                text="Load Example Transactions"
+                onPress={loadDummyData}
+              />
+              <SettingsSeparator />
+              <PressableSetting
+                text="Clear All Transactions"
+                onPress={clearAllTransactions}
+              />
+              <PressableSetting
+                text="Clear All Async Storage"
+                onPress={clearAsyncStorage}
+              />
+              <SettingsSeparator />
+              <PressableSetting
+                text="Go To Onboarding"
+                onPress={() => this.props.navigation.navigate("Intro")}
+              />
+            </View>
+          ) : null}
         </ScrollView>
       </View>
     );

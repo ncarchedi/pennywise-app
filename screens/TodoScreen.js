@@ -31,8 +31,7 @@ class TodoScreen extends React.Component {
   };
 
   state = {
-    refreshing: false,
-    statusMessage: null
+    refreshing: false
   };
 
   componentDidMount() {
@@ -66,9 +65,6 @@ class TodoScreen extends React.Component {
       Alert.alert("Error while downloading transactions", result.message, {
         cancelable: false
       });
-    } else if (result.transactions.length === 0) {
-      // TODO: is this status message logic necessary? Need to revisit
-      this.setState({ statusMessage: "No new transactions available." });
     }
   };
 
@@ -80,7 +76,7 @@ class TodoScreen extends React.Component {
 
   render() {
     const { categories } = this.props.global;
-    const { refreshing, statusMessage } = this.state;
+    const { refreshing } = this.state;
     const transactions = this.props.global.listTransactions();
 
     // get only uncategorized transactions
@@ -107,7 +103,6 @@ class TodoScreen extends React.Component {
             transactions={uncategorizedTransactions}
             categories={categories}
             onTransactionPress={this.handleTransactionPress}
-            statusMessage={statusMessage}
             emptyScreen={
               <View>
                 <Text style={styles.emptyScreenEmoji}>🎉</Text>
@@ -115,11 +110,8 @@ class TodoScreen extends React.Component {
                   All done for today!
                 </Text>
                 <Text style={styles.emptyScreenCTA}>
-                  Add a transaction manually or link a new account
+                  Add a transaction manually or connect a new bank account
                 </Text>
-                {statusMessage ? (
-                  <Text style={styles.statusMessageText}>{statusMessage}</Text>
-                ) : null}
               </View>
             }
           />
@@ -143,11 +135,6 @@ const styles = StyleSheet.create({
   },
   emptyScreenHeader: {
     fontSize: 22,
-    marginTop: 15,
-    textAlign: "center"
-  },
-  statusMessageText: {
-    fontSize: 17,
     marginTop: 15,
     textAlign: "center"
   },
