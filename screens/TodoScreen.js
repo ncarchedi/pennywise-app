@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
   emptyScreenCTA: {
     marginTop: 30,
     color: "darkgrey",
-    width: "50%",
+    width: "60%",
     textAlign: "center",
     alignSelf: "center",
     lineHeight: 20
