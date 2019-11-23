@@ -182,6 +182,23 @@ class SettingsScreen extends React.Component {
               onPress={this.handleShareFeedback}
             />
             <SettingsSeparator />
+            <PressableSetting
+              text="Privacy Policy"
+              onPress={() =>
+                Linking.openURL(
+                  "https://docs.google.com/document/d/1u8f6ZoaHdA3DYAsvcmCU4ekhGt2xYysvbTHE8YbTpVE/edit?usp=sharing"
+                )
+              }
+            />
+            <PressableSetting
+              text="Terms of Service"
+              onPress={() =>
+                Linking.openURL(
+                  "https://docs.google.com/document/d/1qrw9dko4qWBTzQTKIlBv5_xM71mZ70Ug3lZg-sqlCMA/edit?usp=sharing"
+                )
+              }
+            />
+            <SettingsSeparator />
             <PressableSetting text="Logout" onPress={this.handleLogout} />
           </View>
           {/* Admin Settings */}
