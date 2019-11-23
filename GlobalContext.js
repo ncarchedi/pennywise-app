@@ -236,6 +236,12 @@ export class GlobalContextProvider extends React.Component {
       .value();
 
     try {
+      if (!plaidItemsToLoad || plaidItemsToLoad.length == 0) {
+        throw {
+          code: "NoItems"
+        };
+      }
+
       const getPlaidTransactions = firebase
         .functions()
         .httpsCallable("getPlaidTransactions_v6");
@@ -248,10 +254,9 @@ export class GlobalContextProvider extends React.Component {
       });
 
       if (result.data.error) {
-        console.log(result.data.error);
-        return {
-          error: true,
-          message: result.data.error
+        throw {
+          code: "PlaidError",
+          rawError: result.data.error
         };
       } else {
         let itemTransactions = result.data.transactions;
@@ -280,9 +285,6 @@ export class GlobalContextProvider extends React.Component {
         for (const nextItemTransaction of itemTransactions) {
           const itemId = nextItemTransaction.item.item_id;
           const plaidTransactions = nextItemTransaction.transactions;
-
-          // console.log("item id");
-          // console.log(itemId);
 
           if (plaidTransactions) {
             for (let plaidTransaction of plaidTransactions) {
@@ -330,10 +332,38 @@ export class GlobalContextProvider extends React.Component {
     } catch (error) {
       console.log(error);
       Sentry.captureException(error);
-      return {
-        error: true,
-        message: error
-      };
+
+      if (error.code) {
+        // Error has the following structure
+        // {code: 'errorIdentificationCode'}
+        switch (error.code) {
+          case "NoItems":
+            return {
+              error: true,
+              code: error.code,
+              message:
+                "No bank accounts connected. Set up one or more bank accounts to automatically download your transactions."
+            };
+          case "PlaidError":
+            return {
+              error: true,
+              code: error.code,
+              message: error.rawError
+            };
+          default:
+            return {
+              error: true,
+              code: "Unknown",
+              message: "Error occurred"
+            };
+        }
+      } else {
+        return {
+          error: true,
+          code: "Unknown",
+          message: error
+        };
+      }
     }
   };
 

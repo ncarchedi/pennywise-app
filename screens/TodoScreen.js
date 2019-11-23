@@ -61,10 +61,28 @@ class TodoScreen extends React.Component {
     this.setState({ refreshing: false });
 
     if (result.error) {
-      console.log(result);
-      Alert.alert("Error while downloading transactions", result.message, {
-        cancelable: false
-      });
+      if (result.code === "NoItems") {
+        Alert.alert("Connect Bank Account?", result.message, [
+          { text: "Close", style: "cancel" },
+          {
+            text: "Connect Bank Account",
+            onPress: () => this.props.navigation.navigate("LinkedAccounts"),
+            style: "default"
+          }
+        ]);
+      } else if (result.code === "Unknown") {
+        Alert.alert(
+          "Error while downloading transactions",
+          "An error occured. Maybe you're experiencing connectivity issues, or our servers are experiencing temporary issues. Please try again later.",
+          {
+            cancelable: false
+          }
+        );
+      } else {
+        Alert.alert("Error while downloading transactions", result.message, {
+          cancelable: false
+        });
+      }
     }
   };
 
