@@ -558,6 +558,7 @@ export class GlobalContextProvider extends React.Component {
 
       return {
         success: false,
+        code: error.code,
         message: error.message
       };
     }

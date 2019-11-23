@@ -65,7 +65,14 @@ class LoginScreen extends React.Component {
     );
 
     if (!response.success) {
-      Alert.alert("Login error", response.message);
+      if (response.code && response.code === "auth/user-not-found") {
+        Alert.alert(
+          "Login error",
+          "There is no user record corresponding to this email. The user may have been deleted, or the email contains a typo."
+        );
+      } else {
+        Alert.alert("Login error", response.message);
+      }
     } else {
       this.props.navigation.navigate("Main");
     }
