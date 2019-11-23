@@ -58,7 +58,7 @@ export default function TransactionsList({
             <View style={{ marginTop: 5 }}>
               <Text style={{ color: "gray", fontSize: 12 }}>
                 {/* TODO: allow users to choose account when adding manually? */}
-                {institution ? institution + " - " + account : "No Account"}
+                {institution ? institution + " - " + account : "No Bank Account"}
               </Text>
             </View>
           </View>

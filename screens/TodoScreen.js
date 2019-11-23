@@ -110,7 +110,7 @@ class TodoScreen extends React.Component {
                   All done for today!
                 </Text>
                 <Text style={styles.emptyScreenCTA}>
-                  Add a transaction manually or connect a new account
+                  Add a transaction manually or connect a new bank account
                 </Text>
               </View>
             }
