@@ -679,6 +679,10 @@ export class GlobalContextProvider extends React.Component {
     return currentUser.email;
   };
 
+  sendPasswordresetEmail = async email => {
+    await firebase.auth().sendPasswordResetEmail(email);
+  };
+
   render() {
     return (
       <GlobalContext.Provider
@@ -706,7 +710,8 @@ export class GlobalContextProvider extends React.Component {
           removeInstitutionAccount: this.removeInstitutionAccount,
           clearAsyncStorage: this.clearAsyncStorage,
           getEnvironment: this.getEnvironment,
-          getUserEmail: this.getUserEmail
+          getUserEmail: this.getUserEmail,
+          sendPasswordresetEmail: this.sendPasswordresetEmail
         }}
       >
         {this.props.children}

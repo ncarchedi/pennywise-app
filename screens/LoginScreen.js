@@ -1,13 +1,10 @@
 import React from "react";
-import {
-  StyleSheet,
-  View,
-  Button,
-  KeyboardAvoidingView,
-  Alert
-} from "react-native";
+import { StyleSheet, View, KeyboardAvoidingView, Alert } from "react-native";
 
 import { withGlobalContext } from "../GlobalContext";
+
+import PrimaryButton from "../components/PrimaryButton";
+import SecondaryButton from "../components/SecondaryButton";
 
 class LoginScreen extends React.Component {
   static navigationOptions = {
@@ -47,7 +44,14 @@ class LoginScreen extends React.Component {
             secureTextEntry
           />
           <View style={styles.buttonContainer}>
-            <Button title="Log In" onPress={this.signInAsync} />
+            <PrimaryButton
+              buttonText="Log In"
+              onPress={this.signInAsync}
+            ></PrimaryButton>
+            <SecondaryButton
+              buttonText="Forgot password?"
+              onPress={this.handleForgotPassword}
+            ></SecondaryButton>
           </View>
         </View>
       </KeyboardAvoidingView>
@@ -66,8 +70,34 @@ class LoginScreen extends React.Component {
       this.props.navigation.navigate("Main");
     }
   };
-}
 
+  handleForgotPassword = async () => {
+    try {
+      await this.props.global.sendPasswordresetEmail(this.state.emailText);
+
+      Alert.alert(
+        "Password reset successfully",
+        "We've sent you an email with instructions to reset your pasword."
+      );
+    } catch (error) {
+      console.log(JSON.stringify(error));
+
+      let userMessage = "";
+
+      if (this.state.emailText == "") {
+        userMessage =
+          "No email provided. Make sure to enter your email in the Email field.";
+      } else if ("auth/user-not-found") {
+        userMessage =
+          "There is no user record corresponding to this email. The user may have been deleted, or the email contains a typo.";
+      } else {
+        userMessage = error.message;
+      }
+
+      Alert.alert("Password Reset Error", userMessage);
+    }
+  };
+}
 export default withGlobalContext(LoginScreen);
 
 const styles = StyleSheet.create({
