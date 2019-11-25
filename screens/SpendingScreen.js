@@ -32,7 +32,7 @@ class SpendingScreen extends React.Component {
       headerRight: (
         <TouchableOpacity
           onPress={navigation.getParam("toggleListView")}
-          style={{ marginRight: 20 }}
+          style={{ paddingHorizontal: 20 }}
         >
           <Ionicons name={navigation.getParam("toggleViewIcon")} size={25} />
         </TouchableOpacity>
