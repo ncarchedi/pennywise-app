@@ -1,14 +1,11 @@
 import React from "react";
-import {
-  SafeAreaView,
-  StyleSheet,
-  View,
-  Text,
-  TouchableOpacity
-} from "react-native";
+import { SafeAreaView, StyleSheet, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 import { withGlobalContext } from "../GlobalContext";
+
+import PrimaryButton from "../components/PrimaryButton";
+import SecondaryButton from "../components/SecondaryButton";
 
 class WelcomeScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -26,26 +23,14 @@ class WelcomeScreen extends React.Component {
           <Ionicons style={styles.image} name={"ios-bowtie"} size={200} />
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity
+          <PrimaryButton
+            buttonText="Sign Up Now"
             onPress={this.handleRegister}
-            style={{ ...styles.button, backgroundColor: "#50E3C2" }}
-          >
-            <Text
-              style={{
-                ...styles.buttonText,
-                color: "white",
-                fontWeight: "bold"
-              }}
-            >
-              Sign Up Now
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
+          ></PrimaryButton>
+          <SecondaryButton
+            buttonText="Log In"
             onPress={this.handleSignIn}
-            style={[styles.button, styles.secondaryButton]}
-          >
-            <Text style={styles.buttonText}>Log In</Text>
-          </TouchableOpacity>
+          ></SecondaryButton>
         </View>
       </SafeAreaView>
     );
@@ -70,7 +55,9 @@ const styles = StyleSheet.create({
   topContainer: {
     alignItems: "center"
   },
-  buttonContainer: {},
+  buttonContainer: {
+    marginHorizontal: 20
+  },
   image: {
     color: "#50E3C2"
   },

@@ -1,14 +1,10 @@
 import React from "react";
-import {
-  StyleSheet,
-  View,
-  Button,
-  KeyboardAvoidingView,
-  Alert
-} from "react-native";
+import { StyleSheet, View, KeyboardAvoidingView, Alert } from "react-native";
 import TextInputWithIcon from "../components/TextInputWithIcon";
 
 import { withGlobalContext } from "../GlobalContext";
+
+import PrimaryButton from "../components/PrimaryButton";
 
 class RegistrationScreen extends React.Component {
   static navigationOptions = {
@@ -48,7 +44,10 @@ class RegistrationScreen extends React.Component {
             secureTextEntry
           />
           <View style={styles.buttonContainer}>
-            <Button title="Create Account" onPress={this.handleRegistration} />
+            <PrimaryButton
+              buttonText="Create Account"
+              onPress={this.handleRegistration}
+            />
           </View>
         </View>
       </KeyboardAvoidingView>
