@@ -49,7 +49,7 @@ class LoginScreen extends React.Component {
               onPress={this.signInAsync}
             ></PrimaryButton>
             <SecondaryButton
-              buttonText="Forgot password?"
+              buttonText="Forgot Password?"
               onPress={this.handleForgotPassword}
             ></SecondaryButton>
           </View>
@@ -67,8 +67,8 @@ class LoginScreen extends React.Component {
     if (!response.success) {
       if (response.code && response.code === "auth/user-not-found") {
         Alert.alert(
-          "Login error",
-          "There is no user record corresponding to this email. The user may have been deleted, or the email contains a typo."
+          "Incorrect Email",
+          "We can't find a user with this email address. Please confirm it's correct or create a new account.";
         );
       } else {
         Alert.alert("Login error", response.message);
@@ -83,8 +83,8 @@ class LoginScreen extends React.Component {
       await this.props.global.sendPasswordresetEmail(this.state.emailText);
 
       Alert.alert(
-        "Password reset successfully",
-        "We've sent you an email with instructions to reset your pasword."
+        "Check Your Email",
+        "We've sent you an email with instructions to reset your password."
       );
     } catch (error) {
       console.log(JSON.stringify(error));
@@ -93,15 +93,15 @@ class LoginScreen extends React.Component {
 
       if (this.state.emailText == "") {
         userMessage =
-          "No email provided. Make sure to enter your email in the Email field.";
+          "Please fill in the email field to reset your password.";
       } else if ("auth/user-not-found") {
         userMessage =
-          "There is no user record corresponding to this email. The user may have been deleted, or the email contains a typo.";
+          "We can't find a user with this email address. Please confirm it's correct or create a new account.";
       } else {
         userMessage = error.message;
       }
 
-      Alert.alert("Password Reset Error", userMessage);
+      Alert.alert("There's a Problem", userMessage);
     }
   };
 }
