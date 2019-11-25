@@ -41,8 +41,9 @@ class TodoScreen extends React.Component {
       addTransaction: this.handleAddNewTransaction
     });
 
-    // When the Todoscreen is shown for the first time in a session, refresh
-    this.handleRefresh();
+    // If one or more accounts are connected, refresh todo on load
+    const institutionAccounts = this.props.global.institutionAccounts;
+    if (institutionAccounts.length) this.handleRefresh();
   }
 
   handleTransactionPress = transaction => {
@@ -61,10 +62,28 @@ class TodoScreen extends React.Component {
     this.setState({ refreshing: false });
 
     if (result.error) {
-      console.log(result);
-      Alert.alert("Error while downloading transactions", result.message, {
-        cancelable: false
-      });
+      if (result.code === "NoItems") {
+        Alert.alert("Connect Bank Account", result.message, [
+          { text: "Close", style: "cancel" },
+          {
+            text: "Manage Bank Accounts",
+            onPress: () => this.props.navigation.navigate("LinkedAccounts"),
+            style: "default"
+          }
+        ]);
+      } else if (result.code === "Unknown") {
+        Alert.alert(
+          "Unable to Import Transactions",
+          "Are you connected to the internet? If so, the issue may be on our side. Please try again later.",
+          {
+            cancelable: false
+          }
+        );
+      } else {
+        Alert.alert("Unable to Import Transactions", result.message, {
+          cancelable: false
+        });
+      }
     }
   };
 
