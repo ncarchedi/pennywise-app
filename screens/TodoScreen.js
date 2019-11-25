@@ -62,7 +62,7 @@ class TodoScreen extends React.Component {
 
     if (result.error) {
       if (result.code === "NoItems") {
-        Alert.alert("Connect Bank Account?", result.message, [
+        Alert.alert("Connect Bank Account", result.message, [
           { text: "Close", style: "cancel" },
           {
             text: "Connect Bank Account",
@@ -72,14 +72,14 @@ class TodoScreen extends React.Component {
         ]);
       } else if (result.code === "Unknown") {
         Alert.alert(
-          "Error while downloading transactions",
-          "An error occured. Maybe you're experiencing connectivity issues, or our servers are experiencing temporary issues. Please try again later.",
+          "Unable to Download Transactions",
+          "Are you connected to the internet? If so, the issue may be on our side. Please try again later.",
           {
             cancelable: false
           }
         );
       } else {
-        Alert.alert("Error while downloading transactions", result.message, {
+        Alert.alert("Unable to Download Transactions", result.message, {
           cancelable: false
         });
       }
