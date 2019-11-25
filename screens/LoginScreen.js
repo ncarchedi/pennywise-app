@@ -68,7 +68,7 @@ class LoginScreen extends React.Component {
       if (response.code && response.code === "auth/user-not-found") {
         Alert.alert(
           "Incorrect Email",
-          "We can't find a user with this email address. Please confirm it's correct or create a new account.";
+          "We can't find a user with this email address. Please confirm it's correct or create a new account."
         );
       } else {
         Alert.alert("Login error", response.message);
@@ -92,8 +92,7 @@ class LoginScreen extends React.Component {
       let userMessage = "";
 
       if (this.state.emailText == "") {
-        userMessage =
-          "Please fill in the email field to reset your password.";
+        userMessage = "Please fill in the email field to reset your password.";
       } else if ("auth/user-not-found") {
         userMessage =
           "We can't find a user with this email address. Please confirm it's correct or create a new account.";
