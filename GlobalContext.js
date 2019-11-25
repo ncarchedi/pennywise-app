@@ -342,7 +342,7 @@ export class GlobalContextProvider extends React.Component {
               error: true,
               code: error.code,
               message:
-                "Connect a bank account to automatically download your transactions."
+                "Connect a bank account to automatically import transactions."
             };
           case "PlaidError":
             return {
