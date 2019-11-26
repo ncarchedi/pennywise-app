@@ -1,6 +1,5 @@
 import React from "react";
-import { SafeAreaView, StyleSheet, View } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { SafeAreaView, StyleSheet, View, Image } from "react-native";
 
 import { withGlobalContext } from "../GlobalContext";
 
@@ -21,10 +20,9 @@ class WelcomeScreen extends React.Component {
     return (
       <SafeAreaView style={styles.container} behavior="padding" enabled>
         <View style={styles.topContainer}>
-          <Ionicons
-            style={{ color: Colors.lightGreen }}
-            name={"ios-bowtie"}
-            size={200}
+          <Image
+            source={require("../assets/images/logo-full.png")}
+            style={styles.logoImage}
           />
         </View>
         <View style={styles.buttonContainer}>
@@ -59,6 +57,12 @@ const styles = StyleSheet.create({
   },
   topContainer: {
     alignItems: "center"
+  },
+  logoImage: {
+    width: 300,
+    height: 300,
+    marginTop: "10%",
+    resizeMode: "contain"
   },
   buttonContainer: {
     marginHorizontal: 20

@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     marginVertical: 6,
     paddingVertical: 10,
     borderRadius: 6,
-    backgroundColor: Colors.lightGreen
+    backgroundColor: Colors.darkGreen
   },
   primaryButtonText: {
     fontSize: 17,

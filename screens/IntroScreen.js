@@ -18,14 +18,14 @@ const slides = [
     title: "Connect Your Bank Accounts",
     text: "Automatically import your daily expenses",
     icon: "ios-business",
-    color: Colors.copper
+    color: Colors.darkGreen
   },
   {
     key: "slide3",
     title: "Categorize Your Expenses",
     text: "Manually categorize every expense to promote more mindful spending",
     icon: "ios-create",
-    color: Colors.copper
+    color: Colors.darkGreen
   },
   {
     key: "slide4",
@@ -33,7 +33,7 @@ const slides = [
     text:
       "Data-driven insights help you understand trends and measure improvement",
     icon: "ios-stats",
-    color: Colors.copper
+    color: Colors.darkGreen
   },
   {
     key: "slide5",
@@ -41,7 +41,7 @@ const slides = [
     text:
       "Your data is stored securely on your device and never shared with third parties",
     icon: "ios-lock",
-    color: Colors.copper
+    color: Colors.darkGreen
   }
 ];
 
@@ -53,7 +53,7 @@ class IntroScreen extends React.Component {
   renderItem = ({ item, dimensions }) => (
     <View style={styles.mainContent}>
       {item.key === "slide1" ? (
-        <Image source={item.image} style={styles.image} />
+        <Image source={item.image} style={styles.logoImage} />
       ) : (
         <Ionicons
           style={{ marginTop: "25%", color: item.color }}
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-around"
   },
-  image: {
+  logoImage: {
     width: 250,
     height: 250,
     marginTop: "25%",
