@@ -211,6 +211,11 @@ class SettingsScreen extends React.Component {
             <View>
               <SettingsHeader text="ADMIN ONLY" />
               <PressableSetting
+                text="Go To Onboarding"
+                onPress={() => this.props.navigation.navigate("Intro")}
+              />
+              <SettingsSeparator />
+              <PressableSetting
                 text="Load Example Transactions"
                 onPress={loadDummyData}
               />
@@ -222,11 +227,6 @@ class SettingsScreen extends React.Component {
               <PressableSetting
                 text="Clear All Async Storage"
                 onPress={clearAsyncStorage}
-              />
-              <SettingsSeparator />
-              <PressableSetting
-                text="Go To Onboarding"
-                onPress={() => this.props.navigation.navigate("Intro")}
               />
             </View>
           ) : null}

@@ -1,6 +1,6 @@
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, Image } from "react-native";
 import AppIntroSlider from "react-native-app-intro-slider";
 
 import Colors from "../constants/Colors";
@@ -11,22 +11,21 @@ const slides = [
     key: "slide1",
     title: "Welcome to Pennywise",
     text: "Expense tracking made simple",
-    icon: "ios-bowtie",
-    color: Colors.lightGreen
+    image: require("../assets/images/logo-no-text.png")
   },
   {
     key: "slide2",
     title: "Connect Your Bank Accounts",
     text: "Automatically import your daily expenses",
     icon: "ios-business",
-    color: Colors.lightGreen
+    color: Colors.copper
   },
   {
     key: "slide3",
     title: "Categorize Your Expenses",
     text: "Manually categorize every expense to promote more mindful spending",
     icon: "ios-create",
-    color: Colors.lightGreen
+    color: Colors.copper
   },
   {
     key: "slide4",
@@ -34,7 +33,7 @@ const slides = [
     text:
       "Data-driven insights help you understand trends and measure improvement",
     icon: "ios-stats",
-    color: Colors.lightGreen
+    color: Colors.copper
   },
   {
     key: "slide5",
@@ -42,7 +41,7 @@ const slides = [
     text:
       "Your data is stored securely on your device and never shared with third parties",
     icon: "ios-lock",
-    color: Colors.lightGreen
+    color: Colors.copper
   }
 ];
 
@@ -53,11 +52,15 @@ class IntroScreen extends React.Component {
 
   renderItem = ({ item, dimensions }) => (
     <View style={styles.mainContent}>
-      <Ionicons
-        style={{ marginTop: "25%", color: item.color }}
-        name={item.icon}
-        size={200}
-      />
+      {item.key === "slide1" ? (
+        <Image source={item.image} style={styles.image} />
+      ) : (
+        <Ionicons
+          style={{ marginTop: "25%", color: item.color }}
+          name={item.icon}
+          size={200}
+        />
+      )}
       <View style={styles.textContainer}>
         <Text style={styles.title}>{item.title}</Text>
         <Text style={styles.text}>{item.text}</Text>
@@ -98,12 +101,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-around"
   },
+  image: {
+    width: 250,
+    height: 250,
+    marginTop: "25%",
+    resizeMode: "contain"
+  },
   textContainer: {
     marginBottom: 40
   },
   title: {
     fontSize: 28,
-    color: Colors.lightGreen,
+    color: Colors.darkGreen,
     backgroundColor: "transparent",
     textAlign: "center",
     marginBottom: 16,
