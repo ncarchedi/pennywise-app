@@ -17,12 +17,12 @@ const styles = StyleSheet.create({
     marginVertical: 6,
     paddingVertical: 10,
     borderRadius: 6,
-    backgroundColor: Colors.primaryGreen
+    backgroundColor: Colors.lightGreen
   },
   primaryButtonText: {
     fontSize: 17,
     textAlign: "center",
-    color: Colors.primaryWhite,
+    color: Colors.white,
     fontWeight: "bold"
   }
 });

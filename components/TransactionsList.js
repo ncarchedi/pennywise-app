@@ -106,7 +106,7 @@ export default function TransactionsList({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.primaryWhite
+    backgroundColor: Colors.white
   },
   transactionsListItem: {
     marginVertical: 12,

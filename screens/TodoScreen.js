@@ -146,7 +146,7 @@ export default withGlobalContext(TodoScreen);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.primaryWhite
+    backgroundColor: Colors.white
   },
   emptyScreenEmoji: {
     fontSize: 60,

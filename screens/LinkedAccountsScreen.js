@@ -93,7 +93,7 @@ export default withGlobalContext(LinkedAccountsScreen);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.primaryWhite
+    backgroundColor: Colors.white
   },
   emptyAccountsText: {
     marginTop: 30,

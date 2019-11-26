@@ -22,7 +22,7 @@ class WelcomeScreen extends React.Component {
       <SafeAreaView style={styles.container} behavior="padding" enabled>
         <View style={styles.topContainer}>
           <Ionicons
-            style={{ color: Colors.primaryGreen }}
+            style={{ color: Colors.lightGreen }}
             name={"ios-bowtie"}
             size={200}
           />

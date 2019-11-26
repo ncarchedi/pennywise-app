@@ -269,7 +269,7 @@ export default withGlobalContext(SpendingScreen);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.primaryWhite
+    backgroundColor: Colors.white
   },
   chartContainer: {
     flex: 1
@@ -277,7 +277,7 @@ const styles = StyleSheet.create({
   emptyScreenIcon: {
     textAlign: "center",
     marginTop: 30,
-    color: Colors.primaryGreen
+    color: Colors.lightGreen
   },
   emptyScreenHeader: {
     fontSize: 22,

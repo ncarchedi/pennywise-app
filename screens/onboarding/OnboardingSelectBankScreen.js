@@ -87,13 +87,13 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 6,
-    backgroundColor: Colors.primaryGreen,
+    backgroundColor: Colors.lightGreen,
     width: 250
   },
   bankButtonText: {
     textAlign: "center",
     fontWeight: "bold",
     fontSize: 17,
-    color: Colors.primaryWhite
+    color: Colors.white
   }
 });

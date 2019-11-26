@@ -12,21 +12,21 @@ const slides = [
     title: "Welcome to Pennywise",
     text: "Expense tracking made simple",
     icon: "ios-bowtie",
-    color: Colors.primaryGreen
+    color: Colors.lightGreen
   },
   {
     key: "slide2",
     title: "Connect Your Bank Accounts",
     text: "Automatically import your daily expenses",
     icon: "ios-business",
-    color: Colors.primaryGreen
+    color: Colors.lightGreen
   },
   {
     key: "slide3",
     title: "Categorize Your Expenses",
     text: "Manually categorize every expense to promote more mindful spending",
     icon: "ios-create",
-    color: Colors.primaryGreen
+    color: Colors.lightGreen
   },
   {
     key: "slide4",
@@ -34,7 +34,7 @@ const slides = [
     text:
       "Data-driven insights help you understand trends and measure improvement",
     icon: "ios-stats",
-    color: Colors.primaryGreen
+    color: Colors.lightGreen
   },
   {
     key: "slide5",
@@ -42,7 +42,7 @@ const slides = [
     text:
       "Your data is stored securely on your device and never shared with third parties",
     icon: "ios-lock",
-    color: Colors.primaryGreen
+    color: Colors.lightGreen
   }
 ];
 
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    color: Colors.primaryGreen,
+    color: Colors.lightGreen,
     backgroundColor: "transparent",
     textAlign: "center",
     marginBottom: 16,

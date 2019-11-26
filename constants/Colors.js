@@ -1,12 +1,16 @@
+const lightGreen = "#519196";
+const lightGrey = "lightgrey";
+
 export default {
-  primaryGreen: "#3ab795",
-  primaryGold: "#9a8a66",
-  primaryWhite: "#fff",
+  lightGreen,
+  darkGreen: "#104951",
+  copper: "#a05f2e",
+  white: "#fff",
   darkGrey: "darkgrey",
   veryDarkGrey: "#636363",
-  lightGrey: "lightgrey",
+  lightGrey,
   veryLightGrey: "#f1f1f1",
   warningRed: "red",
-  tabIconDefault: "lightgrey",
-  tabIconSelected: "#3ab795"
+  tabIconDefault: lightGrey,
+  tabIconSelected: lightGreen
 };

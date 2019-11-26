@@ -241,6 +241,6 @@ export default withGlobalContext(SettingsScreen);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.primaryWhite
+    backgroundColor: Colors.white
   }
 });
