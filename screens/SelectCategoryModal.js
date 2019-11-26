@@ -81,6 +81,7 @@ export default class SelectCategoryModal extends React.Component {
           onChangeText={text => this.setState({ searchText: text })}
           autoFocus={true}
           autoCorrect={false}
+          clearButtonMode="while-editing"
         />
         <FlatList
           data={categories.filter(c =>

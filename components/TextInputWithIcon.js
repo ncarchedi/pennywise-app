@@ -20,7 +20,11 @@ export default TextInputWithIcon = ({
           {fakeValue}
         </TouchableOpacity>
       ) : (
-        <TextInput style={styles.textInput} {...props}></TextInput>
+        <TextInput
+          clearButtonMode="while-editing"
+          style={styles.textInput}
+          {...props}
+        ></TextInput>
       )}
     </View>
   );

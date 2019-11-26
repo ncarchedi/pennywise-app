@@ -28,7 +28,6 @@ class LoginScreen extends React.Component {
             value={emailText}
             placeholder="Email"
             onChangeText={text => this.setState({ emailText: text })}
-            clearButtonMode="while-editing"
             autoCorrect={false}
             autoCompleteType="email"
             autoCapitalize="none"
@@ -38,7 +37,6 @@ class LoginScreen extends React.Component {
             value={passText}
             placeholder="Password"
             onChangeText={text => this.setState({ passText: text })}
-            clearButtonMode="while-editing"
             autoCorrect={false}
             autoCompleteType="password"
             autoCapitalize="none"

@@ -1,5 +1,11 @@
 import React from "react";
-import { StyleSheet, View, KeyboardAvoidingView, Alert } from "react-native";
+import {
+  StyleSheet,
+  View,
+  KeyboardAvoidingView,
+  Alert,
+  Text
+} from "react-native";
 import TextInputWithIcon from "../components/TextInputWithIcon";
 
 import Colors from "../constants/Colors";
@@ -28,7 +34,6 @@ class RegistrationScreen extends React.Component {
             value={emailText}
             placeholder="Email"
             onChangeText={text => this.setState({ emailText: text })}
-            clearButtonMode="while-editing"
             autoCorrect={false}
             autoCompleteType="email"
             autoCapitalize="none"
@@ -38,7 +43,6 @@ class RegistrationScreen extends React.Component {
             value={passText}
             placeholder="Password"
             onChangeText={text => this.setState({ passText: text })}
-            clearButtonMode="while-editing"
             autoCorrect={false}
             autoCompleteType="password"
             autoCapitalize="none"
@@ -49,6 +53,12 @@ class RegistrationScreen extends React.Component {
               buttonText="Create Account"
               onPress={this.handleRegistration}
             />
+          </View>
+          <View style={{ marginTop: 10 }}>
+            <Text style={{ color: Colors.lightGrey, textAlign: "center" }}>
+              By registering, you agree to our Privacy Policy and Terms and
+              Conditions.
+            </Text>
           </View>
         </View>
       </KeyboardAvoidingView>

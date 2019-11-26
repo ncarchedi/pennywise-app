@@ -147,7 +147,6 @@ class EditTransactionModal extends React.Component {
               value={name}
               placeholder="Name"
               onChangeText={name => this.handleChangeTransaction("name", name)}
-              clearButtonMode="while-editing"
               autoCorrect={false}
             />
             <TextInputWithIcon
@@ -186,7 +185,6 @@ class EditTransactionModal extends React.Component {
               onChangeText={notes =>
                 this.handleChangeTransaction("notes", notes)
               }
-              clearButtonMode="while-editing"
             />
             <View style={{ marginTop: 10 }}>
               <Button
