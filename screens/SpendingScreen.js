@@ -10,7 +10,6 @@ import _ from "lodash";
 import {
   VictoryBar,
   VictoryChart,
-  VictoryTheme,
   VictoryLegend,
   VictoryGroup,
   VictoryAxis,
@@ -277,7 +276,7 @@ const styles = StyleSheet.create({
   emptyScreenIcon: {
     textAlign: "center",
     marginTop: 30,
-    color: Colors.lightGreen
+    color: Colors.copper
   },
   emptyScreenHeader: {
     fontSize: 22,
