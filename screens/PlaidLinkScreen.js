@@ -2,15 +2,23 @@ import React from "react";
 import { Alert } from "react-native";
 import PlaidAuthenticator from "react-native-plaid-link";
 
+import LoadingIndicator from "../components/LoadingIndicator";
 import { withGlobalContext } from "../GlobalContext";
 
 import * as Sentry from "sentry-expo";
 
 class PlaidLinkScreen extends React.Component {
+  state = {
+    data: {},
+    refreshing: false
+  };
+
   onMessage = async data => {
     const { getAccessTokenFromPublicToken } = this.props.global;
 
     if (data.action.includes("connected")) {
+      this.setState({ refreshing: true });
+
       try {
         await getAccessTokenFromPublicToken(data.metadata.public_token);
       } catch (error) {
@@ -35,10 +43,12 @@ class PlaidLinkScreen extends React.Component {
     } else {
       this.props.navigation.goBack();
     }
+
+    this.setState({ refreshing: false });
   };
 
   render() {
-    console.log(this.props.navigation.getParam("onCompleted"));
+    if (this.state.refreshing) return <LoadingIndicator />;
 
     return (
       <PlaidAuthenticator
