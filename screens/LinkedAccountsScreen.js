@@ -46,7 +46,7 @@ class LinkedAccountsScreen extends React.Component {
       return (
         <View style={styles.container}>
           <Text style={styles.emptyAccountsText}>
-            Add a bank account to automatically import transactions
+            Add a bank account to automatically import expenses
           </Text>
         </View>
       );

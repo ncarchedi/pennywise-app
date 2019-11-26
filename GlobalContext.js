@@ -342,7 +342,7 @@ export class GlobalContextProvider extends React.Component {
               error: true,
               code: error.code,
               message:
-                "Connect a bank account to automatically import transactions."
+                "Connect a bank account to automatically import expenses."
             };
           case "PlaidError":
             return {
@@ -515,10 +515,22 @@ export class GlobalContextProvider extends React.Component {
       notificationDate.add(1, "days");
     }
 
+    notificationTitles = [
+      "Got a minute?",
+      "It's that time of day",
+      "Hey, you there?",
+      "Your day just got better",
+      "Do the right thing",
+      "The time has come",
+      "This is your friendly reminder",
+      "Money, money, money, money..."
+    ];
+    notificationTitle =
+      notificationTitles[Math.floor(Math.random() * notificationTitles.length)];
+
     let notification = {
-      title: "Ready to check your transactions?",
-      body:
-        "Categorize any new transactions now and stay on top of your expenses.",
+      title: notificationTitle,
+      body: "Review your recent expenses now to stay on top of your finances.",
       ios: {
         sound: true,
         _displayInForeground: true
