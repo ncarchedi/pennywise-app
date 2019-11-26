@@ -208,7 +208,9 @@ class SpendingScreen extends React.Component {
                 x={10}
                 y={15}
                 orientation="horizontal"
-                data={monthLabels}
+                data={monthLabels.map(m => ({
+                  name: moment(m.name).format("MMM YYYY")
+                }))}
               />
               <VictoryGroup
                 horizontal
