@@ -522,7 +522,7 @@ export class GlobalContextProvider extends React.Component {
       "Your day just got better",
       "Do the right thing",
       "The time has come",
-      "This is your friendly reminder",
+      "A friendly reminder",
       "Money, money, money, money..."
     ];
     notificationTitle =
