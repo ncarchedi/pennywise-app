@@ -11,6 +11,7 @@ import * as Sentry from "sentry-expo";
 
 import AppNavigator from "./navigation/AppNavigator";
 
+import Colors from "./constants/Colors";
 import { GlobalContextProvider, GlobalContext } from "./GlobalContext";
 
 import Constants from "expo-constants";
@@ -108,6 +109,6 @@ function handleFinishLoading(setLoadingComplete) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff"
+    backgroundColor: Colors.white
   }
 });

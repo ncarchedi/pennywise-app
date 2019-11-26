@@ -1,14 +1,16 @@
-const tintColor = "#2f95dc";
+const lightGreen = "#519196";
+const lightGrey = "lightgrey";
 
 export default {
-  tintColor,
-  tabIconDefault: "#ccc",
-  tabIconSelected: tintColor,
-  tabBar: "#fefefe",
-  errorBackground: "red",
-  errorText: "#fff",
-  warningBackground: "#EAEB5E",
-  warningText: "#666804",
-  noticeBackground: tintColor,
-  noticeText: "#fff"
+  lightGreen,
+  darkGreen: "#104951",
+  copper: "#a05f2e",
+  white: "#fff",
+  darkGrey: "darkgrey",
+  veryDarkGrey: "#636363",
+  lightGrey,
+  veryLightGrey: "#f1f1f1",
+  warningRed: "red",
+  tabIconDefault: lightGrey,
+  tabIconSelected: lightGreen
 };

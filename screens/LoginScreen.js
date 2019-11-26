@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, View, KeyboardAvoidingView, Alert } from "react-native";
 
+import Colors from "../constants/Colors";
 import { withGlobalContext } from "../GlobalContext";
 
 import PrimaryButton from "../components/PrimaryButton";
@@ -27,7 +28,6 @@ class LoginScreen extends React.Component {
             value={emailText}
             placeholder="Email"
             onChangeText={text => this.setState({ emailText: text })}
-            clearButtonMode="while-editing"
             autoCorrect={false}
             autoCompleteType="email"
             autoCapitalize="none"
@@ -37,7 +37,6 @@ class LoginScreen extends React.Component {
             value={passText}
             placeholder="Password"
             onChangeText={text => this.setState({ passText: text })}
-            clearButtonMode="while-editing"
             autoCorrect={false}
             autoCompleteType="password"
             autoCapitalize="none"
@@ -110,7 +109,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    backgroundColor: "#fff"
+    backgroundColor: Colors.white
   },
   buttonContainer: {
     marginTop: 20

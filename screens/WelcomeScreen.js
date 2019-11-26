@@ -1,9 +1,9 @@
 import React from "react";
-import { SafeAreaView, StyleSheet, View } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { SafeAreaView, StyleSheet, View, Image } from "react-native";
 
 import { withGlobalContext } from "../GlobalContext";
 
+import Colors from "../constants/Colors";
 import PrimaryButton from "../components/PrimaryButton";
 import SecondaryButton from "../components/SecondaryButton";
 
@@ -20,7 +20,10 @@ class WelcomeScreen extends React.Component {
     return (
       <SafeAreaView style={styles.container} behavior="padding" enabled>
         <View style={styles.topContainer}>
-          <Ionicons style={styles.image} name={"ios-bowtie"} size={200} />
+          <Image
+            source={require("../assets/images/logo-full.png")}
+            style={styles.logoImage}
+          />
         </View>
         <View style={styles.buttonContainer}>
           <PrimaryButton
@@ -55,11 +58,14 @@ const styles = StyleSheet.create({
   topContainer: {
     alignItems: "center"
   },
+  logoImage: {
+    width: 300,
+    height: 300,
+    marginTop: "10%",
+    resizeMode: "contain"
+  },
   buttonContainer: {
     marginHorizontal: 20
-  },
-  image: {
-    color: "#50E3C2"
   },
   button: {
     alignItems: "center",

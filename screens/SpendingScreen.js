@@ -23,6 +23,7 @@ import PennywiseVictoryTheme from "../utils/PennywiseVictoryTheme";
 
 import TransactionsList from "../components/TransactionsList";
 
+import Colors from "../constants/Colors";
 import { withGlobalContext } from "../GlobalContext";
 
 class SpendingScreen extends React.Component {
@@ -89,7 +90,7 @@ class SpendingScreen extends React.Component {
           <Ionicons
             name={"ios-pricetags"}
             size={60}
-            style={styles.emptyScreenEmoji}
+            style={styles.emptyScreenIcon}
           />
           <Text style={styles.emptyScreenHeader}>
             Categorize some expenses!
@@ -268,14 +269,15 @@ export default withGlobalContext(SpendingScreen);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff"
+    backgroundColor: Colors.white
   },
   chartContainer: {
     flex: 1
   },
-  emptyScreenEmoji: {
+  emptyScreenIcon: {
     textAlign: "center",
-    marginTop: 30
+    marginTop: 30,
+    color: Colors.lightGreen
   },
   emptyScreenHeader: {
     fontSize: 22,
@@ -284,7 +286,7 @@ const styles = StyleSheet.create({
   },
   emptyScreenCTA: {
     marginTop: 30,
-    color: "darkgrey",
+    color: Colors.darkGrey,
     width: "50%",
     textAlign: "center",
     alignSelf: "center",

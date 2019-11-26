@@ -1,10 +1,12 @@
 import React from "react";
+import { Text } from "react-native";
 import {
   createStackNavigator,
   createBottomTabNavigator
 } from "react-navigation";
 
 import TabBarIcon from "../components/TabBarIcon";
+import TabBarLabel from "../components/TabBarLabel";
 
 import TodoScreen from "../screens/TodoScreen";
 import SpendingScreen from "../screens/SpendingScreen";
@@ -29,7 +31,7 @@ const TodoStack = createStackNavigator(
 );
 
 TodoStack.navigationOptions = {
-  tabBarLabel: "To Do",
+  tabBarLabel: ({ focused }) => <TabBarLabel focused={focused} label="To Do" />,
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name={"ios-checkbox-outline"} />
   )
@@ -45,7 +47,9 @@ const SpendingStack = createStackNavigator(
 );
 
 SpendingStack.navigationOptions = {
-  tabBarLabel: "Spending",
+  tabBarLabel: ({ focused }) => (
+    <TabBarLabel focused={focused} label="Spending" />
+  ),
   tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="ios-cash" />
 };
 
@@ -59,7 +63,9 @@ const SettingsStack = createStackNavigator(
 );
 
 SettingsStack.navigationOptions = {
-  tabBarLabel: "Settings",
+  tabBarLabel: ({ focused }) => (
+    <TabBarLabel focused={focused} label="Settings" />
+  ),
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name="ios-options" />
   )

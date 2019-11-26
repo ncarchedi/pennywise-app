@@ -2,21 +2,29 @@ import React from "react";
 import { Alert } from "react-native";
 import PlaidAuthenticator from "react-native-plaid-link";
 
+import LoadingIndicator from "../components/LoadingIndicator";
 import { withGlobalContext } from "../GlobalContext";
 
 import * as Sentry from "sentry-expo";
 
 class PlaidLinkScreen extends React.Component {
+  state = {
+    data: {},
+    refreshing: false
+  };
+
   onMessage = async data => {
     const { getAccessTokenFromPublicToken } = this.props.global;
 
     if (data.action.includes("connected")) {
+      this.setState({ refreshing: true });
+
       try {
         await getAccessTokenFromPublicToken(data.metadata.public_token);
       } catch (error) {
         console.log(error);
         Sentry.captureException(error);
-        Alert.alert("Error when linking bank accounts", error, {
+        Alert.alert("Error when connecting bank account", error, {
           cancelable: false
         });
       }
@@ -35,10 +43,12 @@ class PlaidLinkScreen extends React.Component {
     } else {
       this.props.navigation.goBack();
     }
+
+    this.setState({ refreshing: false });
   };
 
   render() {
-    console.log(this.props.navigation.getParam("onCompleted"));
+    if (this.state.refreshing) return <LoadingIndicator />;
 
     return (
       <PlaidAuthenticator
@@ -46,7 +56,7 @@ class PlaidLinkScreen extends React.Component {
         publicKey="aef79d0fac8493ad10a8760b0c01a6"
         env={this.props.global.getEnvironment()}
         product="transactions"
-        clientName="Conscious Spending"
+        clientName="Pennywise"
         selectAccount={false}
       />
     );
