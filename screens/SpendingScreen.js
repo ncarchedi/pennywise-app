@@ -277,7 +277,7 @@ const styles = StyleSheet.create({
   emptyScreenIcon: {
     textAlign: "center",
     marginTop: 30,
-    color: Colors.primaryGold
+    color: Colors.primaryGreen
   },
   emptyScreenHeader: {
     fontSize: 22,
