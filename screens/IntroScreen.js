@@ -31,7 +31,8 @@ const slides = [
   {
     key: "slide4",
     title: "Analyze Your Spending",
-    text: "Data-driven insights help you (re)gain control of your finances",
+    text:
+      "Data-driven insights help you understand trends and measure improvement",
     icon: "ios-stats",
     color: Colors.primaryGreen
   },
