@@ -1,10 +1,13 @@
 const tintColor = "#2f95dc";
+const primaryGold = "#9a8a66";
+const primaryGreen = "#234850";
+const primaryWhite = "#fff";
 
 export default {
   // customer colors
-  primaryGold: "gold",
-  primaryGreen: "green",
-  primaryWhite: "#fff",
+  primaryGold,
+  primaryGreen,
+  primaryWhite,
   darkGrey: "darkgrey",
   veryDarkGrey: "#636363",
   lightGrey: "lightgrey",
@@ -20,5 +23,5 @@ export default {
   warningBackground: "#EAEB5E",
   warningText: "#666804",
   noticeBackground: tintColor,
-  noticeText: "#fff"
+  noticeText: primaryWhite
 };

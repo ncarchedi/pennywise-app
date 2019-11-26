@@ -90,7 +90,7 @@ class SpendingScreen extends React.Component {
           <Ionicons
             name={"ios-pricetags"}
             size={60}
-            style={styles.emptyScreenEmoji}
+            style={styles.emptyScreenIcon}
           />
           <Text style={styles.emptyScreenHeader}>
             Categorize some expenses!
@@ -274,9 +274,10 @@ const styles = StyleSheet.create({
   chartContainer: {
     flex: 1
   },
-  emptyScreenEmoji: {
+  emptyScreenIcon: {
     textAlign: "center",
-    marginTop: 30
+    marginTop: 30,
+    color: Colors.primaryGold
   },
   emptyScreenHeader: {
     fontSize: 22,

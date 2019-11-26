@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 6,
-    backgroundColor: Colors.primaryGreen,
+    backgroundColor: Colors.primaryGold,
     width: 250
   },
   bankButtonText: {

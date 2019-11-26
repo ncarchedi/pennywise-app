@@ -21,7 +21,11 @@ class WelcomeScreen extends React.Component {
     return (
       <SafeAreaView style={styles.container} behavior="padding" enabled>
         <View style={styles.topContainer}>
-          <Ionicons style={styles.image} name={"ios-bowtie"} size={200} />
+          <Ionicons
+            style={{ color: Colors.primaryGold }}
+            name={"ios-bowtie"}
+            size={200}
+          />
         </View>
         <View style={styles.buttonContainer}>
           <PrimaryButton
@@ -58,9 +62,6 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginHorizontal: 20
-  },
-  image: {
-    color: Colors.primaryGreen
   },
   button: {
     alignItems: "center",
