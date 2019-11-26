@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
+import Colors from "../constants/Colors";
 import { withGlobalContext } from "../GlobalContext";
 
 class LinkedAccountsScreen extends React.Component {
@@ -73,7 +74,7 @@ class LinkedAccountsScreen extends React.Component {
                   <Ionicons
                     name="ios-remove-circle-outline"
                     size={20}
-                    color={"red"}
+                    color={Colors.warningRed}
                   />
                 </TouchableOpacity>
               </View>
@@ -92,11 +93,11 @@ export default withGlobalContext(LinkedAccountsScreen);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff"
+    backgroundColor: Colors.primaryWhite
   },
   emptyAccountsText: {
     marginTop: 30,
-    color: "darkgrey",
+    color: Colors.darkGrey,
     width: "60%",
     textAlign: "center",
     alignSelf: "center",

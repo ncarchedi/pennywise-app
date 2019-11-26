@@ -23,6 +23,7 @@ import PennywiseVictoryTheme from "../utils/PennywiseVictoryTheme";
 
 import TransactionsList from "../components/TransactionsList";
 
+import Colors from "../constants/Colors";
 import { withGlobalContext } from "../GlobalContext";
 
 class SpendingScreen extends React.Component {
@@ -268,7 +269,7 @@ export default withGlobalContext(SpendingScreen);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff"
+    backgroundColor: Colors.primaryWhite
   },
   chartContainer: {
     flex: 1
@@ -284,7 +285,7 @@ const styles = StyleSheet.create({
   },
   emptyScreenCTA: {
     marginTop: 30,
-    color: "darkgrey",
+    color: Colors.darkGrey,
     width: "50%",
     textAlign: "center",
     alignSelf: "center",

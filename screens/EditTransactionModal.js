@@ -11,6 +11,7 @@ import moment from "moment";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import { Appearance } from "react-native-appearance";
 
+import Colors from "../constants/Colors";
 import { withGlobalContext } from "../GlobalContext";
 import { toPrettyDate } from "../utils/TransactionUtils";
 import TextInputWithIcon from "../components/TextInputWithIcon";
@@ -190,7 +191,7 @@ class EditTransactionModal extends React.Component {
             <View style={{ marginTop: 10 }}>
               <Button
                 title="Delete Transaction"
-                color="red"
+                color={Colors.warningRed}
                 onPress={this.handleDeleteTransaction}
               />
             </View>

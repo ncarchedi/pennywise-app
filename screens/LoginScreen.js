@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, View, KeyboardAvoidingView, Alert } from "react-native";
 
+import Colors from "../constants/Colors";
 import { withGlobalContext } from "../GlobalContext";
 
 import PrimaryButton from "../components/PrimaryButton";
@@ -110,7 +111,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    backgroundColor: "#fff"
+    backgroundColor: Colors.primaryWhite
   },
   buttonContainer: {
     marginTop: 20

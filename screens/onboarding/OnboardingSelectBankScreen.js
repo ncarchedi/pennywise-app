@@ -7,6 +7,7 @@ import {
   TouchableOpacity
 } from "react-native";
 
+import Colors from "../../constants/Colors";
 import { withGlobalContext } from "../../GlobalContext";
 
 class OnboardingSelectBankScreen extends React.Component {
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
   continueText: {
     fontSize: 17,
     textAlign: "center",
-    color: "gray",
+    color: Colors.darkGrey,
     marginBottom: 15
   },
   bankButton: {
@@ -86,13 +87,13 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 6,
-    backgroundColor: "#50E3C2",
+    backgroundColor: Colors.primaryGreen,
     width: 250
   },
   bankButtonText: {
     textAlign: "center",
     fontWeight: "bold",
     fontSize: 17,
-    color: "white"
+    color: Colors.primaryWhite
   }
 });

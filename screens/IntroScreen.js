@@ -3,6 +3,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, View, Text } from "react-native";
 import AppIntroSlider from "react-native-app-intro-slider";
 
+import Colors from "../constants/Colors";
 import { withGlobalContext } from "../GlobalContext";
 
 const slides = [
@@ -11,28 +12,28 @@ const slides = [
     title: "Welcome to Pennywise",
     text: "Expense tracking made simple",
     icon: "ios-bowtie",
-    color: "#50E3C2"
+    color: Colors.primaryGreen
   },
   {
     key: "slide2",
     title: "Connect Your Bank Accounts",
     text: "Automatically import your daily expenses",
     icon: "ios-business",
-    color: "#636363"
+    color: Colors.primaryGreen
   },
   {
     key: "slide3",
     title: "Categorize Your Expenses",
     text: "Manually categorize every expense to promote more mindful spending",
     icon: "ios-create",
-    color: "#636363"
+    color: Colors.primaryGreen
   },
   {
     key: "slide4",
     title: "Analyze Your Spending",
     text: "Data-driven insights help you (re)gain control of your finances",
     icon: "ios-stats",
-    color: "#636363"
+    color: Colors.primaryGreen
   },
   {
     key: "slide5",
@@ -40,7 +41,7 @@ const slides = [
     text:
       "Your data is stored securely on your device and never shared with third parties",
     icon: "ios-lock",
-    color: "#636363"
+    color: Colors.primaryGreen
   }
 ];
 
@@ -100,12 +101,12 @@ const styles = StyleSheet.create({
     marginBottom: 40
   },
   image: {
-    color: "#636363",
+    color: Colors.primaryGreen,
     marginTop: "25%"
   },
   title: {
     fontSize: 28,
-    color: "#50E3C2",
+    color: Colors.primaryGreen,
     backgroundColor: "transparent",
     textAlign: "center",
     marginBottom: 16,
@@ -113,7 +114,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 17,
-    color: "#636363",
+    color: Colors.veryDarkGrey,
     backgroundColor: "transparent",
     textAlign: "center",
     paddingHorizontal: 16
@@ -121,18 +122,18 @@ const styles = StyleSheet.create({
   navigationButtonText: {
     fontSize: 17,
     padding: 12,
-    color: "#636363"
+    color: Colors.veryDarkGrey
   },
   doneButtonText: {
     fontSize: 17,
     padding: 12,
-    color: "#636363",
+    color: Colors.veryDarkGrey,
     fontWeight: "bold"
   },
   dotStyle: {
-    backgroundColor: "#E8E6E6"
+    backgroundColor: Colors.lightGrey
   },
   activeDotStyle: {
-    backgroundColor: "#636363"
+    backgroundColor: Colors.veryDarkGrey
   }
 });

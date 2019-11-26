@@ -16,7 +16,7 @@ class PlaidLinkScreen extends React.Component {
       } catch (error) {
         console.log(error);
         Sentry.captureException(error);
-        Alert.alert("Error when linking bank accounts", error, {
+        Alert.alert("Error when connecting bank account", error, {
           cancelable: false
         });
       }

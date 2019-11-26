@@ -11,6 +11,7 @@ import moment from "moment";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import { Appearance } from "react-native-appearance";
 
+import Colors from "../constants/Colors";
 import { withGlobalContext } from "../GlobalContext";
 
 PressableSetting = ({ text, onPress, style = {} }) => {
@@ -19,7 +20,7 @@ PressableSetting = ({ text, onPress, style = {} }) => {
       onPress={onPress}
       style={{
         paddingVertical: 10,
-        borderColor: "#f1f1f1",
+        borderColor: Colors.veryLightGrey,
         borderBottomWidth: 1,
         ...style
       }}
@@ -36,7 +37,7 @@ SettingsHeader = ({ text }) => {
         marginTop: 30,
         paddingVertical: 10,
         paddingHorizontal: 10,
-        backgroundColor: "#f1f1f1"
+        backgroundColor: Colors.veryLightGrey
       }}
     >
       <Text style={{ fontSize: 12 }}>{text}</Text>
@@ -45,7 +46,9 @@ SettingsHeader = ({ text }) => {
 };
 
 SettingsSeparator = () => {
-  return <View style={{ height: 15, backgroundColor: "#f1f1f1" }}></View>;
+  return (
+    <View style={{ height: 15, backgroundColor: Colors.veryLightGrey }}></View>
+  );
 };
 
 class SettingsScreen extends React.Component {
@@ -133,7 +136,9 @@ class SettingsScreen extends React.Component {
               paddingVertical: 10
             }}
           >
-            <Text style={{ color: "grey", fontSize: 12, marginBottom: 3 }}>
+            <Text
+              style={{ color: Colors.darkGrey, fontSize: 12, marginBottom: 3 }}
+            >
               LOGGED IN AS
             </Text>
             <Text>{this.state.userEmail}</Text>
@@ -236,6 +241,6 @@ export default withGlobalContext(SettingsScreen);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff"
+    backgroundColor: Colors.primaryWhite
   }
 });

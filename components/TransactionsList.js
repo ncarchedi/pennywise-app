@@ -9,6 +9,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import _ from "lodash";
 
+import Colors from "../constants/Colors";
 import { toPrettyDate, leftJoin } from "../utils/TransactionUtils";
 
 export default function TransactionsList({
@@ -19,7 +20,13 @@ export default function TransactionsList({
 }) {
   ListItemSeparator = () => {
     return (
-      <View style={{ height: 1, width: "100%", backgroundColor: "#f1f1f1" }} />
+      <View
+        style={{
+          height: 1,
+          width: "100%",
+          backgroundColor: Colors.veryLightGrey
+        }}
+      />
     );
   };
 
@@ -56,9 +63,11 @@ export default function TransactionsList({
               </Text>
             </View>
             <View style={{ marginTop: 5 }}>
-              <Text style={{ color: "gray", fontSize: 12 }}>
+              <Text style={{ color: Colors.darkGrey, fontSize: 12 }}>
                 {/* TODO: allow users to choose account when adding manually? */}
-                {institution ? institution + " - " + account : "No Bank Account"}
+                {institution
+                  ? institution + " - " + account
+                  : "No Bank Account"}
               </Text>
             </View>
           </View>
@@ -97,7 +106,7 @@ export default function TransactionsList({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff"
+    backgroundColor: Colors.primaryWhite
   },
   transactionsListItem: {
     marginVertical: 12,

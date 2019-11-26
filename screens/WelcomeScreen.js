@@ -4,6 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 import { withGlobalContext } from "../GlobalContext";
 
+import Colors from "../constants/Colors";
 import PrimaryButton from "../components/PrimaryButton";
 import SecondaryButton from "../components/SecondaryButton";
 
@@ -59,7 +60,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20
   },
   image: {
-    color: "#50E3C2"
+    color: Colors.primaryGreen
   },
   button: {
     alignItems: "center",

@@ -9,6 +9,7 @@ import {
   Text
 } from "react-native";
 
+import Colors from "../constants/Colors";
 import TransactionsList from "../components/TransactionsList";
 import { Ionicons } from "@expo/vector-icons";
 import _ from "lodash";
@@ -145,7 +146,7 @@ export default withGlobalContext(TodoScreen);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff"
+    backgroundColor: Colors.primaryWhite
   },
   emptyScreenEmoji: {
     fontSize: 60,
@@ -159,7 +160,7 @@ const styles = StyleSheet.create({
   },
   emptyScreenCTA: {
     marginTop: 30,
-    color: "darkgrey",
+    color: Colors.darkGrey,
     width: "60%",
     textAlign: "center",
     alignSelf: "center",

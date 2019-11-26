@@ -11,6 +11,8 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import _ from "lodash";
 
+import Colors from "../constants/Colors";
+
 export default class SelectCategoryModal extends React.Component {
   state = {
     searchText: ""
@@ -52,7 +54,13 @@ export default class SelectCategoryModal extends React.Component {
 
   ListItemSeparator = () => {
     return (
-      <View style={{ height: 1, width: "100%", backgroundColor: "#f1f1f1" }} />
+      <View
+        style={{
+          height: 1,
+          width: "100%",
+          backgroundColor: Colors.veryLightGrey
+        }}
+      />
     );
   };
 
@@ -104,7 +112,7 @@ const styles = StyleSheet.create({
     padding: 10,
     marginTop: 10,
     marginBottom: 5,
-    borderColor: "#f1f1f1",
+    borderColor: Colors.veryLightGrey,
     borderRadius: 5,
     borderWidth: 1
   },
