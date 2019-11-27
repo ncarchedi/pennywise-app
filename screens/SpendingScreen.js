@@ -4,7 +4,8 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
-  Text
+  Text,
+  Linking
 } from "react-native";
 import _ from "lodash";
 import {
@@ -21,7 +22,7 @@ import { Ionicons } from "@expo/vector-icons";
 import PennywiseVictoryTheme from "../utils/PennywiseVictoryTheme";
 
 import TransactionsList from "../components/TransactionsList";
-
+import PrimaryButton from "../components/PrimaryButton";
 import Colors from "../constants/Colors";
 import { withGlobalContext } from "../GlobalContext";
 
@@ -68,6 +69,11 @@ class SpendingScreen extends React.Component {
 
   monthIdentifier = date => {
     return moment(date).format("YYYY-MM");
+  };
+
+  handleShareFeedback = async () => {
+    // This doesn't work in the simulator, but should work on a real device
+    Linking.openURL("mailto:hello@pennywise.io?subject=Chart%20suggestion");
   };
 
   render() {
@@ -258,6 +264,22 @@ class SpendingScreen extends React.Component {
               />
               <VictoryLabel angle={45} />
             </VictoryChart>
+            <View style={{ marginTop: 10 }}>
+              <Text
+                style={{
+                  fontSize: 17,
+                  textAlign: "center"
+                }}
+              >
+                More insights coming soon!
+              </Text>
+              <View style={{ marginTop: 10, marginHorizontal: 20 }}>
+                <PrimaryButton
+                  buttonText="Suggest a Chart"
+                  onPress={this.handleShareFeedback}
+                ></PrimaryButton>
+              </View>
+            </View>
           </ScrollView>
         </View>
       </View>

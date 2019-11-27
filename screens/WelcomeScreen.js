@@ -3,7 +3,6 @@ import { SafeAreaView, StyleSheet, View, Image } from "react-native";
 
 import { withGlobalContext } from "../GlobalContext";
 
-import Colors from "../constants/Colors";
 import PrimaryButton from "../components/PrimaryButton";
 import SecondaryButton from "../components/SecondaryButton";
 
