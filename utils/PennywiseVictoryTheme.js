@@ -1,12 +1,17 @@
 import { assign } from "lodash";
+import Colors from "../constants/Colors";
 
 // *
 // * Colors
 // *
-const yellow200 = "#FFF59D";
-const deepOrange600 = "#F4511E";
-const lime300 = "#DCE775";
-const lightGreen500 = "#8BC34A";
+//const yellow200 = "#FFF59D";
+const yellow200 = Colors.copper;
+//const deepOrange600 = "#F4511E";
+const deepOrange600 = Colors.darkGreen;
+//const lime300 = "#DCE775";
+const lime300 = Colors.lightGreen;
+//const lightGreen500 = "#8BC34A";
+const lightGreen500 = Colors.veryDarkGrey;
 const teal700 = "#00796B";
 const cyan900 = "#006064";
 const colors = [
