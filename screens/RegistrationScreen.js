@@ -55,7 +55,7 @@ class RegistrationScreen extends React.Component {
             />
           </View>
           <View style={{ marginTop: 10 }}>
-            <Text style={{ color: Colors.lightGrey, textAlign: "center" }}>
+            <Text style={{ color: Colors.darkGrey, textAlign: "center" }}>
               By registering, you agree to our Privacy Policy and Terms of
               Service.
             </Text>
