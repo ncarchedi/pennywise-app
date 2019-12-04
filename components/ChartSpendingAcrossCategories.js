@@ -89,6 +89,7 @@ export default ChartSpendingAcrossCategories = ({ transactions }) => {
       // TODO: make sure long category names don't get cutoff
       // https://formidable.com/open-source/victory/docs/faq/#my-axis-labels-are-cut-off-how-can-i-fix-them
       padding={{ top: 50, bottom: 50, left: 120, right: 50 }}
+      domainPadding={25}
       height={height}
     >
       <VictoryLegend

@@ -3,7 +3,6 @@ import _ from "lodash";
 import {
   VictoryBar,
   VictoryChart,
-  VictoryGroup,
   VictoryAxis,
   VictoryLabel
 } from "victory-native";
@@ -17,11 +16,17 @@ export default ChartSpendingWithinCategory = ({ transactions }) => {
   };
 
   // TODO: get this from the user instead of hardcoding
-  SELECTED_CATEGORY = "Transportation";
+  SELECTED_CATEGORY = "All";
+
+  let filteredTransactions = transactions;
+
+  if (SELECTED_CATEGORY !== "All")
+    filteredTransactions = _(filteredTransactions).filter(
+      t => t.category === SELECTED_CATEGORY
+    );
 
   // spending chart logic
-  const spendingByMonth = _(transactions)
-    .filter(t => t.category === SELECTED_CATEGORY)
+  const spendingByMonth = _(filteredTransactions)
     .map(t => ({
       monthIdentifier: monthIdentifier(t.date),
       ...t
@@ -31,6 +36,7 @@ export default ChartSpendingWithinCategory = ({ transactions }) => {
       monthIdentifier,
       amountSpent: _(month).sumBy("amount")
     }))
+    .sortBy("monthIdentifier")
     .value();
 
   return (
@@ -40,29 +46,22 @@ export default ChartSpendingWithinCategory = ({ transactions }) => {
       // TODO: make sure long category names don't get cutoff
       // https://formidable.com/open-source/victory/docs/faq/#my-axis-labels-are-cut-off-how-can-i-fix-them
       padding={{ top: 50, bottom: 50, left: 75, right: 50 }}
+      domainPadding={50}
     >
-      <VictoryGroup
-        offset={15}
-        style={{
-          data: { width: 15 }
+      <VictoryBar
+        data={spendingByMonth}
+        x={m => moment(m.monthIdentifier).format("MMM YYYY")}
+        y="amountSpent"
+        labels={({ datum }) => {
+          return datum.amountSpent.toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+          });
         }}
-      >
-        <VictoryBar
-          data={spendingByMonth}
-          x="monthIdentifier"
-          y="amountSpent"
-          labels={({ datum }) => {
-            return datum.amountSpent.toLocaleString("en-US", {
-              style: "currency",
-              currency: "USD",
-              minimumFractionDigits: 0,
-              maximumFractionDigits: 0
-            });
-          }}
-          labelComponent={<VictoryLabel angle={-45} dx={15} dy={0} />}
-          // categories={{ x: orderedCategories }}
-        />
-      </VictoryGroup>
+        labelComponent={<VictoryLabel angle={-45} dx={15} dy={-10} />}
+      />
       {/* The vertical axis */}
       <VictoryAxis style={{ grid: { stroke: null } }} />
       {/* The horizontal axis */}
