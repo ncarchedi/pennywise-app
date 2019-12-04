@@ -226,6 +226,7 @@ export class GlobalContextProvider extends React.Component {
         .subtract(2, "days")
         .format("YYYY-MM-DD");
     } else {
+      // if no previous transactions
       startDate = moment()
         .subtract(5, "days")
         .format("YYYY-MM-DD");
@@ -714,6 +715,8 @@ export class GlobalContextProvider extends React.Component {
   };
 
   getEnvironment = () => {
+    console.log("Your current environment is: " + ENVIRONMENT);
+
     return ENVIRONMENT;
   };
 
