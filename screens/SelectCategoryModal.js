@@ -78,7 +78,11 @@ export default class SelectCategoryModal extends React.Component {
       >
         <TextInput
           style={styles.searchBar}
-          placeholder={`Select a category for "${transactionName}"`}
+          placeholder={
+            transactionName
+              ? `Select a category for "${transactionName}"`
+              : "Select a category"
+          }
           onChangeText={text => this.setState({ searchText: text })}
           autoFocus={true}
           autoCorrect={false}
