@@ -65,6 +65,7 @@ export default class SelectCategoryModal extends React.Component {
   };
 
   render() {
+    const transactionName = this.props.navigation.getParam("transactionName");
     const categories = this.props.navigation.getParam("categories");
     const { searchText } = this.state;
 
@@ -77,7 +78,7 @@ export default class SelectCategoryModal extends React.Component {
       >
         <TextInput
           style={styles.searchBar}
-          placeholder="Search categories"
+          placeholder={`Select a category for "${transactionName}"`}
           onChangeText={text => this.setState({ searchText: text })}
           autoFocus={true}
           autoCorrect={false}
