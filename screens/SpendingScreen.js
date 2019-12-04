@@ -16,6 +16,7 @@ import Colors from "../constants/Colors";
 import { withGlobalContext } from "../GlobalContext";
 
 import ChartSpendingAcrossCategories from "../components/ChartSpendingAcrossCategories";
+import ChartSpendingWithinCategory from "../components/ChartSpendingWithinCategory";
 
 class SpendingScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -124,6 +125,9 @@ class SpendingScreen extends React.Component {
             showsVerticalScrollIndicator={false}
           >
             <ChartSpendingAcrossCategories
+              transactions={categorizedTransactions}
+            />
+            <ChartSpendingWithinCategory
               transactions={categorizedTransactions}
             />
             <View style={{ marginTop: 10 }}>

@@ -72,9 +72,7 @@ export default ChartSpendingAcrossCategories = ({ transactions }) => {
     .map("category")
     .value();
 
-  // These calculations are not exact. E.g. I'm not sure how many pixels
-  // 'overhead' should be. It's just to adjust the height
-  // more or less with the nb of categories.
+  // Rough dimensions for the chart
   const nbCategories = orderedCategories.length;
   const nbMonths = monthLabelsArray.length;
 
