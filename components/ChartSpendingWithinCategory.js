@@ -25,7 +25,6 @@ export default ChartSpendingWithinCategory = ({ transactions }) => {
       t => t.category === SELECTED_CATEGORY
     );
 
-  // spending chart logic
   const spendingByMonth = _(filteredTransactions)
     .map(t => ({
       monthIdentifier: monthIdentifier(t.date),
@@ -52,7 +51,7 @@ export default ChartSpendingWithinCategory = ({ transactions }) => {
         data={spendingByMonth}
         x={m => moment(m.monthIdentifier).format("MMM YYYY")}
         y="amountSpent"
-        barWidth={15}
+        barWidth={30}
         labels={({ datum }) => {
           return datum.amountSpent.toLocaleString("en-US", {
             style: "currency",

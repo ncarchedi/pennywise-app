@@ -86,10 +86,10 @@ class SpendingScreen extends React.Component {
     const { categories } = this.props.global;
     const { showListView } = this.state;
 
-    // get only categorized transactions
-    const categorizedTransactions = _.reject(transactions, {
-      category: "No Category"
-    });
+    // get all categorized transactions
+    const categorizedTransactions = _(transactions)
+      .filter(t => t.category !== "No Category")
+      .value();
 
     // if no categorized expenses, show the empty screen
     if (

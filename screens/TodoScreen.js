@@ -100,7 +100,7 @@ class TodoScreen extends React.Component {
     const transactions = this.props.global.listTransactions();
 
     // log all transactions to the console
-    console.log(JSON.stringify(transactions));
+    // console.log(JSON.stringify(transactions));
 
     // get only uncategorized transactions
     const uncategorizedTransactions = _.filter(transactions, {

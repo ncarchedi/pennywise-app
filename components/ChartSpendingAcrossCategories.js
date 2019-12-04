@@ -18,7 +18,6 @@ export default ChartSpendingAcrossCategories = ({ transactions }) => {
     return moment(date).format("YYYY-MM");
   };
 
-  // spending chart logic
   const spendingByMonth = _(transactions)
     .map(t => ({
       monthIdentifier: monthIdentifier(t.date),
