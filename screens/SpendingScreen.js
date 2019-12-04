@@ -18,6 +18,23 @@ import { withGlobalContext } from "../GlobalContext";
 import ChartSpendingAcrossCategories from "../components/ChartSpendingAcrossCategories";
 import ChartSpendingWithinCategory from "../components/ChartSpendingWithinCategory";
 
+ChartTitle = ({ title }) => {
+  return (
+    <View style={{ marginLeft: 10, marginTop: 10 }}>
+      <Text
+        style={{
+          color: Colors.darkGrey,
+          fontSize: 17,
+          marginBottom: 3,
+          textTransform: "uppercase"
+        }}
+      >
+        {title}
+      </Text>
+    </View>
+  );
+};
+
 class SpendingScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
@@ -124,12 +141,16 @@ class SpendingScreen extends React.Component {
             contentContainerStyle={styles.contentContainer}
             showsVerticalScrollIndicator={false}
           >
-            <ChartSpendingAcrossCategories
-              transactions={categorizedTransactions}
-            />
+            <ChartTitle title="Total spending over time" />
             <ChartSpendingWithinCategory
               transactions={categorizedTransactions}
             />
+
+            <ChartTitle title="Spending by category" />
+            <ChartSpendingAcrossCategories
+              transactions={categorizedTransactions}
+            />
+
             <View style={{ marginTop: 10 }}>
               <Text
                 style={{
@@ -139,7 +160,13 @@ class SpendingScreen extends React.Component {
               >
                 More insights coming soon!
               </Text>
-              <View style={{ marginTop: 10, marginHorizontal: 20 }}>
+              <View
+                style={{
+                  marginTop: 10,
+                  marginBottom: 20,
+                  marginHorizontal: 20
+                }}
+              >
                 <PrimaryButton
                   buttonText="Suggest a Chart"
                   onPress={this.handleShareFeedback}

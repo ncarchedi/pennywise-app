@@ -137,9 +137,14 @@ class SettingsScreen extends React.Component {
             }}
           >
             <Text
-              style={{ color: Colors.darkGrey, fontSize: 12, marginBottom: 3 }}
+              style={{
+                color: Colors.darkGrey,
+                fontSize: 12,
+                marginBottom: 3,
+                textTransform: "uppercase"
+              }}
             >
-              LOGGED IN AS
+              Logged in as
             </Text>
             <Text>{this.state.userEmail}</Text>
           </View>

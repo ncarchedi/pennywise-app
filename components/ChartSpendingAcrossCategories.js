@@ -10,6 +10,7 @@ import {
 } from "victory-native";
 import moment from "moment";
 
+import { truncateString } from "../utils/TextUtils";
 import PennywiseVictoryTheme from "../utils/PennywiseVictoryTheme";
 
 export default ChartSpendingAcrossCategories = ({ transactions }) => {
@@ -88,31 +89,26 @@ export default ChartSpendingAcrossCategories = ({ transactions }) => {
       theme={PennywiseVictoryTheme}
       // TODO: make sure long category names don't get cutoff
       // https://formidable.com/open-source/victory/docs/faq/#my-axis-labels-are-cut-off-how-can-i-fix-them
-      padding={{ top: 50, bottom: 50, left: 120, right: 50 }}
+      padding={{ top: 45, bottom: 50, left: 115, right: 30 }}
       domainPadding={25}
       height={height}
     >
       <VictoryLegend
         x={10}
-        y={15}
+        y={10}
         orientation="horizontal"
         data={monthLabels.map(m => ({
           name: moment(m.name).format("MMM YYYY")
         }))}
       />
-      <VictoryGroup
-        horizontal
-        offset={15}
-        style={{
-          data: { width: 15 }
-        }}
-      >
+      <VictoryGroup horizontal offset={15}>
         {monthLabelsArray.map(m => (
           <VictoryBar
             key={m}
             data={spendingByMonthFinal[m]}
             x="category"
             y="amountSpent"
+            barWidth={15}
             labels={({ datum }) => {
               return datum.amountSpent.toLocaleString("en-US", {
                 style: "currency",
@@ -127,12 +123,15 @@ export default ChartSpendingAcrossCategories = ({ transactions }) => {
         ))}
       </VictoryGroup>
       {/* The vertical axis */}
-      <VictoryAxis style={{ grid: { stroke: null } }} />
+      <VictoryAxis
+        tickFormat={x => truncateString(x, 15)}
+        style={{ grid: { stroke: null } }}
+      />
       {/* The horizontal axis */}
       <VictoryAxis
         dependentAxis
-        tickFormat={x =>
-          x.toLocaleString("en-US", {
+        tickFormat={y =>
+          y.toLocaleString("en-US", {
             style: "currency",
             currency: "USD",
             minimumFractionDigits: 0,
