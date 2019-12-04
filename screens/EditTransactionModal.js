@@ -153,6 +153,7 @@ class EditTransactionModal extends React.Component {
               icon="ios-pricetags"
               onPress={() =>
                 navigation.navigate(categoryModalRouteName, {
+                  transactionName: name,
                   categories: categories,
                   onAddCategory: addCategory,
                   onChangeCategory: this.handleChangeTransaction
