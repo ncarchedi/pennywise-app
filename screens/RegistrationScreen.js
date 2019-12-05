@@ -4,14 +4,79 @@ import {
   View,
   KeyboardAvoidingView,
   Alert,
-  Text
+  Text,
+  TouchableOpacity
 } from "react-native";
-import TextInputWithIcon from "../components/TextInputWithIcon";
+import { Ionicons } from "@expo/vector-icons";
 
+import TextInputWithIcon from "../components/TextInputWithIcon";
+import WebLink from "../components/WebLink";
 import Colors from "../constants/Colors";
 import { withGlobalContext } from "../GlobalContext";
-
 import PrimaryButton from "../components/PrimaryButton";
+
+EmailExplainer = () => {
+  handlePress = () => {
+    Alert.alert(
+      "Our Promise to You",
+      "Your privacy and security are our top priorities. We promise to never share your email address with third parties and to only send you emails when absolutely necessary."
+    );
+  };
+
+  return (
+    <TouchableOpacity onPress={handlePress} style={styles.primaryButton}>
+      <View
+        style={{
+          marginTop: 20,
+          flexDirection: "row",
+          justifyContent: "center"
+        }}
+      >
+        <Ionicons
+          name={"ios-information-circle-outline"}
+          size={17}
+          style={{ color: Colors.darkGrey, marginRight: 5 }}
+        />
+        <Text style={{ color: Colors.darkGrey }}>
+          How will my email address be used?
+        </Text>
+      </View>
+    </TouchableOpacity>
+  );
+};
+
+Disclaimer = () => {
+  return (
+    <View
+      style={{
+        position: "absolute",
+        left: 0,
+        right: 0,
+        bottom: 20,
+        marginHorizontal: 40
+      }}
+    >
+      <Text
+        style={{
+          color: Colors.darkGrey,
+          textAlign: "center"
+        }}
+      >
+        By registering, you agree to our{" "}
+        <WebLink
+          text="Privacy Policy"
+          url="https://docs.google.com/document/d/1u8f6ZoaHdA3DYAsvcmCU4ekhGt2xYysvbTHE8YbTpVE/edit?usp=sharing"
+        />{" "}
+        and{" "}
+        <WebLink
+          text="Terms of Service"
+          url="https://docs.google.com/document/d/1qrw9dko4qWBTzQTKIlBv5_xM71mZ70Ug3lZg-sqlCMA/edit?usp=sharing"
+        />
+        .
+      </Text>
+    </View>
+  );
+};
 
 class RegistrationScreen extends React.Component {
   static navigationOptions = {
@@ -54,13 +119,9 @@ class RegistrationScreen extends React.Component {
               onPress={this.handleRegistration}
             />
           </View>
-          <View style={{ marginTop: 10 }}>
-            <Text style={{ color: Colors.darkGrey, textAlign: "center" }}>
-              By registering, you agree to our Privacy Policy and Terms of
-              Service.
-            </Text>
-          </View>
+          <EmailExplainer />
         </View>
+        <Disclaimer />
       </KeyboardAvoidingView>
     );
   }
