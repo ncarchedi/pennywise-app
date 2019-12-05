@@ -106,7 +106,11 @@ class SettingsScreen extends React.Component {
 
   userIsAdmin = () => {
     const userEmail = this.state.userEmail;
-    const admins = ["nick.carchedi@gmail.com", "borisgordts@hotmail.com"];
+    const admins = [
+      "nick.carchedi@gmail.com",
+      "nick@pennywise.io",
+      "borisgordts@hotmail.com"
+    ];
     return admins.includes(userEmail);
   };
 
