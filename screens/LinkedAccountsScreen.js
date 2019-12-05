@@ -33,7 +33,7 @@ class LinkedAccountsScreen extends React.Component {
 
     if (result.error) {
       Alert.alert(
-        "Error removing account",
+        "Error Removing Account",
         "Make sure you're connected to the internet and try again."
       );
     }
