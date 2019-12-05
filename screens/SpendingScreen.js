@@ -10,6 +10,7 @@ import {
 import _ from "lodash";
 import { Ionicons } from "@expo/vector-icons";
 
+import SearchBar from "../components/SearchBar";
 import TransactionsList from "../components/TransactionsList";
 import PrimaryButton from "../components/PrimaryButton";
 import Colors from "../constants/Colors";
@@ -39,6 +40,7 @@ class SpendingScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       title: "Spending",
+      headerLeft: navigation.getParam("SearchBarToggle"),
       headerRight: (
         <TouchableOpacity
           onPress={navigation.getParam("toggleListView")}
@@ -51,7 +53,9 @@ class SpendingScreen extends React.Component {
   };
 
   state = {
-    showListView: false
+    showListView: false,
+    showSearchBar: false,
+    searchText: ""
   };
 
   componentDidMount() {
@@ -59,9 +63,31 @@ class SpendingScreen extends React.Component {
     // https://reactnavigation.org/docs/en/header-buttons.html#adding-a-button-to-the-header
     this.props.navigation.setParams({
       toggleListView: this.toggleListView,
-      toggleViewIcon: "ios-list"
+      toggleViewIcon: "ios-list",
+      SearchBarToggle: this.SearchBarToggleIcon
     });
   }
+
+  SearchBarToggleIcon = () => {
+    const { showListView } = this.state;
+
+    // if not in list view, don't show search icon
+    if (!showListView) return null;
+
+    return (
+      <TouchableOpacity
+        onPress={this.handleToggleSearchBar}
+        style={{ paddingHorizontal: 20 }}
+      >
+        <Ionicons name="ios-search" size={25} />
+      </TouchableOpacity>
+    );
+  };
+
+  handleToggleSearchBar = () => {
+    const { showSearchBar } = this.state;
+    this.setState({ showSearchBar: !showSearchBar, searchText: "" });
+  };
 
   toggleListView = () => {
     const { showListView } = this.state;
@@ -81,10 +107,14 @@ class SpendingScreen extends React.Component {
     Linking.openURL("mailto:hello@pennywise.io?subject=Chart%20suggestion");
   };
 
+  handleSearchTextChange = text => {
+    this.setState({ searchText: text });
+  };
+
   render() {
     const transactions = this.props.global.listTransactions();
     const { categories } = this.props.global;
-    const { showListView } = this.state;
+    const { showListView, showSearchBar, searchText } = this.state;
 
     // get all categorized transactions
     const categorizedTransactions = _(transactions)
@@ -116,6 +146,13 @@ class SpendingScreen extends React.Component {
     if (showListView) {
       return (
         <View style={styles.container}>
+          {showSearchBar ? (
+            <SearchBar
+              placeholder="Search transactions, categories, and accounts"
+              onChangeText={text => this.handleSearchTextChange(text)}
+              style={{ marginHorizontal: 10 }}
+            />
+          ) : null}
           <ScrollView
             style={styles.container}
             contentContainerStyle={styles.contentContainer}
@@ -127,6 +164,8 @@ class SpendingScreen extends React.Component {
               transactions={categorizedTransactions}
               categories={categories}
               onTransactionPress={this.handleTransactionPress}
+              showSearchBar={showSearchBar}
+              searchText={searchText}
             />
           </ScrollView>
         </View>

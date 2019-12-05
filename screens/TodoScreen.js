@@ -11,6 +11,7 @@ import {
 
 import Colors from "../constants/Colors";
 import TransactionsList from "../components/TransactionsList";
+import SearchBar from "../components/SearchBar";
 import { Ionicons } from "@expo/vector-icons";
 import _ from "lodash";
 
@@ -20,6 +21,14 @@ class TodoScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       title: "To Do",
+      headerLeft: (
+        <TouchableOpacity
+          onPress={navigation.getParam("toggleSearchBar")}
+          style={{ paddingHorizontal: 20 }}
+        >
+          <Ionicons name="ios-search" size={25} />
+        </TouchableOpacity>
+      ),
       headerRight: (
         <TouchableOpacity
           onPress={navigation.getParam("addTransaction")}
@@ -32,20 +41,28 @@ class TodoScreen extends React.Component {
   };
 
   state = {
-    refreshing: false
+    refreshing: false,
+    showSearchBar: false,
+    searchText: ""
   };
 
   componentDidMount() {
     // necessary for parameterizing the header bar button. See:
     // https://reactnavigation.org/docs/en/header-buttons.html#adding-a-button-to-the-header
     this.props.navigation.setParams({
-      addTransaction: this.handleAddNewTransaction
+      addTransaction: this.handleAddNewTransaction,
+      toggleSearchBar: this.handleToggleSearchBar
     });
 
     // If one or more accounts are connected, refresh todo on load
     const institutionAccounts = this.props.global.institutionAccounts;
     if (institutionAccounts.length) this.handleRefresh();
   }
+
+  handleToggleSearchBar = () => {
+    const { showSearchBar } = this.state;
+    this.setState({ showSearchBar: !showSearchBar, searchText: "" });
+  };
 
   handleTransactionPress = transaction => {
     this.props.navigation.navigate("EditModalTodo", { transaction });
@@ -94,9 +111,13 @@ class TodoScreen extends React.Component {
     this.handleTransactionPress(await addTransaction());
   };
 
+  handleSearchTextChange = text => {
+    this.setState({ searchText: text });
+  };
+
   render() {
     const { categories } = this.props.global;
-    const { refreshing } = this.state;
+    const { refreshing, showSearchBar, searchText } = this.state;
     const transactions = this.props.global.listTransactions();
 
     // log all transactions to the console
@@ -109,6 +130,13 @@ class TodoScreen extends React.Component {
 
     return (
       <View style={styles.container}>
+        {showSearchBar ? (
+          <SearchBar
+            placeholder="Search transactions, categories, and accounts"
+            onChangeText={text => this.handleSearchTextChange(text)}
+            style={{ marginHorizontal: 10 }}
+          />
+        ) : null}
         <ScrollView
           style={styles.container}
           contentContainerStyle={styles.contentContainer}
@@ -126,6 +154,7 @@ class TodoScreen extends React.Component {
             transactions={uncategorizedTransactions}
             categories={categories}
             onTransactionPress={this.handleTransactionPress}
+            searchText={searchText}
             emptyScreen={
               <View>
                 <Text style={styles.emptyScreenEmoji}>🎉</Text>

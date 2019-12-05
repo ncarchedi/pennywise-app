@@ -12,12 +12,13 @@ import _ from "lodash";
 import Colors from "../constants/Colors";
 import { toPrettyDate, leftJoin } from "../utils/TransactionUtils";
 
-export default function TransactionsList({
+export default TransactionsList = ({
   transactions,
   categories,
   onTransactionPress,
-  emptyScreen
-}) {
+  emptyScreen,
+  searchText
+}) => {
   ListItemSeparator = () => {
     return (
       <View
@@ -42,7 +43,11 @@ export default function TransactionsList({
               width: 25
             }}
           >
-            <Ionicons name={icon} size={25} style={{ alignSelf: "center" }} />
+            <Ionicons
+              name={icon ? icon : "ios-archive"}
+              size={25}
+              style={{ alignSelf: "center" }}
+            />
           </View>
           <View style={{ flex: 1, marginLeft: 10 }}>
             <View style={{ flexDirection: "row" }}>
@@ -82,11 +87,20 @@ export default function TransactionsList({
   );
 
   const transactionsFinal = _(transactionsWithIcons)
+    .filter(
+      t =>
+        // transaction names
+        _.includes(_.lowerCase(t.name), _.lowerCase(searchText)) ||
+        // transaction categories
+        _.includes(_.lowerCase(t.category), _.lowerCase(searchText)) ||
+        // institution
+        _.includes(_.lowerCase(t.institution), _.lowerCase(searchText)) ||
+        // account
+        _.includes(_.lowerCase(t.account), _.lowerCase(searchText))
+    )
     .sortBy("date")
     .reverse()
     .value();
-
-  // console.log("rendering transactions list...");
 
   return (
     <View style={styles.container}>
@@ -96,10 +110,12 @@ export default function TransactionsList({
         ItemSeparatorComponent={this.ListItemSeparator}
         keyExtractor={(item, index) => item + index}
         ListEmptyComponent={emptyScreen}
+        keyboardShouldPersistTaps="always"
+        keyboardDismissMode="on-drag"
       />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
