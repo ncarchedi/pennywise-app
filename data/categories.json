@@ -8,12 +8,28 @@
     "icon": "ios-beer"
   },
   {
+    "label": "Bank Fees",
+    "icon": "ios-business"
+  },
+  {
     "label": "Clothing",
     "icon": "ios-shirt"
   },
   {
+    "label": "Coffee",
+    "icon": "ios-cafe"
+  },
+  {
+    "label": "Credit Card Payments",
+    "icon": "ios-card"
+  },
+  {
     "label": "Education",
     "icon": "ios-school"
+  },
+  {
+    "label": "Electricity",
+    "icon": "ios-pulse"
   },
   {
     "label": "Entertainment",
@@ -22,6 +38,14 @@
   {
     "label": "Fitness",
     "icon": "ios-fitness"
+  },
+  {
+    "label": "Furniture",
+    "icon": "ios-bed"
+  },
+  {
+    "label": "Gasoline",
+    "icon": "ios-car"
   },
   {
     "label": "Gifts",
@@ -41,15 +65,19 @@
   },
   {
     "label": "Household Goods",
-    "icon": "ios-construct"
-  },
-  {
-    "label": "Housing",
-    "icon": "ios-home"
+    "icon": "ios-cart"
   },
   {
     "label": "Insurance",
     "icon": "ios-filing"
+  },
+  {
+    "label": "Internet",
+    "icon": "ios-wifi"
+  },
+  {
+    "label": "Investments",
+    "icon": "ios-trending-up"
   },
   {
     "label": "Loan Payments",
@@ -57,19 +85,43 @@
   },
   {
     "label": "Miscellaneous",
-    "icon": "ios-card"
+    "icon": "ios-archive"
+  },
+  {
+    "label": "Mortgage",
+    "icon": "ios-home"
   },
   {
     "label": "Personal Care",
     "icon": "ios-body"
   },
   {
+    "label": "Pets",
+    "icon": "ios-paw"
+  },
+  {
+    "label": "Phone",
+    "icon": "ios-cellular"
+  },
+  {
     "label": "Professional",
     "icon": "ios-briefcase"
   },
   {
+    "label": "Rent",
+    "icon": "ios-home"
+  },
+  {
+    "label": "Repairs",
+    "icon": "ios-hammer"
+  },
+  {
     "label": "Restaurants",
     "icon": "ios-restaurant"
+  },
+  {
+    "label": "Savings",
+    "icon": "ios-cash"
   },
   {
     "label": "Subscriptions",
@@ -86,5 +138,9 @@
   {
     "label": "Vacation",
     "icon": "ios-map"
+  },
+  {
+    "label": "Water",
+    "icon": "ios-water"
   }
 ]
