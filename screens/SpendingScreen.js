@@ -39,6 +39,15 @@ class SpendingScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       title: "Spending",
+      headerLeft: (
+        // TODO: only show this when in list view
+        <TouchableOpacity
+          onPress={() => console.log("spending search!")}
+          style={{ paddingHorizontal: 20 }}
+        >
+          <Ionicons name="ios-search" size={25} />
+        </TouchableOpacity>
+      ),
       headerRight: (
         <TouchableOpacity
           onPress={navigation.getParam("toggleListView")}
@@ -51,7 +60,8 @@ class SpendingScreen extends React.Component {
   };
 
   state = {
-    showListView: false
+    showListView: false,
+    showSearchBar: false
   };
 
   componentDidMount() {
@@ -84,7 +94,7 @@ class SpendingScreen extends React.Component {
   render() {
     const transactions = this.props.global.listTransactions();
     const { categories } = this.props.global;
-    const { showListView } = this.state;
+    const { showListView, showSearchBar } = this.state;
 
     // get all categorized transactions
     const categorizedTransactions = _(transactions)
@@ -127,6 +137,7 @@ class SpendingScreen extends React.Component {
               transactions={categorizedTransactions}
               categories={categories}
               onTransactionPress={this.handleTransactionPress}
+              showSearchBar={showSearchBar}
             />
           </ScrollView>
         </View>

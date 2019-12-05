@@ -20,6 +20,14 @@ class TodoScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       title: "To Do",
+      headerLeft: (
+        <TouchableOpacity
+          onPress={navigation.getParam("toggleSearchBar")}
+          style={{ paddingHorizontal: 20 }}
+        >
+          <Ionicons name="ios-search" size={25} />
+        </TouchableOpacity>
+      ),
       headerRight: (
         <TouchableOpacity
           onPress={navigation.getParam("addTransaction")}
@@ -32,20 +40,27 @@ class TodoScreen extends React.Component {
   };
 
   state = {
-    refreshing: false
+    refreshing: false,
+    showSearchBar: false
   };
 
   componentDidMount() {
     // necessary for parameterizing the header bar button. See:
     // https://reactnavigation.org/docs/en/header-buttons.html#adding-a-button-to-the-header
     this.props.navigation.setParams({
-      addTransaction: this.handleAddNewTransaction
+      addTransaction: this.handleAddNewTransaction,
+      toggleSearchBar: this.handleToggleSearchBar
     });
 
     // If one or more accounts are connected, refresh todo on load
     const institutionAccounts = this.props.global.institutionAccounts;
     if (institutionAccounts.length) this.handleRefresh();
   }
+
+  handleToggleSearchBar = () => {
+    const { showSearchBar } = this.state;
+    this.setState({ showSearchBar: !showSearchBar });
+  };
 
   handleTransactionPress = transaction => {
     this.props.navigation.navigate("EditModalTodo", { transaction });
@@ -96,7 +111,7 @@ class TodoScreen extends React.Component {
 
   render() {
     const { categories } = this.props.global;
-    const { refreshing } = this.state;
+    const { refreshing, showSearchBar } = this.state;
     const transactions = this.props.global.listTransactions();
 
     // log all transactions to the console
@@ -126,6 +141,7 @@ class TodoScreen extends React.Component {
             transactions={uncategorizedTransactions}
             categories={categories}
             onTransactionPress={this.handleTransactionPress}
+            showSearchBar={showSearchBar}
             emptyScreen={
               <View>
                 <Text style={styles.emptyScreenEmoji}>🎉</Text>

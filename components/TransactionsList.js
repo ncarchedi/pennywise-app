@@ -83,7 +83,7 @@ export default class TransactionsList extends React.Component {
   };
 
   render() {
-    const { transactions, categories, emptyScreen } = this.props;
+    const { transactions, categories, emptyScreen, showSearchBar } = this.props;
     const { searchText } = this.state;
 
     const transactionsWithIcons = leftJoin(
@@ -118,11 +118,13 @@ export default class TransactionsList extends React.Component {
           keyExtractor={(item, index) => item + index}
           ListEmptyComponent={emptyScreen}
           ListHeaderComponent={
-            <SearchBar
-              placeholder="Search transactions, categories, and accounts"
-              onChangeText={text => this.handleSearchTextChange(text)}
-              style={{ marginHorizontal: 10 }}
-            />
+            showSearchBar ? (
+              <SearchBar
+                placeholder="Search transactions, categories, and accounts"
+                onChangeText={text => this.handleSearchTextChange(text)}
+                style={{ marginHorizontal: 10 }}
+              />
+            ) : null
           }
           keyboardShouldPersistTaps="always"
           keyboardDismissMode="on-drag"
