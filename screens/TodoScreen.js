@@ -112,7 +112,6 @@ class TodoScreen extends React.Component {
   };
 
   handleSearchTextChange = text => {
-    console.log(text);
     this.setState({ searchText: text });
   };
 

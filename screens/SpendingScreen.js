@@ -40,15 +40,7 @@ class SpendingScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       title: "Spending",
-      headerLeft: (
-        // TODO: only show this when in list view
-        <TouchableOpacity
-          onPress={() => console.log("spending search!")}
-          style={{ paddingHorizontal: 20 }}
-        >
-          <Ionicons name="ios-search" size={25} />
-        </TouchableOpacity>
-      ),
+      headerLeft: navigation.getParam("SearchBarToggle"),
       headerRight: (
         <TouchableOpacity
           onPress={navigation.getParam("toggleListView")}
@@ -62,7 +54,7 @@ class SpendingScreen extends React.Component {
 
   state = {
     showListView: false,
-    showSearchBar: true,
+    showSearchBar: false,
     searchText: ""
   };
 
@@ -71,9 +63,31 @@ class SpendingScreen extends React.Component {
     // https://reactnavigation.org/docs/en/header-buttons.html#adding-a-button-to-the-header
     this.props.navigation.setParams({
       toggleListView: this.toggleListView,
-      toggleViewIcon: "ios-list"
+      toggleViewIcon: "ios-list",
+      SearchBarToggle: this.SearchBarToggleIcon
     });
   }
+
+  SearchBarToggleIcon = () => {
+    const { showListView } = this.state;
+
+    // if not in list view, don't show search icon
+    if (!showListView) return null;
+
+    return (
+      <TouchableOpacity
+        onPress={this.handleToggleSearchBar}
+        style={{ paddingHorizontal: 20 }}
+      >
+        <Ionicons name="ios-search" size={25} />
+      </TouchableOpacity>
+    );
+  };
+
+  handleToggleSearchBar = () => {
+    const { showSearchBar } = this.state;
+    this.setState({ showSearchBar: !showSearchBar, searchText: "" });
+  };
 
   toggleListView = () => {
     const { showListView } = this.state;
@@ -94,7 +108,6 @@ class SpendingScreen extends React.Component {
   };
 
   handleSearchTextChange = text => {
-    console.log(text);
     this.setState({ searchText: text });
   };
 
