@@ -42,7 +42,11 @@ export default class TransactionsList extends React.Component {
               width: 25
             }}
           >
-            <Ionicons name={icon} size={25} style={{ alignSelf: "center" }} />
+            <Ionicons
+              name={icon ? icon : "ios-archive"}
+              size={25}
+              style={{ alignSelf: "center" }}
+            />
           </View>
           <View style={{ flex: 1, marginLeft: 10 }}>
             <View style={{ flexDirection: "row" }}>
