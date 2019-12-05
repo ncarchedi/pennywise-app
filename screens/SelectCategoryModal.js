@@ -13,6 +13,7 @@ import { Ionicons } from "@expo/vector-icons";
 import _ from "lodash";
 
 import Colors from "../constants/Colors";
+import SearchBar from "../components/SearchBar";
 
 export default class SelectCategoryModal extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -78,6 +79,10 @@ export default class SelectCategoryModal extends React.Component {
     this.handleChangeCategory(newCategory.label);
   };
 
+  handleSearchTextChange = text => {
+    this.setState({ searchText: text });
+  };
+
   listItem = item => {
     const { icon, label } = item;
 
@@ -117,17 +122,13 @@ export default class SelectCategoryModal extends React.Component {
         keyboardDismissMode="on-drag"
         showsVerticalScrollIndicator={false}
       >
-        <TextInput
-          style={styles.searchBar}
+        <SearchBar
           placeholder={
             transactionName
               ? `Select a category for "${transactionName}"`
               : "Select a category"
           }
-          onChangeText={text => this.setState({ searchText: text })}
-          autoFocus={true}
-          autoCorrect={false}
-          clearButtonMode="while-editing"
+          onChangeText={text => this.handleSearchTextChange(text)}
         />
         <FlatList
           data={categories.filter(c =>
@@ -158,15 +159,6 @@ export default class SelectCategoryModal extends React.Component {
 const styles = StyleSheet.create({
   contentContainer: {
     marginHorizontal: 10
-  },
-  searchBar: {
-    height: 40,
-    padding: 10,
-    marginTop: 10,
-    marginBottom: 5,
-    borderColor: Colors.veryLightGrey,
-    borderRadius: 5,
-    borderWidth: 1
   },
   itemContainer: {
     flex: 1,
