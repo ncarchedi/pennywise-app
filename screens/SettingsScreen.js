@@ -156,7 +156,7 @@ class SettingsScreen extends React.Component {
           {/* User Settings */}
           <View>
             <PressableSetting
-              text="Manage Bank Accounts"
+              text="Manage Accounts"
               onPress={() => this.props.navigation.navigate("LinkedAccounts")}
               style={{ borderTopWidth: 1 }}
             />

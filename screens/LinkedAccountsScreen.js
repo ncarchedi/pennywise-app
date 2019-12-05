@@ -16,7 +16,7 @@ import { withGlobalContext } from "../GlobalContext";
 class LinkedAccountsScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      title: "Manage Bank Accounts",
+      title: "Manage Accounts",
       headerRight: (
         <TouchableOpacity
           onPress={() => navigation.navigate("PlaidModal")}
@@ -46,7 +46,7 @@ class LinkedAccountsScreen extends React.Component {
       return (
         <View style={styles.container}>
           <Text style={styles.emptyAccountsText}>
-            Add a bank account to automatically import expenses
+            Add a bank or credit card account to automatically import expenses
           </Text>
         </View>
       );
