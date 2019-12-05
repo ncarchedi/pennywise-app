@@ -6,7 +6,8 @@ import {
   FlatList,
   Text,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
+  Alert
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import _ from "lodash";
@@ -14,8 +15,28 @@ import _ from "lodash";
 import Colors from "../constants/Colors";
 
 export default class SelectCategoryModal extends React.Component {
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: "Select Category",
+      headerRight: (
+        <TouchableOpacity
+          onPress={navigation.getParam("addCategory")}
+          style={{ paddingHorizontal: 20 }}
+        >
+          <Ionicons name="ios-add" size={35} />
+        </TouchableOpacity>
+      )
+    };
+  };
+
   state = {
     searchText: ""
+  };
+
+  componentDidMount = () => {
+    this.props.navigation.setParams({
+      addCategory: this.handlePressAddCategory
+    });
   };
 
   handleChangeCategory = label => {
@@ -23,6 +44,26 @@ export default class SelectCategoryModal extends React.Component {
 
     onChangeCategory("category", label);
     this.props.navigation.goBack();
+  };
+
+  handlePressAddCategory = () => {
+    const { searchText } = this.state;
+
+    searchText
+      ? Alert.alert(
+          "Create New Category",
+          `Would you like to create a new category called "${searchText}"?`,
+          [
+            {
+              text: "Cancel"
+            },
+            { text: "OK", onPress: this.handleAddCategory }
+          ]
+        )
+      : Alert.alert(
+          "Name Your Category",
+          "Please enter a name for your new category in the search box."
+        );
   };
 
   handleAddCategory = async () => {
@@ -96,11 +137,16 @@ export default class SelectCategoryModal extends React.Component {
           keyExtractor={item => item.label}
           ItemSeparatorComponent={this.ListItemSeparator}
           ListEmptyComponent={() => (
-            <TouchableOpacity onPress={this.handleAddCategory}>
-              <Text style={{ marginTop: 10, fontStyle: "italic" }}>
-                {`+ Create a new category called ${searchText}`}
-              </Text>
-            </TouchableOpacity>
+            <Text
+              style={{
+                marginTop: 15,
+                fontStyle: "italic",
+                textAlign: "center",
+                color: Colors.darkGrey
+              }}
+            >
+              {`Press the + icon to add a category called "${searchText}"`}
+            </Text>
           )}
           keyboardShouldPersistTaps="always"
         />
