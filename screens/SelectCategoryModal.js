@@ -14,8 +14,28 @@ import _ from "lodash";
 import Colors from "../constants/Colors";
 
 export default class SelectCategoryModal extends React.Component {
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: "Select Category",
+      headerRight: (
+        <TouchableOpacity
+          onPress={navigation.getParam("addCategory")}
+          style={{ paddingHorizontal: 20 }}
+        >
+          <Ionicons name="ios-add" size={35} />
+        </TouchableOpacity>
+      )
+    };
+  };
+
   state = {
     searchText: ""
+  };
+
+  componentDidMount = () => {
+    this.props.navigation.setParams({
+      addCategory: this.handleAddCategory
+    });
   };
 
   handleChangeCategory = label => {
@@ -96,11 +116,16 @@ export default class SelectCategoryModal extends React.Component {
           keyExtractor={item => item.label}
           ItemSeparatorComponent={this.ListItemSeparator}
           ListEmptyComponent={() => (
-            <TouchableOpacity onPress={this.handleAddCategory}>
-              <Text style={{ marginTop: 10, fontStyle: "italic" }}>
-                {`+ Create a new category called ${searchText}`}
-              </Text>
-            </TouchableOpacity>
+            <Text
+              style={{
+                marginTop: 15,
+                fontStyle: "italic",
+                textAlign: "center",
+                color: Colors.darkGrey
+              }}
+            >
+              {`No category called "${searchText}"`}
+            </Text>
           )}
           keyboardShouldPersistTaps="always"
         />
