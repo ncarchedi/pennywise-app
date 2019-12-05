@@ -129,6 +129,7 @@ export default class SelectCategoryModal extends React.Component {
               : "Select a category"
           }
           onChangeText={text => this.handleSearchTextChange(text)}
+          autoFocus={true}
         />
         <FlatList
           data={categories.filter(c =>

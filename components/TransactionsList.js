@@ -115,7 +115,7 @@ export default class TransactionsList extends React.Component {
           ListEmptyComponent={emptyScreen}
           ListHeaderComponent={
             <SearchBar
-              placeholder="Search transaction names, categories, and accounts"
+              placeholder="Search transactions, categories, and accounts"
               onChangeText={text => this.handleSearchTextChange(text)}
               style={{ marginHorizontal: 10 }}
             />
