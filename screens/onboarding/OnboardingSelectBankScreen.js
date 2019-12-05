@@ -36,13 +36,14 @@ class OnboardingSelectBankScreen extends React.Component {
       <SafeAreaView style={styles.container}>
         <View style={styles.contentContainer}>
           <Text style={styles.text}>
-            To start, connect a bank account to import your recent expenses.
+            To start, connect a bank or credit card account to import your
+            recent expenses.
           </Text>
           <TouchableOpacity
             style={styles.bankButton}
             onPress={this.handleSelectBank}
           >
-            <Text style={styles.bankButtonText}>Connect Bank Account</Text>
+            <Text style={styles.bankButtonText}>Connect Account</Text>
           </TouchableOpacity>
         </View>
         <View styles={styles.footerContainer}>

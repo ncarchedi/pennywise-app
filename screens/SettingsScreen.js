@@ -10,12 +10,13 @@ import {
 import moment from "moment";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import { Appearance } from "react-native-appearance";
+import { Ionicons } from "@expo/vector-icons";
 import * as WebBrowser from "expo-web-browser";
 
 import Colors from "../constants/Colors";
 import { withGlobalContext } from "../GlobalContext";
 
-PressableSetting = ({ text, onPress, style = {} }) => {
+PressableSetting = ({ text, icon, onPress, style = {} }) => {
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -26,7 +27,14 @@ PressableSetting = ({ text, onPress, style = {} }) => {
         ...style
       }}
     >
-      <Text style={{ paddingHorizontal: 10 }}>{text}</Text>
+      <View style={{ flexDirection: "row", alignItems: "center" }}>
+        <View
+          style={{ alignItems: "center", minWidth: 30, marginHorizontal: 5 }}
+        >
+          <Ionicons name={icon} size={20} />
+        </View>
+        <Text>{text}</Text>
+      </View>
     </TouchableOpacity>
   );
 };
@@ -157,13 +165,15 @@ class SettingsScreen extends React.Component {
           {/* User Settings */}
           <View>
             <PressableSetting
-              text="Manage Bank Accounts"
+              text="Manage Accounts"
+              icon="ios-business"
               onPress={() => this.props.navigation.navigate("LinkedAccounts")}
               style={{ borderTopWidth: 1 }}
             />
             <View>
               <PressableSetting
                 text="Manage Notifications"
+                icon="ios-notifications"
                 onPress={this.toggleTimePicker}
               />
               <DateTimePicker
@@ -194,11 +204,13 @@ class SettingsScreen extends React.Component {
             </Text>
             <PressableSetting
               text="Share Feedback"
+              icon="ios-megaphone"
               onPress={this.handleShareFeedback}
             />
             <SettingsSeparator />
             <PressableSetting
               text="Privacy Policy"
+              icon="ios-lock"
               onPress={() =>
                 WebBrowser.openBrowserAsync(
                   "https://docs.google.com/document/d/1u8f6ZoaHdA3DYAsvcmCU4ekhGt2xYysvbTHE8YbTpVE/edit?usp=sharing"
@@ -207,6 +219,7 @@ class SettingsScreen extends React.Component {
             />
             <PressableSetting
               text="Terms of Service"
+              icon="ios-paper"
               onPress={() =>
                 WebBrowser.openBrowserAsync(
                   "https://docs.google.com/document/d/1qrw9dko4qWBTzQTKIlBv5_xM71mZ70Ug3lZg-sqlCMA/edit?usp=sharing"
@@ -214,7 +227,11 @@ class SettingsScreen extends React.Component {
               }
             />
             <SettingsSeparator />
-            <PressableSetting text="Logout" onPress={this.handleLogout} />
+            <PressableSetting
+              text="Log Out"
+              icon="ios-log-out"
+              onPress={this.handleLogout}
+            />
           </View>
           {/* Admin Settings */}
           {this.userIsAdmin() ? (
@@ -222,20 +239,24 @@ class SettingsScreen extends React.Component {
               <SettingsHeader text="ADMIN ONLY" />
               <PressableSetting
                 text="Go To Onboarding"
+                icon="ios-paper-plane"
                 onPress={() => this.props.navigation.navigate("Intro")}
               />
               <SettingsSeparator />
               <PressableSetting
                 text="Load Example Transactions"
+                icon="ios-wallet"
                 onPress={loadDummyData}
               />
               <SettingsSeparator />
               <PressableSetting
                 text="Clear All Transactions"
+                icon="ios-trash"
                 onPress={clearAllTransactions}
               />
               <PressableSetting
                 text="Clear All Async Storage"
+                icon="ios-trash"
                 onPress={clearAsyncStorage}
               />
             </View>

@@ -64,10 +64,10 @@ class TodoScreen extends React.Component {
 
     if (result.error) {
       if (result.code === "NoItems") {
-        Alert.alert("Connect Bank Account", result.message, [
+        Alert.alert("Connect Account", result.message, [
           { text: "Close", style: "cancel" },
           {
-            text: "Manage Bank Accounts",
+            text: "Manage Accounts",
             onPress: () => this.props.navigation.navigate("LinkedAccounts"),
             style: "default"
           }
@@ -133,7 +133,15 @@ class TodoScreen extends React.Component {
                   All done for today!
                 </Text>
                 <Text style={styles.emptyScreenCTA}>
-                  Add a transaction manually or connect a new bank account
+                  Add a transaction manually or{"\n"}
+                  <Text
+                    style={{ textDecorationLine: "underline" }}
+                    onPress={() =>
+                      this.props.navigation.navigate("LinkedAccounts")
+                    }
+                  >
+                    connect a new bank or credit card
+                  </Text>
                 </Text>
               </View>
             }

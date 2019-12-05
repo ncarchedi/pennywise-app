@@ -15,8 +15,9 @@ const slides = [
   },
   {
     key: "slide2",
-    title: "Connect Your Bank Accounts",
-    text: "Automatically import your daily expenses",
+    title: "Connect Your Accounts",
+    text:
+      "Automatically import daily expenses from your bank and credit card accounts",
     icon: "ios-business",
     color: Colors.darkGreen
   },

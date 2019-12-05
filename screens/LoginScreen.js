@@ -70,7 +70,7 @@ class LoginScreen extends React.Component {
           "We can't find a user with this email address. Please confirm it's correct or create a new account."
         );
       } else {
-        Alert.alert("Login error", response.message);
+        Alert.alert("Login Error", response.message);
       }
     } else {
       this.props.navigation.navigate("Main");
