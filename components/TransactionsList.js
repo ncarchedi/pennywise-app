@@ -124,6 +124,8 @@ export default class TransactionsList extends React.Component {
               style={{ marginHorizontal: 10 }}
             />
           }
+          keyboardShouldPersistTaps="always"
+          keyboardDismissMode="on-drag"
         />
       </View>
     );
