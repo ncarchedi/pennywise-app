@@ -15,6 +15,7 @@ import { toPrettyDate, leftJoin } from "../utils/TransactionUtils";
 export default TransactionsList = ({
   transactions,
   categories,
+  onTransactionPress,
   emptyScreen,
   searchText
 }) => {
@@ -34,7 +35,7 @@ export default TransactionsList = ({
     const { name, amount, date, category, icon, institution, account } = item;
 
     return (
-      <TouchableOpacity onPress={() => this.props.onTransactionPress(item)}>
+      <TouchableOpacity onPress={() => onTransactionPress(item)}>
         <View style={styles.transactionsListItem} key={index}>
           <View
             style={{

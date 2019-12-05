@@ -61,7 +61,7 @@ class TodoScreen extends React.Component {
 
   handleToggleSearchBar = () => {
     const { showSearchBar } = this.state;
-    this.setState({ showSearchBar: !showSearchBar });
+    this.setState({ showSearchBar: !showSearchBar, searchText: "" });
   };
 
   handleTransactionPress = transaction => {
