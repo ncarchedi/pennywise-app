@@ -6,7 +6,8 @@ import {
   FlatList,
   Text,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
+  Alert
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import _ from "lodash";
@@ -34,7 +35,7 @@ export default class SelectCategoryModal extends React.Component {
 
   componentDidMount = () => {
     this.props.navigation.setParams({
-      addCategory: this.handleAddCategory
+      addCategory: this.handlePressAddCategory
     });
   };
 
@@ -43,6 +44,26 @@ export default class SelectCategoryModal extends React.Component {
 
     onChangeCategory("category", label);
     this.props.navigation.goBack();
+  };
+
+  handlePressAddCategory = () => {
+    const { searchText } = this.state;
+
+    searchText
+      ? Alert.alert(
+          "Create New Category",
+          `Would you like to create a new category called "${searchText}"?`,
+          [
+            {
+              text: "Cancel"
+            },
+            { text: "OK", onPress: this.handleAddCategory }
+          ]
+        )
+      : Alert.alert(
+          "Name Your Category",
+          "Please enter a name for your new category in the search box."
+        );
   };
 
   handleAddCategory = async () => {
@@ -124,7 +145,7 @@ export default class SelectCategoryModal extends React.Component {
                 color: Colors.darkGrey
               }}
             >
-              {`No category called "${searchText}"`}
+              {`Press the + icon to add a category called "${searchText}"`}
             </Text>
           )}
           keyboardShouldPersistTaps="always"
