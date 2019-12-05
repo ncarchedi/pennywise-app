@@ -10,6 +10,7 @@ import {
 import moment from "moment";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import { Appearance } from "react-native-appearance";
+import * as WebBrowser from "expo-web-browser";
 
 import Colors from "../constants/Colors";
 import { withGlobalContext } from "../GlobalContext";
@@ -199,7 +200,7 @@ class SettingsScreen extends React.Component {
             <PressableSetting
               text="Privacy Policy"
               onPress={() =>
-                Linking.openURL(
+                WebBrowser.openBrowserAsync(
                   "https://docs.google.com/document/d/1u8f6ZoaHdA3DYAsvcmCU4ekhGt2xYysvbTHE8YbTpVE/edit?usp=sharing"
                 )
               }
@@ -207,7 +208,7 @@ class SettingsScreen extends React.Component {
             <PressableSetting
               text="Terms of Service"
               onPress={() =>
-                Linking.openURL(
+                WebBrowser.openBrowserAsync(
                   "https://docs.google.com/document/d/1qrw9dko4qWBTzQTKIlBv5_xM71mZ70Ug3lZg-sqlCMA/edit?usp=sharing"
                 )
               }
