@@ -11,13 +11,13 @@ import _ from "lodash";
 
 import Colors from "../constants/Colors";
 import { toPrettyDate, leftJoin } from "../utils/TransactionUtils";
-import SearchBar from "../components/SearchBar";
 
-export default class TransactionsList extends React.Component {
-  state = {
-    searchText: ""
-  };
-
+export default TransactionsList = ({
+  transactions,
+  categories,
+  emptyScreen,
+  searchText
+}) => {
   ListItemSeparator = () => {
     return (
       <View
@@ -78,61 +78,43 @@ export default class TransactionsList extends React.Component {
     );
   };
 
-  handleSearchTextChange = text => {
-    this.setState({ searchText: text });
-  };
+  const transactionsWithIcons = leftJoin(
+    transactions,
+    categories,
+    "category",
+    "label"
+  );
 
-  render() {
-    const { transactions, categories, emptyScreen, showSearchBar } = this.props;
-    const { searchText } = this.state;
+  const transactionsFinal = _(transactionsWithIcons)
+    .filter(
+      t =>
+        // transaction names
+        _.includes(_.lowerCase(t.name), _.lowerCase(searchText)) ||
+        // transaction categories
+        _.includes(_.lowerCase(t.category), _.lowerCase(searchText)) ||
+        // institution
+        _.includes(_.lowerCase(t.institution), _.lowerCase(searchText)) ||
+        // account
+        _.includes(_.lowerCase(t.account), _.lowerCase(searchText))
+    )
+    .sortBy("date")
+    .reverse()
+    .value();
 
-    const transactionsWithIcons = leftJoin(
-      transactions,
-      categories,
-      "category",
-      "label"
-    );
-
-    const transactionsFinal = _(transactionsWithIcons)
-      .filter(
-        t =>
-          // transaction names
-          _.includes(_.lowerCase(t.name), _.lowerCase(searchText)) ||
-          // transaction categories
-          _.includes(_.lowerCase(t.category), _.lowerCase(searchText)) ||
-          // institution
-          _.includes(_.lowerCase(t.institution), _.lowerCase(searchText)) ||
-          // account
-          _.includes(_.lowerCase(t.account), _.lowerCase(searchText))
-      )
-      .sortBy("date")
-      .reverse()
-      .value();
-
-    return (
-      <View style={styles.container}>
-        <FlatList
-          data={transactionsFinal}
-          renderItem={({ item, index }) => this.ListItem(item, index)}
-          ItemSeparatorComponent={this.ListItemSeparator}
-          keyExtractor={(item, index) => item + index}
-          ListEmptyComponent={emptyScreen}
-          ListHeaderComponent={
-            showSearchBar ? (
-              <SearchBar
-                placeholder="Search transactions, categories, and accounts"
-                onChangeText={text => this.handleSearchTextChange(text)}
-                style={{ marginHorizontal: 10 }}
-              />
-            ) : null
-          }
-          keyboardShouldPersistTaps="always"
-          keyboardDismissMode="on-drag"
-        />
-      </View>
-    );
-  }
-}
+  return (
+    <View style={styles.container}>
+      <FlatList
+        data={transactionsFinal}
+        renderItem={({ item, index }) => this.ListItem(item, index)}
+        ItemSeparatorComponent={this.ListItemSeparator}
+        keyExtractor={(item, index) => item + index}
+        ListEmptyComponent={emptyScreen}
+        keyboardShouldPersistTaps="always"
+        keyboardDismissMode="on-drag"
+      />
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {

@@ -11,6 +11,7 @@ import {
 
 import Colors from "../constants/Colors";
 import TransactionsList from "../components/TransactionsList";
+import SearchBar from "../components/SearchBar";
 import { Ionicons } from "@expo/vector-icons";
 import _ from "lodash";
 
@@ -41,7 +42,8 @@ class TodoScreen extends React.Component {
 
   state = {
     refreshing: false,
-    showSearchBar: false
+    showSearchBar: false,
+    searchText: ""
   };
 
   componentDidMount() {
@@ -109,9 +111,14 @@ class TodoScreen extends React.Component {
     this.handleTransactionPress(await addTransaction());
   };
 
+  handleSearchTextChange = text => {
+    console.log(text);
+    this.setState({ searchText: text });
+  };
+
   render() {
     const { categories } = this.props.global;
-    const { refreshing, showSearchBar } = this.state;
+    const { refreshing, showSearchBar, searchText } = this.state;
     const transactions = this.props.global.listTransactions();
 
     // log all transactions to the console
@@ -124,6 +131,13 @@ class TodoScreen extends React.Component {
 
     return (
       <View style={styles.container}>
+        {showSearchBar ? (
+          <SearchBar
+            placeholder="Search transactions, categories, and accounts"
+            onChangeText={text => this.handleSearchTextChange(text)}
+            style={{ marginHorizontal: 10 }}
+          />
+        ) : null}
         <ScrollView
           style={styles.container}
           contentContainerStyle={styles.contentContainer}
@@ -141,7 +155,7 @@ class TodoScreen extends React.Component {
             transactions={uncategorizedTransactions}
             categories={categories}
             onTransactionPress={this.handleTransactionPress}
-            showSearchBar={showSearchBar}
+            searchText={searchText}
             emptyScreen={
               <View>
                 <Text style={styles.emptyScreenEmoji}>🎉</Text>

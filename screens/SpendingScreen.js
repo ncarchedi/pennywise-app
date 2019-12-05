@@ -10,6 +10,7 @@ import {
 import _ from "lodash";
 import { Ionicons } from "@expo/vector-icons";
 
+import SearchBar from "../components/SearchBar";
 import TransactionsList from "../components/TransactionsList";
 import PrimaryButton from "../components/PrimaryButton";
 import Colors from "../constants/Colors";
@@ -61,7 +62,8 @@ class SpendingScreen extends React.Component {
 
   state = {
     showListView: false,
-    showSearchBar: false
+    showSearchBar: true,
+    searchText: ""
   };
 
   componentDidMount() {
@@ -91,10 +93,15 @@ class SpendingScreen extends React.Component {
     Linking.openURL("mailto:hello@pennywise.io?subject=Chart%20suggestion");
   };
 
+  handleSearchTextChange = text => {
+    console.log(text);
+    this.setState({ searchText: text });
+  };
+
   render() {
     const transactions = this.props.global.listTransactions();
     const { categories } = this.props.global;
-    const { showListView, showSearchBar } = this.state;
+    const { showListView, showSearchBar, searchText } = this.state;
 
     // get all categorized transactions
     const categorizedTransactions = _(transactions)
@@ -126,6 +133,13 @@ class SpendingScreen extends React.Component {
     if (showListView) {
       return (
         <View style={styles.container}>
+          {showSearchBar ? (
+            <SearchBar
+              placeholder="Search transactions, categories, and accounts"
+              onChangeText={text => this.handleSearchTextChange(text)}
+              style={{ marginHorizontal: 10 }}
+            />
+          ) : null}
           <ScrollView
             style={styles.container}
             contentContainerStyle={styles.contentContainer}
@@ -138,6 +152,7 @@ class SpendingScreen extends React.Component {
               categories={categories}
               onTransactionPress={this.handleTransactionPress}
               showSearchBar={showSearchBar}
+              searchText={searchText}
             />
           </ScrollView>
         </View>
