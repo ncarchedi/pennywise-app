@@ -49,7 +49,7 @@ SettingsHeader = ({ text }) => {
         backgroundColor: Colors.veryLightGrey
       }}
     >
-      <Text style={{ fontSize: 12 }}>{text}</Text>
+      <Text style={{ fontSize: 12, textTransform: "uppercase" }}>{text}</Text>
     </View>
   );
 };
@@ -127,7 +127,8 @@ class SettingsScreen extends React.Component {
     const {
       clearAllTransactions,
       loadDummyData,
-      clearAsyncStorage
+      clearAsyncStorage,
+      getEnvironment
     } = this.props.global;
 
     const notificationTime = moment()
@@ -236,7 +237,7 @@ class SettingsScreen extends React.Component {
           {/* Admin Settings */}
           {this.userIsAdmin() ? (
             <View>
-              <SettingsHeader text="ADMIN ONLY" />
+              <SettingsHeader text={`Admin Only (${getEnvironment()})`} />
               <PressableSetting
                 text="Go To Onboarding"
                 icon="ios-paper-plane"
