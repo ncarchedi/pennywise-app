@@ -40,8 +40,8 @@ Every time you change the environment, you'll need to authenticate with plaid ag
 Based on the instructions [here](https://docs.expo.io/versions/latest/distribution/uploading-apps/). This only works if you have the `EXPO_APPLE_ID` and `EXPO_APPLE_ID_PASSWORD` environment variables set:
 
 ```
-expo build:ios
-expo upload:ios --apple-id $EXPO_APPLE_ID --apple-id-password $EXPO_APPLE_ID_PASSWORD
+# Confirm that ENVIRONMENT="development" in .env
+expo build:ios && expo upload:ios --apple-id $EXPO_APPLE_ID --apple-id-password $EXPO_APPLE_ID_PASSWORD
 ```
 
 You may be required to input an app-specific password, which can be generated [here](https://appleid.apple.com/).
