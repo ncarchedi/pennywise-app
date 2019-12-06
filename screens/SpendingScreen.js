@@ -86,12 +86,16 @@ class SpendingScreen extends React.Component {
 
   handleToggleSearchBar = () => {
     const { showSearchBar } = this.state;
+
+    // toggle the search bar and reset the search text
     this.setState({ showSearchBar: !showSearchBar, searchText: "" });
   };
 
   toggleListView = () => {
     const { showListView } = this.state;
-    this.setState({ showListView: !showListView });
+
+    // toggle the list view and reset the search text
+    this.setState({ showListView: !showListView, searchText: "" });
 
     this.props.navigation.setParams({
       toggleViewIcon: this.state.showListView ? "ios-list" : "ios-stats"
