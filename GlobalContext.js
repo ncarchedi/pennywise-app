@@ -28,7 +28,6 @@ import "firebase/functions";
 import "firebase/firestore";
 
 import * as Amplitude from "expo-analytics-amplitude";
-
 import * as Sentry from "sentry-expo";
 
 export const GlobalContext = React.createContext({});
@@ -42,9 +41,10 @@ import {
   FIREBASE_MESSAGING_SENDER_ID,
   FIREBASE_APP_ID,
   FIREBASE_MEASUREMENT_ID,
-  AMPLITUDE_API_KEY,
-  ENVIRONMENT
+  AMPLITUDE_API_KEY
 } from "react-native-dotenv";
+
+const ENVIRONMENT = "development"; // or "sandbox"
 
 export class GlobalContextProvider extends React.Component {
   cleanState = {
