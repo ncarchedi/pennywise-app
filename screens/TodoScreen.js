@@ -79,6 +79,9 @@ class TodoScreen extends React.Component {
     const result = await getPlaidTransactions();
     this.setState({ refreshing: false });
 
+    console.log("hey fa");
+    console.log(result);
+
     if (result.error) {
       if (result.code === "NoItems") {
         Alert.alert("Connect Account", result.message, [
@@ -96,6 +99,26 @@ class TodoScreen extends React.Component {
           {
             cancelable: false
           }
+        );
+      } else if (
+        result.code === "PlaidError" &&
+        result.message.error_code === "ITEM_LOGIN_REQUIRED"
+      ) {
+        // We need to update a user's item
+        Alert.alert(
+          "Reconnect Bank Account",
+          "You need to reconnect one of your bank accounts in order to download transactions.",
+          [
+            { text: "Close", style: "cancel" },
+            {
+              text: "Reconnect Account",
+              onPress: () =>
+                this.props.navigation.navigate("PlaidModal", {
+                  updateMode: true
+                }),
+              style: "default"
+            }
+          ]
         );
       } else {
         Alert.alert("Unable to Import Transactions", result.message, {

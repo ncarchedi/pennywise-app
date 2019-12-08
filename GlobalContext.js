@@ -208,6 +208,26 @@ export class GlobalContextProvider extends React.Component {
     }
   };
 
+  createPublicToken = async () => {
+    const createPublicTokenFirebase = firebase
+      .functions()
+      .httpsCallable("createPublicToken");
+
+    let result = await createPublicTokenFirebase({
+      env: ENVIRONMENT
+    });
+
+    console.log("lolo");
+    console.log(JSON.stringify(result));
+
+    if (result.data.error) {
+      console.log(result);
+      throw result.data.error.error_message;
+    } else {
+      return result.data.publicToken;
+    }
+  };
+
   // A note on dates:
   // - Plaid uses the 'local' date as used by the bank and visible by the user on the bank website
   // - By default, MomentJS uses the local timezone (e.g. the timezone of the user's device)
@@ -253,6 +273,15 @@ export class GlobalContextProvider extends React.Component {
         end_date: endDate,
         plaidItemsToUse: plaidItemsToLoad
       });
+
+      // To remove, using to test the solution to the capital one issue
+      result = {
+        data: {
+          error: {
+            error_code: "ITEM_LOGIN_REQUIRED"
+          }
+        }
+      };
 
       if (result.data.error) {
         throw {
@@ -757,7 +786,8 @@ export class GlobalContextProvider extends React.Component {
           clearAsyncStorage: this.clearAsyncStorage,
           getEnvironment: this.getEnvironment,
           getUserEmail: this.getUserEmail,
-          sendPasswordresetEmail: this.sendPasswordresetEmail
+          sendPasswordresetEmail: this.sendPasswordresetEmail,
+          createPublicToken: this.createPublicToken
         }}
       >
         {this.props.children}

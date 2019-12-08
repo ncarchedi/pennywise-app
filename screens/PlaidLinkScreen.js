@@ -47,8 +47,19 @@ class PlaidLinkScreen extends React.Component {
     this.setState({ refreshing: false });
   };
 
+  fetchPublicToken = async () => {
+    this.setState({ refreshing: true });
+
+    console.log("kut");
+    console.log(await this.props.global.createPublicToken());
+  };
+
   render() {
     if (this.state.refreshing) return <LoadingIndicator />;
+
+    if (this.props.navigation.getParam("updateMode", false)) {
+      this.fetchPublicToken();
+    }
 
     return (
       <PlaidAuthenticator
