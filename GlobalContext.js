@@ -44,7 +44,7 @@ import {
   AMPLITUDE_API_KEY
 } from "react-native-dotenv";
 
-const ENVIRONMENT = "development"; // or "sandbox"
+const ENVIRONMENT = "production"; // or "sandbox"
 
 export class GlobalContextProvider extends React.Component {
   cleanState = {
