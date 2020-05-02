@@ -103,7 +103,7 @@ You have several choices available when it comes to information about you:
 
 - **Limit the Information that You Provide:** If you have an account with us, you can choose not to provide the optional account information. Please keep in mind that if you do not provide this information, certain features of our Services—for example, automatic loading of transactions from your bank account—may not be accessible.
 - **Opt-Out of Marketing Communications:** You may opt out of receiving promotional communications from us. Just follow the instructions in those communications or let us know. If you opt out of promotional communications, we may still send you other communications, like those about your account and legal notices.
-- **Close Your Account:** While we’d be very sad to see you go, if you no longer want to use our Services you can close your account. You can ask us to close your account by sending an email to hello@pennywise.io. Please keep in mind that we may continue to retain your information after closing your account, as described in How Long We Keep Information above—for example, when that information is reasonably needed to comply with (or demonstrate our compliance with) legal obligations such as law enforcement requests, or reasonably needed for our legitimate business interests.
+- **Close Your Account:** While we’d be very sad to see you go, if you no longer want to use our Services you can close your account. You can ask us to close your account by sending an email to hello@dayonelabs.io. Please keep in mind that we may continue to retain your information after closing your account, as described in How Long We Keep Information above—for example, when that information is reasonably needed to comply with (or demonstrate our compliance with) legal obligations such as law enforcement requests, or reasonably needed for our legitimate business interests.
 
 # Transfer Of Data
 
@@ -129,7 +129,7 @@ You can usually access, correct, or delete your personal data using your account
 
 # How to Reach Us
 
-If you have a question about this Privacy Policy, or you would like to contact us about any of the rights mentioned in the Your Rights section above, please [contact us](mailto:hello@pennywise.io).
+If you have a question about this Privacy Policy, or you would like to contact us about any of the rights mentioned in the Your Rights section above, please [contact us](mailto:hello@dayonelabs.io).
 
 # Privacy Policy Changes
 

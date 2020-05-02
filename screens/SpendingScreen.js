@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Text,
-  Linking
+  Linking,
 } from "react-native";
 import _ from "lodash";
 import { Ionicons } from "@expo/vector-icons";
@@ -27,7 +27,7 @@ ChartTitle = ({ title }) => {
           color: Colors.darkGrey,
           fontSize: 17,
           marginBottom: 3,
-          textTransform: "uppercase"
+          textTransform: "uppercase",
         }}
       >
         {title}
@@ -48,14 +48,14 @@ class SpendingScreen extends React.Component {
         >
           <Ionicons name={navigation.getParam("toggleViewIcon")} size={25} />
         </TouchableOpacity>
-      )
+      ),
     };
   };
 
   state = {
     showListView: false,
     showSearchBar: false,
-    searchText: ""
+    searchText: "",
   };
 
   componentDidMount() {
@@ -64,7 +64,7 @@ class SpendingScreen extends React.Component {
     this.props.navigation.setParams({
       toggleListView: this.toggleListView,
       toggleViewIcon: "ios-list",
-      SearchBarToggle: this.SearchBarToggleIcon
+      SearchBarToggle: this.SearchBarToggleIcon,
     });
   }
 
@@ -98,20 +98,20 @@ class SpendingScreen extends React.Component {
     this.setState({ showListView: !showListView, searchText: "" });
 
     this.props.navigation.setParams({
-      toggleViewIcon: this.state.showListView ? "ios-list" : "ios-stats"
+      toggleViewIcon: this.state.showListView ? "ios-list" : "ios-stats",
     });
   };
 
-  handleTransactionPress = transaction => {
+  handleTransactionPress = (transaction) => {
     this.props.navigation.navigate("EditModalTransactions", { transaction });
   };
 
   handleShareFeedback = async () => {
     // This doesn't work in the simulator, but should work on a real device
-    Linking.openURL("mailto:hello@pennywise.io?subject=Chart%20suggestion");
+    Linking.openURL("mailto:hello@dayonelabs.io?subject=Chart%20suggestion");
   };
 
-  handleSearchTextChange = text => {
+  handleSearchTextChange = (text) => {
     this.setState({ searchText: text });
   };
 
@@ -122,7 +122,7 @@ class SpendingScreen extends React.Component {
 
     // get all categorized transactions
     const categorizedTransactions = _(transactions)
-      .filter(t => t.category !== "No Category")
+      .filter((t) => t.category !== "No Category")
       .value();
 
     // if no categorized expenses, show the empty screen
@@ -153,7 +153,7 @@ class SpendingScreen extends React.Component {
           {showSearchBar ? (
             <SearchBar
               placeholder="Search transactions, categories, and accounts"
-              onChangeText={text => this.handleSearchTextChange(text)}
+              onChangeText={(text) => this.handleSearchTextChange(text)}
               style={{ marginHorizontal: 10 }}
             />
           ) : null}
@@ -198,7 +198,7 @@ class SpendingScreen extends React.Component {
               <Text
                 style={{
                   fontSize: 17,
-                  textAlign: "center"
+                  textAlign: "center",
                 }}
               >
                 More insights coming soon!
@@ -207,7 +207,7 @@ class SpendingScreen extends React.Component {
                 style={{
                   marginTop: 10,
                   marginBottom: 20,
-                  marginHorizontal: 20
+                  marginHorizontal: 20,
                 }}
               >
                 <PrimaryButton
@@ -228,20 +228,20 @@ export default withGlobalContext(SpendingScreen);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.white
+    backgroundColor: Colors.white,
   },
   chartContainer: {
-    flex: 1
+    flex: 1,
   },
   emptyScreenIcon: {
     textAlign: "center",
     marginTop: 30,
-    color: Colors.copper
+    color: Colors.copper,
   },
   emptyScreenHeader: {
     fontSize: 22,
     marginTop: 15,
-    textAlign: "center"
+    textAlign: "center",
   },
   emptyScreenCTA: {
     marginTop: 30,
@@ -249,6 +249,6 @@ const styles = StyleSheet.create({
     width: "50%",
     textAlign: "center",
     alignSelf: "center",
-    lineHeight: 20
-  }
+    lineHeight: 20,
+  },
 });
