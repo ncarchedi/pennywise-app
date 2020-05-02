@@ -5,7 +5,7 @@ import {
   Text,
   View,
   TouchableOpacity,
-  Linking
+  Linking,
 } from "react-native";
 import moment from "moment";
 import DateTimePicker from "react-native-modal-datetime-picker";
@@ -24,7 +24,7 @@ PressableSetting = ({ text, icon, onPress, style = {} }) => {
         paddingVertical: 10,
         borderColor: Colors.veryLightGrey,
         borderBottomWidth: 1,
-        ...style
+        ...style,
       }}
     >
       <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -46,7 +46,7 @@ SettingsHeader = ({ text }) => {
         marginTop: 30,
         paddingVertical: 10,
         paddingHorizontal: 10,
-        backgroundColor: Colors.veryLightGrey
+        backgroundColor: Colors.veryLightGrey,
       }}
     >
       <Text style={{ fontSize: 12, textTransform: "uppercase" }}>{text}</Text>
@@ -62,13 +62,13 @@ SettingsSeparator = () => {
 
 class SettingsScreen extends React.Component {
   static navigationOptions = {
-    title: "Settings"
+    title: "Settings",
   };
 
   state = {
     notificationTime: this.props.global.notificationTime,
     userEmail: "",
-    isTimePickerVisible: false
+    isTimePickerVisible: false,
   };
 
   componentDidMount() {
@@ -80,12 +80,12 @@ class SettingsScreen extends React.Component {
     this.setState({ isTimePickerVisible: !isTimePickerVisible });
   };
 
-  setNotificationTime = newTime => {
+  setNotificationTime = (newTime) => {
     let momentTime = moment(newTime);
 
     const newNotificationTime = {
       hours: momentTime.hours(),
-      minutes: momentTime.minutes()
+      minutes: momentTime.minutes(),
     };
 
     this.setState({ notificationTime: newNotificationTime });
@@ -100,7 +100,7 @@ class SettingsScreen extends React.Component {
 
   handleShareFeedback = async () => {
     // This doesn't work in the simulator, but should work on a real device
-    Linking.openURL("mailto:hello@pennywise.io?subject=Feedback");
+    Linking.openURL("mailto:hello@dayonelabs.io?subject=Feedback");
   };
 
   handleLogout = async () => {
@@ -115,11 +115,7 @@ class SettingsScreen extends React.Component {
 
   userIsAdmin = () => {
     const userEmail = this.state.userEmail;
-    const admins = [
-      "nick.carchedi@gmail.com",
-      "nick@pennywise.io",
-      "borisgordts@hotmail.com"
-    ];
+    const admins = ["nick.carchedi@gmail.com", "borisgordts@hotmail.com"];
     return admins.includes(userEmail);
   };
 
@@ -128,7 +124,7 @@ class SettingsScreen extends React.Component {
       clearAllTransactions,
       loadDummyData,
       clearAsyncStorage,
-      getEnvironment
+      getEnvironment,
     } = this.props.global;
 
     const notificationTime = moment()
@@ -147,7 +143,7 @@ class SettingsScreen extends React.Component {
           <View
             style={{
               paddingHorizontal: 10,
-              paddingVertical: 10
+              paddingVertical: 10,
             }}
           >
             <Text
@@ -155,7 +151,7 @@ class SettingsScreen extends React.Component {
                 color: Colors.darkGrey,
                 fontSize: 12,
                 marginBottom: 3,
-                textTransform: "uppercase"
+                textTransform: "uppercase",
               }}
             >
               Logged in as
@@ -187,7 +183,7 @@ class SettingsScreen extends React.Component {
                 hideTitleContainerIOS={true}
                 datePickerContainerStyleIOS={{
                   backgroundColor:
-                    Appearance.getColorScheme() === "dark" ? "black" : "white"
+                    Appearance.getColorScheme() === "dark" ? "black" : "white",
                 }}
               />
             </View>
@@ -197,7 +193,7 @@ class SettingsScreen extends React.Component {
                 fontSize: 12,
                 color: "darkgrey",
                 marginHorizontal: 10,
-                marginTop: 5
+                marginTop: 5,
               }}
             >
               If you have any suggestions for how we can improve the app, please
@@ -273,6 +269,6 @@ export default withGlobalContext(SettingsScreen);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.white
-  }
+    backgroundColor: Colors.white,
+  },
 });
