@@ -20,18 +20,6 @@
     "ios": {
       "bundleIdentifier": "com.dayonelabs.conscious-spending",
       "userInterfaceStyle": "automatic"
-    },
-    "hooks": {
-      "postPublish": [
-        {
-          "file": "sentry-expo/upload-sourcemaps",
-          "config": {
-            "organization": "day-one-labs",
-            "project": "pennywise",
-            "authToken": "cc1dc5c4ca734ffb8e0bb5cdf31b1d9041b9ea4c5bfc4a3abbba56737847795d"
-          }
-        }
-      ]
     }
   }
 }
